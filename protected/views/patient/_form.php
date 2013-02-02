@@ -1,6 +1,9 @@
 <?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
 	'id'=>'patient-form',
 	'enableAjaxValidation'=>false,
+    'htmlOptions'=>array(
+        'class'=>'well',
+    )
 )); ?>
 
 	<p class="help-block">Fields with <span class="required">*</span> are required.</p>

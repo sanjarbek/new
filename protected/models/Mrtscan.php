@@ -17,7 +17,7 @@
  * The followings are the available model relations:
  * @property Registrations[] $registrations
  */
-class Mrtscan extends CActiveRecord
+class Mrtscan extends MasterModel
 {
 	/**
 	 * @return string the associated database table name

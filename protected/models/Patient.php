@@ -20,7 +20,7 @@
  * @property Doctors $doctor
  * @property Registrations[] $registrations
  */
-class Patient extends CActiveRecord
+class Patient extends MasterModel
 {
 	/**
 	 * @return string the associated database table name

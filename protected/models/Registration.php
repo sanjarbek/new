@@ -22,7 +22,7 @@
  * @property Mrtscans $mrtscan
  * @property Patients $patient
  */
-class Registration extends CActiveRecord
+class Registration extends MasterModel
 {
 	/**
 	 * @return string the associated database table name

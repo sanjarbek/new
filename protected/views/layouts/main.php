@@ -31,22 +31,8 @@
             'class'=>'navbar-inverse',
         ),
         'items' => array(
-//            array(
-//                'class'=>'bootstrap.widgets.TbButton',
-//                'htmlOptions'=>array(
-//                    'class'=>'btn btn-navbar',
-//                ),
-//                'items'=>array(
-//                    array('icon'=>'icon-bar'),
-//                    array('icon'=>'icon-bar'),
-//                    array('icon'=>'icon-bar'),
-//                )
-//            ),
             array(
                 'class' => 'bootstrap.widgets.TbMenu',
-                'htmlOptions'=>array(
-                    'class'=>'nav-collapse',
-                ),
                 'items' => array(
                     array('label'=>'Home', 'url'=>array('/site/index')),
                     array('label'=>'About', 'url'=>array('/site/page', 'view'=>'about')),
@@ -54,7 +40,27 @@
                     array('label'=>'Login', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),
                     array('label'=>'Logout ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest)
                 ),
-            )
+            ),
+            array(
+                'class' => 'bootstrap.widgets.TbMenu',
+                'items'=>array(
+                    array(
+                        'label'=>Yii::t('title', 'Configure'),
+                        'icon'=>'icon-wrench', 
+                        'items'=>array(
+                            array('label'=>Yii::t('title', 'Patients'), 'url'=>array('/patient/admin'), 'visible'=>!Yii::app()->user->isGuest),
+                            array('label'=>Yii::t('title', 'Registrations'), 'url'=>array('/registration/admin'), 'visible'=>!Yii::app()->user->isGuest),
+                            array('label'=>Yii::t('title', 'Hospitals'), 'url'=>array('/hospital'), 'visible'=>!Yii::app()->user->isGuest),
+                            array('label'=>Yii::t('title', 'Doctors'), 'url'=>array('/doctor'), 'visible'=>!Yii::app()->user->isGuest),
+                            array('label'=>Yii::t('title', 'MRT scans'), 'url'=>array('/mrtscan'), 'visible'=>!Yii::app()->user->isGuest),
+                        )
+                    ),
+					array('label'=>'Logout', 'url'=>array('/user/logout'), 'icon'=>'icon-off','visible'=>!Yii::app()->user->isGuest, 'htmlOptions'=>array('class'=>'btn')),
+				),
+                'htmlOptions'=>array(
+                    'class'=>'nav pull-right',
+                ),
+            ),
         )
     )); ?>
 
@@ -67,7 +73,7 @@
 	<?php echo $content; ?>
 
 	<div class="row-fluid">
-        <div class="pull-right">
+        <div class="footer well">
             Copyright &copy; <?php echo date('Y'); ?> by My Company.<br/>
             All Rights Reserved.<br/>
             <?php echo Yii::powered(); ?>

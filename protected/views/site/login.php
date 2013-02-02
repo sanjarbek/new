@@ -23,7 +23,6 @@ $this->breadcrumbs=array(
 	<p class="note">Fields with <span class="required">*</span> are required.</p>
 
 		<?php echo $form->textFieldRow($model,'username', array(
-            'class'=>'test-input',
         )); ?>
 		<?php echo $form->passwordFieldRow($model,'password', array(
             'hint'=>'Hint: You may login with <kbd>demo</kbd>/<kbd>demo</kbd> or <kbd>admin</kbd>/<kbd>admin</kbd>.',

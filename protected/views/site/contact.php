@@ -13,11 +13,10 @@ $this->breadcrumbs=array(
 
 	<?php echo Yii::app()->user->getFlash('contact'); ?>
 <?php else: ?>
-<div class="span12">
+<div class="span12 well">
 <p>
 If you have business inquiries or other questions, please fill out the following form to contact us. Thank you.
-</p>    
-</div>
+</p>  
 
 <?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 	'id'=>'contact-form',
@@ -31,7 +30,7 @@ If you have business inquiries or other questions, please fill out the following
 
 	<?php // echo $form->errorSummaryRow($model); ?>
 
-		<?php echo $form->textFieldRow($model,'name'); ?>
+		<?php echo $form->textFieldRow($model,'name', array('class'=>'span3', 'maxLength'=>20)); ?>
 		<?php echo $form->textFieldRow($model,'email'); ?>
 		<?php echo $form->textFieldRow($model,'subject',array('size'=>60,'maxlength'=>128)); ?>
 		<?php echo $form->textAreaRow($model,'body',array('rows'=>6, 'cols'=>50)); ?>
@@ -52,5 +51,6 @@ If you have business inquiries or other questions, please fill out the following
         )); ?>
 
 <?php $this->endWidget(); ?>
-
+  
+</div>
 <?php endif; ?>

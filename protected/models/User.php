@@ -18,7 +18,7 @@
  * The followings are the available model relations:
  * @property Hospitals[] $hospitals
  */
-class User extends CActiveRecord
+class User extends MasterModel
 {
 	/**
 	 * @return string the associated database table name
