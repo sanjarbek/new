@@ -19,17 +19,30 @@ $this->menu=array(
 	'data'=>$model,
 	'attributes'=>array(
 		'id',
-		'patient_id',
-		'mrtscan_id',
+		array(
+            'name'=>'patient_id',
+            'value'=>CHtml::encode($model->patient->fullname),
+        ),
+        array(
+            'name'=>'mrtscan_id',
+            'value'=>CHtml::encode($model->mrtscan->name),
+        ),
 		'price',
 		'discont',
 		'price_with_discont',
-		'status',
-		'report_status',
-		'report_text',
+		array(
+            'name'=>'status',
+            'value'=>$model->getStatusText(),
+        ),
 		'created_at',
 		'updated_at',
-		'created_user',
-		'updated_user',
+		array(
+            'name'=>'created_user',
+            'value'=>CHtml::encode($model->creator->fullname),
+        ),
+		array(
+            'name'=>'updated_user',
+            'value'=>  CHtml::encode($model->updater->fullname),
+        ),
 	),
 )); ?>

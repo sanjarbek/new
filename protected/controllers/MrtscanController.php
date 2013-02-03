@@ -13,9 +13,12 @@ class MrtscanController extends Controller
 	 */
 	public function filters()
 	{
-		return array(
+		return CMap::mergeArray(parent::filters(), array(
 			'accessControl', // perform access control for CRUD operations
-		);
+            array( // handle gridview ajax update
+                'application.filters.GridViewHandler', //path to GridViewHandler.php class
+            ),
+		));
 	}
 
 	/**
@@ -31,12 +34,12 @@ class MrtscanController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
+				'actions'=>array('create','update', 'getPrice'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('admin','delete'),
-				'users'=>array('admin'),
+				'users'=>array('sanzhar'),
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),
@@ -127,7 +130,11 @@ class MrtscanController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Mrtscan');
+		$dataProvider=new CActiveDataProvider('Mrtscan', array(
+            'criteria'=>array(
+                'condition'=>'t.status='.Mrtscan::STATUS_ENABLED,
+            )
+        ));
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
@@ -173,4 +180,51 @@ class MrtscanController extends Controller
 			Yii::app()->end();
 		}
 	}
+    
+    /**
+	 * Manages all models via Ajax.
+	 */
+	public function _getGridViewMrtscanGrid()
+	{
+		$model=new Mrtscan('search');
+		$model->unsetAttributes();  // clear any default values
+		if(isset($_GET['Mrtscan']))
+			$model->attributes=$_GET['Mrtscan'];
+
+		$this->renderPartial('_gridview',array(
+			'model'=>$model,
+		));
+	}
+    
+    /**
+     * Return mrtscan price
+     * @param integer the ID of the model to be loaded
+     */
+    public function actionGetPrice()
+    {
+        $id = 0;
+
+        if (isset($_POST['Registration']))
+            $id = $_POST['Registration']['mrtscan_id'];
+
+        $model = Mrtscan::model()->findByPk($id);
+
+        if($model===null)
+        {
+            echo CJSON::encode( array(
+                'status' => 'failure',
+                'content' => 0,
+            ));
+        }
+        else
+        {
+            echo CJSON::encode( array(
+                'status' => 'success',
+                'content' => $model->price,
+        ));
+
+        }
+        Yii::app()->end();
+
+    }
 }

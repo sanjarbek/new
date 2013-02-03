@@ -20,6 +20,16 @@
  */
 class User extends MasterModel
 {
+    const USER_ADMIN = 0;
+    const USER_MANAGER = 1;
+    const USER_REGISTRATOR = 2;
+    
+    const STATUS_ENABLED = 0;
+    const STATUS_DISABLED = 1;
+    
+    const TYPE_SUPERUSER = 0;
+    const TYPE_NOT_SUPERUSER = 1;
+    
 	/**
 	 * @return string the associated database table name
 	 */
@@ -41,12 +51,37 @@ class User extends MasterModel
 			array('fullname', 'length', 'max'=>50),
 			array('username', 'length', 'max'=>20),
 			array('password, email', 'length', 'max'=>128),
+            array('type', 'in', 'range'=>array(
+                self::USER_ADMIN,
+                self::USER_MANAGER,
+                self::USER_REGISTRATOR,
+            )),
+            array('status', 'in', 'range'=>array(
+                self::STATUS_ENABLED,
+                self::STATUS_DISABLED,
+            )),
+            array('superuser', 'in', 'range'=>array(
+                self::TYPE_SUPERUSER,
+                self::TYPE_NOT_SUPERUSER,
+            )),
 			array('lastvisit_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, fullname, username, password, email, created_at, lastvisit_at, superuser, status, type', 'safe', 'on'=>'search'),
 		);
 	}
+    
+    public function scopes()
+    {
+        return array(
+            'managers'=>array(
+                'condition'=>'type=' . self::USER_MANAGER,
+            ),
+            'active'=>array(
+                'condition'=>'status=' . self::STATUS_ENABLED,
+            ),
+        );
+    }
 
 	/**
 	 * @return array relational rules.
@@ -123,4 +158,84 @@ class User extends MasterModel
 	{
 		return parent::model($className);
 	}
+    
+    /**
+    * apply a hash on the password before we store it in the database
+    */
+    protected function afterValidate()
+    {
+        parent::afterValidate();
+        if(!$this->hasErrors())
+        $this->password = $this->hashPassword($this->password);
+    }
+
+    /**
+    * Generates the password hash.
+    * @param string password
+    * @return string hash
+    */
+    public function hashPassword($password)
+    {
+        return md5($password);
+    }
+
+    /**
+    * Checks if the given password is correct.
+    * @param string the password to be validated
+    * @return boolean whether the password is valid
+    */
+    public function validatePassword($password)
+    {
+        return $this->hashPassword($password)===$this->password;
+    }
+    
+    /**
+     * @return status values as array
+     */
+    public function getStatusOptions()
+    {
+        return array(
+            self::STATUS_DISABLED => Yii::t('status', 'Inactive'),
+            self::STATUS_ENABLED => Yii::t('status', 'Active'),
+        );
+    }
+    
+    /**
+     * 
+     * @return status text presentation
+     */
+    public function getStatusText()
+    {
+        $statusOptions = $this->getStatusOptions();
+        return (isset($statusOptions[$this->status]) ? 
+                $statusOptions[$this->status] : 
+            Yii::t('message', 'Unknown status: ') . $this->status);
+    }
+    
+    /**
+     * 
+     * @return user types as array
+     */
+    public function getUserTypes()
+    {
+        return array(
+            self::USER_ADMIN => Yii::t('status', 'Admin'),
+            self::USER_MANAGER => Yii::t('status', 'Manager'),
+            self::USER_REGISTRATOR => Yii::t('status', 'Registrator'),
+        );
+    }
+    
+    /**
+     * 
+     * @return user type text representation
+     */
+    public function getTypeText()
+    {
+        $typeOptions = $this->getUserTypes();
+        return (isset($typeOptions[$this->type]) ? 
+                $typeOptions[$this->type] : 
+            Yii::t('message', 'Unknown type: ') . $this->type);
+    }
+    
+
 }

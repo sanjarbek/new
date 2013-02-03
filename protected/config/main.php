@@ -38,6 +38,7 @@ return array(
 		'user'=>array(
 			// enable cookie-based authentication
 			'allowAutoLogin'=>true,
+            'loginUrl'=>array('user/login'),
 		),
         'bootstrap' => array(
             'class' => 'ext.bootstrap.components.Bootstrap',
@@ -61,8 +62,8 @@ return array(
 			'username' => 'semamed',
 			'password' => ',trth12',
 			'charset' => 'utf8',
-            'enableProfiling'=>false,
-            'enableParamLogging'=>false,
+            'enableProfiling'=>true,
+            'enableParamLogging'=>true,
 		),
         
 		'errorHandler'=>array(
@@ -77,11 +78,11 @@ return array(
 					'levels'=>'error, warning',
 				),
 				// uncomment the following to show log messages on web pages
-				/*
+				
 				array(
 					'class'=>'CWebLogRoute',
 				),
-				*/
+				
 			),
 		),
 	),

@@ -20,6 +20,9 @@
  */
 class Hospital extends MasterModel
 {
+    const STATUS_ENABLED = 0;
+    const STATUS_DISABLED = 1;
+    
 	/**
 	 * @return string the associated database table name
 	 */
@@ -38,23 +41,45 @@ class Hospital extends MasterModel
 		return array(
 			array('name, phone, manager_id, status, created_at, updated_at, created_user, updated_user', 'required'),
 			array('manager_id, status, created_user, updated_user', 'numerical', 'integerOnly'=>true),
+            array('status', 'in', 'range'=>array(
+                self::STATUS_DISABLED,
+                self::STATUS_ENABLED,
+            )),
+            array('manager_id', 
+                'exist', 
+                'allowEmpty' => false,
+                'attributeName' => 'id',
+                'className' => 'User',
+                'message' => 'The specified manager does not exist.',
+                'skipOnError'=>false,
+            ),
 			array('name, phone', 'length', 'max'=>45),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, name, phone, manager_id, status, created_at, updated_at, created_user, updated_user', 'safe', 'on'=>'search'),
 		);
 	}
-
-	/**
-	 * @return array relational rules.
-	 */
+    
+    public function scopes() {
+        return array(
+            'active'=>array(
+                'condition'=>'status='.self::STATUS_ENABLED,
+            )
+        );
+    }
+    
+    /**
+    * @return array relational rules.
+	*/
 	public function relations()
 	{
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'doctors' => array(self::HAS_MANY, 'Doctors', 'hospital_id'),
-			'manager' => array(self::BELONGS_TO, 'Users', 'manager_id'),
+			'doctors' => array(self::HAS_MANY, 'Doctor', 'hospital_id'),
+			'manager' => array(self::BELONGS_TO, 'User', 'manager_id'),
+            'creator' => array(self::BELONGS_TO, 'User', 'created_user'),
+            'updater' => array(self::BELONGS_TO, 'User', 'updated_user'),
 		);
 	}
 
@@ -94,15 +119,15 @@ class Hospital extends MasterModel
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id',$this->id);
-		$criteria->compare('name',$this->name,true);
-		$criteria->compare('phone',$this->phone,true);
-		$criteria->compare('manager_id',$this->manager_id);
-		$criteria->compare('status',$this->status);
-		$criteria->compare('created_at',$this->created_at,true);
-		$criteria->compare('updated_at',$this->updated_at,true);
-		$criteria->compare('created_user',$this->created_user);
-		$criteria->compare('updated_user',$this->updated_user);
+		$criteria->compare('t.id',$this->id);
+		$criteria->compare('t.name',$this->name,true);
+		$criteria->compare('t.phone',$this->phone,true);
+		$criteria->compare('t.manager_id',$this->manager_id);
+		$criteria->compare('t.status',$this->status);
+		$criteria->compare('t.created_at',$this->created_at,true);
+		$criteria->compare('t.updated_at',$this->updated_at,true);
+		$criteria->compare('t.created_user',$this->created_user);
+		$criteria->compare('t.updated_user',$this->updated_user);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -119,4 +144,25 @@ class Hospital extends MasterModel
 	{
 		return parent::model($className);
 	}
+    
+    public function getStatusOptions()
+    {
+        return array(
+            self::STATUS_DISABLED => Yii::t('status', 'Inactive'),
+            self::STATUS_ENABLED => Yii::t('status', 'Active'),
+        );
+    }
+    
+    public function getStatusText()
+    {
+        $statusOptions = $this->getStatusOptions();
+        return (isset($statusOptions[$this->status]) ? 
+                $statusOptions[$this->status] : 
+            Yii::t('message', 'Unknown status: ') . $this->status);
+    }
+    
+    public function getManagersList()
+    {
+        return CHtml::listData(User::model()->managers()->active()->findAll(), 'id', 'fullname');
+    }
 }

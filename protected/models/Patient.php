@@ -22,6 +22,15 @@
  */
 class Patient extends MasterModel
 {
+    const STATUS_NOT_YET_STARTED = 0;
+    const STATUS_STARTED = 1;
+    const STATUS_FINISHED = 2;
+    const STATUS_CANCELED = 3;
+    const STATUS_DELAYED = 4;
+    
+    const SEX_MALE = 0;
+    const SEX_FEMALE = 1;
+    
 	/**
 	 * @return string the associated database table name
 	 */
@@ -42,6 +51,26 @@ class Patient extends MasterModel
 			array('sex, status, doctor_id, created_user, updated_user', 'numerical', 'integerOnly'=>true),
 			array('fullname', 'length', 'max'=>30),
 			array('phone', 'length', 'max'=>20),
+            array('birthday', 'date', 'format'=>'yyyy-mm-dd'),
+            array('doctor_id', 
+                'exist', 
+                'allowEmpty' => false,
+                'attributeName' => 'id',
+                'className' => 'Doctor',
+                'message' => 'The specified doctor does not exist.',
+                'skipOnError'=>false,
+            ),
+            array('status', 'in', 'range'=>array(
+                self::STATUS_NOT_YET_STARTED,
+                self::STATUS_STARTED,
+                self::STATUS_FINISHED,
+                self::STATUS_CANCELED,
+                self::STATUS_DELAYED,
+            )),
+            array('sex', 'in', 'range'=>array(
+                self::SEX_MALE,
+                self::SEX_FEMALE,
+            )),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, fullname, phone, birthday, sex, status, doctor_id, created_at, updated_at, created_user, updated_user', 'safe', 'on'=>'search'),
@@ -56,8 +85,10 @@ class Patient extends MasterModel
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'doctor' => array(self::BELONGS_TO, 'Doctors', 'doctor_id'),
-			'registrations' => array(self::HAS_MANY, 'Registrations', 'patient_id'),
+			'doctor' => array(self::BELONGS_TO, 'Doctor', 'doctor_id', 'alias'=>'d'),
+			'registrations' => array(self::HAS_MANY, 'Registration', 'patient_id', 'alias'=>'reg'),
+            'creator'=>array(self::BELONGS_TO, 'User', 'created_user'),
+            'updater'=>array(self::BELONGS_TO, 'User', 'updated_user'),
 		);
 	}
 
@@ -99,17 +130,17 @@ class Patient extends MasterModel
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id',$this->id);
-		$criteria->compare('fullname',$this->fullname,true);
-		$criteria->compare('phone',$this->phone,true);
-		$criteria->compare('birthday',$this->birthday,true);
-		$criteria->compare('sex',$this->sex);
-		$criteria->compare('status',$this->status);
-		$criteria->compare('doctor_id',$this->doctor_id);
-		$criteria->compare('created_at',$this->created_at,true);
-		$criteria->compare('updated_at',$this->updated_at,true);
-		$criteria->compare('created_user',$this->created_user);
-		$criteria->compare('updated_user',$this->updated_user);
+		$criteria->compare('t.id',$this->id);
+		$criteria->compare('t.fullname',$this->fullname,true);
+		$criteria->compare('t.phone',$this->phone,true);
+		$criteria->compare('t.birthday',$this->birthday,true);
+		$criteria->compare('t.sex',$this->sex);
+		$criteria->compare('t.status',$this->status);
+		$criteria->compare('t.doctor_id',$this->doctor_id);
+		$criteria->compare('t.created_at',$this->created_at,true);
+		$criteria->compare('t.updated_at',$this->updated_at,true);
+		$criteria->compare('t.created_user',$this->created_user);
+		$criteria->compare('t.updated_user',$this->updated_user);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -126,4 +157,44 @@ class Patient extends MasterModel
 	{
 		return parent::model($className);
 	}
+    
+    public function getStatusOptions()
+    {
+        return array(
+            self::STATUS_NOT_YET_STARTED => Yii::t('status', 'Not yet started'),
+            self::STATUS_STARTED => Yii::t('status', 'Started'),
+            self::STATUS_FINISHED => Yii::t('status', 'Finished'),
+            self::STATUS_CANCELED => Yii::t('status', 'Canceled'),
+            self::STATUS_DELAYED => Yii::t('status', 'Delayed'),
+        );
+    }
+
+    public function getStatusText()
+    {
+        $status_options = $this->getStatusOptions();
+        return isset($status_options[$this->status])
+            ? $status_options[$this->status]
+            : (Yii::t('status', 'Unknown status ') . $this->status);
+    }
+
+    public function getSexOptions()
+    {
+        return array(
+            self::SEX_MALE => Yii::t('status', 'Male'),
+            self::SEX_FEMALE => Yii::t('status', 'Female'),
+        );
+    }
+
+    public function getSexText()
+    {
+        $sex_options = $this->getSexOptions();
+        return isset($sex_options[$this->sex])
+            ? $sex_options[$this->sex]
+            : (Yii::t('value', 'Unknown status ') . $this->sex);
+    }
+    
+    public function getDoctorsList()
+    {
+        return CHtml::listData(Doctor::model()->active()->findAll(), 'id', 'fullname');
+    }
 }

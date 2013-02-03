@@ -10,20 +10,62 @@ root {
     display: block;
 }
 
-input[type="text"], input[type="password"] {
-    height: 14px;
-}
-
 .footer {
     text-align: center;
 }
 
-textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
+select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
     height: 14px;
+    font-size: 12px;
+}
+
+select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
+  border-radius: 4px 4px 4px 4px;
+  color: #555555;
+  display: inline-block;
+  font-size: 14px;
+  height: 20px;
+  line-height: 20px;
+  margin-bottom: 10px;
+  padding: 2px 2px;
+  vertical-align: middle;
+}
+
+select, input[type="file"] {
+  font-size: 12px;
+  height: 25px;
+  line-height: 25px;
 }
 
 .row-fluid [class*="span"] {
     -moz-box-sizing: border-box;
     min-height: 25px;
+}
+
+body {
+    font-size: 12px;
+}
+
+.bootstrap-widget-header {
+    height: 25px;
+}
+
+.bootstrap-widget-header h3 {
+    line-height: 5px;
+}
+
+.input-append .add-on, .input-prepend .add-on {
+  background-color: #EEEEEE;
+  border: 1px solid #CCCCCC;
+  display: inline-block;
+  font-size: 14px;
+  font-weight: normal;
+  height: 15px;
+  line-height: 20px;
+  min-width: 16px;
+  padding: 4px 5px;
+  text-align: center;
+  text-shadow: 0 1px 0 #FFFFFF;
+  width: auto;
 }
 

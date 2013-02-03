@@ -13,6 +13,9 @@ $this->menu=array(
 );
 ?>
 
-<h1>Update Hospital <?php echo $model->id; ?></h1>
+<div class="well well-large">
+    <h3>Update Hospital <?php echo $model->id; ?></h3>
 
-<?php echo $this->renderPartial('_form',array('model'=>$model)); ?>
+    <?php echo $this->renderPartial('_form',array('model'=>$model)); ?>
+
+</div>

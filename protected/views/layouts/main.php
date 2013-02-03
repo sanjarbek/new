@@ -37,8 +37,8 @@
                     array('label'=>'Home', 'url'=>array('/site/index')),
                     array('label'=>'About', 'url'=>array('/site/page', 'view'=>'about')),
                     array('label'=>'Contact', 'url'=>array('/site/contact')),
-                    array('label'=>'Login', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),
-                    array('label'=>'Logout ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest)
+                    array('label'=>'Login', 'url'=>array('/user/login'), 'visible'=>Yii::app()->user->isGuest),
+                    array('label'=>'Logout ('.Yii::app()->user->name.')', 'url'=>array('/user/logout'), 'visible'=>!Yii::app()->user->isGuest)
                 ),
             ),
             array(
@@ -55,7 +55,6 @@
                             array('label'=>Yii::t('title', 'MRT scans'), 'url'=>array('/mrtscan'), 'visible'=>!Yii::app()->user->isGuest),
                         )
                     ),
-					array('label'=>'Logout', 'url'=>array('/user/logout'), 'icon'=>'icon-off','visible'=>!Yii::app()->user->isGuest, 'htmlOptions'=>array('class'=>'btn')),
 				),
                 'htmlOptions'=>array(
                     'class'=>'nav pull-right',

@@ -7,16 +7,67 @@ class RegistrationController extends Controller
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
 	public $layout='//layouts/column2';
+    
+    /**
+     * @var private property containing the associated Patient model instance.
+     */
+    private $_patient = null;
 
 	/**
 	 * @return array action filters
 	 */
 	public function filters()
 	{
-		return array(
+        return CMap::mergeArray(parent::filters(),array(
 			'accessControl', // perform access control for CRUD operations
-		);
+            'patientContext + create', //check to ensure valid patient context
+//            'postOnly + delete', // we only allow deletion via POST request
+            array(
+                'application.filters.GridViewHandler' //path to GridViewHandler.php class
+            )
+        ));
 	}
+    
+    /**
+     * In-class defined filter method, configured for use in the above filters() method
+     * It is called before the actionCreate() action method is run in order to ensure a proper patient context
+     */
+
+    public function filterPatientContext($filterChain)
+    {
+        //set the project identifier based on either the GET or POST input
+        //request variables, since we allow both types for our actions
+
+        $patientId = null;
+        if(isset($_GET['pid']))
+            $patientId = $_GET['pid'];
+        else if (isset($_POST['pid']))
+            $patientId = $_POST['pid'];
+
+        $this->loadPatient($patientId);
+
+        // complete the running of other filters and execute the requested action
+        $filterChain->run();
+    }
+    
+    /**
+    * Protected method to load the associated Patient model class
+    * @patient_id the primary identifier of the associated Patient
+    * @return object the Project data model based on the primary key
+    */
+    protected function loadPatient($patient_id)
+    {
+        //if the project property is null, create it based on input id
+        if($this->_patient===null)
+        {
+            $this->_patient=Patient::model()->findbyPk($patient_id);
+            if($this->_patient===null)
+            {
+                throw new CHttpException(404,'The requested patient does not exist.');
+            }
+        }
+        return $this->_patient;
+    }
 
 	/**
 	 * Specifies the access control rules.
@@ -36,7 +87,7 @@ class RegistrationController extends Controller
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('admin','delete'),
-				'users'=>array('admin'),
+				'users'=>array('sanzhar'),
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),
@@ -69,6 +120,7 @@ class RegistrationController extends Controller
 		if(isset($_POST['Registration']))
 		{
 			$model->attributes=$_POST['Registration'];
+            $model->patient_id = $this->_patient->id;
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -127,7 +179,11 @@ class RegistrationController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Registration');
+		$dataProvider=new CActiveDataProvider('Registration', array(
+            'criteria'=>array(
+                'with'=>array('patient', 'mrtscan'),
+            )
+        ));
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
@@ -172,5 +228,20 @@ class RegistrationController extends Controller
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
 		}
+	}
+    
+    /**
+	 * Manages all models via Ajax.
+	 */
+	public function _getGridViewRegistrationGrid()
+	{
+		$model=new Registration('search');
+		$model->unsetAttributes();  // clear any default values
+		if(isset($_GET['Registration']))
+			$model->attributes=$_GET['Registration'];
+
+		$this->renderPartial('_gridview',array(
+			'model'=>$model,
+		));
 	}
 }

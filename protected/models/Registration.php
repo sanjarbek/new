@@ -24,6 +24,10 @@
  */
 class Registration extends MasterModel
 {
+    const STATUS_NOT_YET_STARTED = 0;
+    const STATUS_FINISHED = 1;
+    const STATUS_CANCELED = 2;
+    
 	/**
 	 * @return string the associated database table name
 	 */
@@ -40,15 +44,44 @@ class Registration extends MasterModel
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('patient_id, mrtscan_id, price, discont, price_with_discont, status, report_status, created_at, updated_at, created_user, updated_user', 'required'),
+			array('patient_id, mrtscan_id, price, discont, price_with_discont, status, created_at, updated_at, created_user, updated_user', 'required'),
 			array('patient_id, mrtscan_id, status, report_status, created_user, updated_user', 'numerical', 'integerOnly'=>true),
 			array('price, discont, price_with_discont', 'length', 'max'=>10),
+            array('patient_id', 
+                'exist', 
+                'allowEmpty' => false,
+                'attributeName' => 'id',
+                'className' => 'Patient',
+                'message' => 'The specified patient does not exist.',
+                'skipOnError'=>false,
+            ),
+            array('mrtscan_id', 
+                'exist', 
+                'allowEmpty' => false,
+                'attributeName' => 'id',
+                'className' => 'Mrtscan',
+                'message' => 'The specified mrtscan does not exist.',
+                'skipOnError'=>false,
+            ),
+            array('price', 'priceValidation'),
+            array('status', 'in', 'range'=>array(
+                self::STATUS_NOT_YET_STARTED,
+                self::STATUS_FINISHED,
+                self::STATUS_CANCELED,
+            )),
 			array('report_text', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, patient_id, mrtscan_id, price, discont, price_with_discont, status, report_status, report_text, created_at, updated_at, created_user, updated_user', 'safe', 'on'=>'search'),
 		);
 	}
+    
+    public function priceValidation($attribute)
+    {
+        $mrtscan = Mrtscan::model()->findByPk($this->mrtscan_id);
+        if ($this->price !== $mrtscan->price)
+          $this->addError($attribute, 'Don\'t change mrtscan\'s price!');
+    }
 
 	/**
 	 * @return array relational rules.
@@ -58,8 +91,10 @@ class Registration extends MasterModel
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'mrtscan' => array(self::BELONGS_TO, 'Mrtscans', 'mrtscan_id'),
-			'patient' => array(self::BELONGS_TO, 'Patients', 'patient_id'),
+			'mrtscan' => array(self::BELONGS_TO, 'Mrtscan', 'mrtscan_id'),
+			'patient' => array(self::BELONGS_TO, 'Patient', 'patient_id'),
+            'creator' => array(self::BELONGS_TO, 'User', 'created_user'),
+            'updater' => array(self::BELONGS_TO, 'User', 'updated_user'),
 		);
 	}
 
@@ -74,7 +109,7 @@ class Registration extends MasterModel
 			'mrtscan_id' => 'Mrtscan',
 			'price' => 'Price',
 			'discont' => 'Discont',
-			'price_with_discont' => 'Price With Discont',
+			'price_with_discont' => 'Final price',
 			'status' => 'Status',
 			'report_status' => 'Report Status',
 			'report_text' => 'Report Text',
@@ -103,19 +138,19 @@ class Registration extends MasterModel
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id',$this->id);
-		$criteria->compare('patient_id',$this->patient_id);
-		$criteria->compare('mrtscan_id',$this->mrtscan_id);
-		$criteria->compare('price',$this->price,true);
-		$criteria->compare('discont',$this->discont,true);
-		$criteria->compare('price_with_discont',$this->price_with_discont,true);
-		$criteria->compare('status',$this->status);
-		$criteria->compare('report_status',$this->report_status);
-		$criteria->compare('report_text',$this->report_text,true);
-		$criteria->compare('created_at',$this->created_at,true);
-		$criteria->compare('updated_at',$this->updated_at,true);
-		$criteria->compare('created_user',$this->created_user);
-		$criteria->compare('updated_user',$this->updated_user);
+		$criteria->compare('t.id',$this->id);
+		$criteria->compare('t.patient_id',$this->patient_id);
+		$criteria->compare('t.mrtscan_id',$this->mrtscan_id);
+		$criteria->compare('t.price',$this->price,true);
+		$criteria->compare('t.discont',$this->discont,true);
+		$criteria->compare('t.price_with_discont',$this->price_with_discont,true);
+		$criteria->compare('t.status',$this->status);
+		$criteria->compare('t.report_status',$this->report_status);
+		$criteria->compare('t.report_text',$this->report_text,true);
+		$criteria->compare('t.created_at',$this->created_at,true);
+		$criteria->compare('t.updated_at',$this->updated_at,true);
+		$criteria->compare('t.created_user',$this->created_user);
+		$criteria->compare('t.updated_user',$this->updated_user);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -132,4 +167,31 @@ class Registration extends MasterModel
 	{
 		return parent::model($className);
 	}
+    
+    public function getMrtscansList()
+    {
+        return CHtml::listData(Mrtscan::model()->active()->findAll(), 'id', 'name');
+    }
+    
+    public function getPatientsList()
+    {
+        return CHtml::listData(Patient::model()->findAll(), 'id', 'fullname');
+    }
+    
+    public function getStatusOptions()
+    {
+        return array(
+            self::STATUS_NOT_YET_STARTED => Yii::t('status', 'Not yet started'),
+            self::STATUS_FINISHED => Yii::t('status', 'Finished'),
+            self::STATUS_CANCELED => Yii::t('status', 'Canceled'),
+        );
+    }
+
+    public function getStatusText()
+    {
+        $status_options = $this->getStatusOptions();
+        return isset($status_options[$this->status])
+            ? $status_options[$this->status]
+            : (Yii::t('status', 'Unknown status ') . $this->status);
+    }
 }

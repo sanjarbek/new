@@ -5,11 +5,11 @@
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('patient_id')); ?>:</b>
-	<?php echo CHtml::encode($data->patient_id); ?>
+	<?php echo CHtml::encode($data->patient->fullname); ?>
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('mrtscan_id')); ?>:</b>
-	<?php echo CHtml::encode($data->mrtscan_id); ?>
+	<?php echo CHtml::encode($data->mrtscan->name); ?>
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('price')); ?>:</b>
@@ -25,8 +25,10 @@
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('status')); ?>:</b>
-	<?php echo CHtml::encode($data->status); ?>
+	<?php echo CHtml::encode($data->getStatusText()); ?>
 	<br />
+    
+    <hr />
 
 	<?php /*
 	<b><?php echo CHtml::encode($data->getAttributeLabel('report_status')); ?>:</b>

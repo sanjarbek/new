@@ -7,7 +7,7 @@
 
 	<?php echo $form->errorSummary($model); ?>
 
-	<?php echo $form->textFieldRow($model,'fullname',array('class'=>'span5','maxlength'=>50)); ?>
+	<?php echo $form->textFieldRow($model,'fullname', array('class'=>'span5','maxlength'=>50)); ?>
 
 	<?php echo $form->textFieldRow($model,'username',array('class'=>'span5','maxlength'=>20)); ?>
 
@@ -15,15 +15,11 @@
 
 	<?php echo $form->textFieldRow($model,'email',array('class'=>'span5','maxlength'=>128)); ?>
 
-	<?php echo $form->textFieldRow($model,'created_at',array('class'=>'span5')); ?>
+	<?php echo $form->dropDownListRow($model,'superuser', array(0=>'Super', 1=>'Not super'), array('class'=>'span2')); ?>
 
-	<?php echo $form->textFieldRow($model,'lastvisit_at',array('class'=>'span5')); ?>
+	<?php echo $form->dropDownListRow($model,'status', $model->getStatusOptions(), array('class'=>'span3')); ?>
 
-	<?php echo $form->textFieldRow($model,'superuser',array('class'=>'span5')); ?>
-
-	<?php echo $form->textFieldRow($model,'status',array('class'=>'span5')); ?>
-
-	<?php echo $form->textFieldRow($model,'type',array('class'=>'span5')); ?>
+	<?php echo $form->dropDownListRow($model,'type', $model->getUserTYpes(), array('class'=>'span3')); ?>
 
 	<div class="form-actions">
 		<?php $this->widget('bootstrap.widgets.TbButton', array(

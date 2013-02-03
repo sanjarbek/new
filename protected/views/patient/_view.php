@@ -17,21 +17,24 @@
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('sex')); ?>:</b>
-	<?php echo CHtml::encode($data->sex); ?>
+	<?php echo CHtml::encode($data->getSexText()); ?>
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('status')); ?>:</b>
-	<?php echo CHtml::encode($data->status); ?>
+	<?php echo CHtml::encode($data->getStatusText()); ?>
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('doctor_id')); ?>:</b>
-	<?php echo CHtml::encode($data->doctor_id); ?>
+	<?php echo CHtml::encode($data->doctor->fullname); ?>
 	<br />
-
-	<?php /*
-	<b><?php echo CHtml::encode($data->getAttributeLabel('created_at')); ?>:</b>
+    
+    <b><?php echo CHtml::encode('Registration date'); ?>:</b>
 	<?php echo CHtml::encode($data->created_at); ?>
 	<br />
+    
+    <hr />
+
+	<?php /*
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('updated_at')); ?>:</b>
 	<?php echo CHtml::encode($data->updated_at); ?>

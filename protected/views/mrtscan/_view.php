@@ -17,16 +17,10 @@
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('status')); ?>:</b>
-	<?php echo CHtml::encode($data->status); ?>
+	<?php echo CHtml::encode($data->getStatusText()); ?>
 	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('created_at')); ?>:</b>
-	<?php echo CHtml::encode($data->created_at); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('updated_at')); ?>:</b>
-	<?php echo CHtml::encode($data->updated_at); ?>
-	<br />
+    
+    <hr />
 
 	<?php /*
 	<b><?php echo CHtml::encode($data->getAttributeLabel('created_user')); ?>:</b>

@@ -19,6 +19,9 @@
  */
 class Mrtscan extends MasterModel
 {
+    const STATUS_ENABLED = 0;
+    const STATUS_DISABLED = 1;
+    
 	/**
 	 * @return string the associated database table name
 	 */
@@ -54,9 +57,20 @@ class Mrtscan extends MasterModel
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'registrations' => array(self::HAS_MANY, 'Registrations', 'mrtscan_id'),
+			'registrations' => array(self::HAS_MANY, 'Registration', 'mrtscan_id'),
+            'creator'=>array(self::BELONGS_TO, 'User', 'created_user'),
+            'updater'=>array(self::BELONGS_TO, 'User', 'updated_user'),
 		);
 	}
+    
+    public function scopes() 
+    {
+        return array(
+            'active'=>array(
+                'condition'=>'status='.self::STATUS_ENABLED,
+            )
+        );
+    }
 
 	/**
 	 * @return array customized attribute labels (name=>label)
@@ -119,4 +133,20 @@ class Mrtscan extends MasterModel
 	{
 		return parent::model($className);
 	}
+    
+    public function getStatusOptions()
+    {
+        return array(
+            self::STATUS_DISABLED => Yii::t('status', 'Inactive'),
+            self::STATUS_ENABLED => Yii::t('status', 'Active'),
+        );
+    }
+    
+    public function getStatusText()
+    {
+        $statusOptions = $this->getStatusOptions();
+        return (isset($statusOptions[$this->status]) ? 
+                $statusOptions[$this->status] : 
+            Yii::t('message', 'Unknown status: ') . $this->status);
+    }
 }

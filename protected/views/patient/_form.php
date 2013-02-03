@@ -12,23 +12,23 @@
 
 	<?php echo $form->textFieldRow($model,'fullname',array('class'=>'span5','maxlength'=>30)); ?>
 
-	<?php echo $form->textFieldRow($model,'phone',array('class'=>'span5','maxlength'=>20)); ?>
+	<?php echo $form->textFieldRow($model,'phone',array('class'=>'span3','maxlength'=>20)); ?>
 
-	<?php echo $form->textFieldRow($model,'birthday',array('class'=>'span5')); ?>
+	<?php echo $form->datepickerRow($model,'birthday',array(
+        'class'=>'span2', 
+        'prepend'=>'<i class="icon-calendar"></i>',
+        'options'=>array(
+            'format'=>'yyyy-mm-dd',
+            'calendarWeeks'=>true,
+            'startView'=>'decade',
+        ),
+    )); ?>
 
-	<?php echo $form->textFieldRow($model,'sex',array('class'=>'span5')); ?>
+	<?php echo $form->dropDownListRow($model,'sex',$model->getSexOptions(), array('class'=>'span2')); ?>
 
-	<?php echo $form->textFieldRow($model,'status',array('class'=>'span5')); ?>
+	<?php echo $form->dropDownListRow($model,'status',$model->getStatusOptions(), array('class'=>'span2')); ?>
 
-	<?php echo $form->textFieldRow($model,'doctor_id',array('class'=>'span5')); ?>
-
-	<?php echo $form->textFieldRow($model,'created_at',array('class'=>'span5')); ?>
-
-	<?php echo $form->textFieldRow($model,'updated_at',array('class'=>'span5')); ?>
-
-	<?php echo $form->textFieldRow($model,'created_user',array('class'=>'span5')); ?>
-
-	<?php echo $form->textFieldRow($model,'updated_user',array('class'=>'span5')); ?>
+	<?php echo $form->dropDownListRow($model,'doctor_id', $model->getDoctorsList(), array('class'=>'span3')); ?>
 
 	<div class="form-actions">
 		<?php $this->widget('bootstrap.widgets.TbButton', array(

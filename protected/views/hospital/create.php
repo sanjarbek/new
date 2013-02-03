@@ -10,6 +10,8 @@ $this->menu=array(
 );
 ?>
 
-<h1>Create Hospital</h1>
+<div class="well">
+    <h3>Create Hospital</h3>
 
-<?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+    <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+</div>

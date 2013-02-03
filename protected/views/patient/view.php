@@ -13,7 +13,7 @@ $this->menu=array(
 );
 ?>
 
-<h1>View Patient #<?php echo $model->id; ?></h1>
+<h3>View Patient #<?php echo $model->id; ?></h3>
 
 <?php $this->widget('bootstrap.widgets.TbDetailView',array(
 	'data'=>$model,
@@ -22,12 +22,27 @@ $this->menu=array(
 		'fullname',
 		'phone',
 		'birthday',
-		'sex',
-		'status',
-		'doctor_id',
+		array(
+            'name'=>'sex',
+            'value'=>$model->getSexText(),
+        ),
+        array(
+            'name'=>'status',
+            'value'=>$model->getStatusText(),
+        ),
+        array(
+            'name'=>'doctor_id',
+            'value'=>CHtml::encode($model->doctor->fullname),
+        ),
 		'created_at',
 		'updated_at',
-		'created_user',
-		'updated_user',
+		array(
+            'name'=>'created_user',
+            'value'=>CHtml::encode($model->creator->fullname),
+        ),
+        array(
+            'name'=>'updated_user',
+            'value'=>CHtml::encode($model->updater->fullname),
+        ),
 	),
 )); ?>

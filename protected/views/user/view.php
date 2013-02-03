@@ -13,7 +13,8 @@ $this->menu=array(
 );
 ?>
 
-<h1>View User #<?php echo $model->id; ?></h1>
+<div class="well">
+<h3>View User #<?php echo $model->id; ?></h3>
 
 <?php $this->widget('bootstrap.widgets.TbDetailView',array(
 	'data'=>$model,
@@ -26,7 +27,14 @@ $this->menu=array(
 		'created_at',
 		'lastvisit_at',
 		'superuser',
-		'status',
-		'type',
+        array(
+            'name'=>'status',
+            'value'=>$model->getStatusText(),
+        ),
+        array(
+            'name'=>'type',
+            'value'=>$model->getTypeText(),
+        ),
 	),
 )); ?>
+</div>

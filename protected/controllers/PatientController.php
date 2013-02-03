@@ -13,9 +13,12 @@ class PatientController extends Controller
 	 */
 	public function filters()
 	{
-		return array(
+		return CMap::mergeArray(parent::filters(), array(
 			'accessControl', // perform access control for CRUD operations
-		);
+            array( // handle gridview ajax update
+                'application.filters.GridViewHandler', //path to GridViewHandler.php class
+            ),
+		));
 	}
 
 	/**
@@ -36,7 +39,7 @@ class PatientController extends Controller
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('admin','delete'),
-				'users'=>array('admin'),
+				'users'=>array('sanzhar'),
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),
@@ -172,5 +175,20 @@ class PatientController extends Controller
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
 		}
+	}
+    
+    /**
+	 * Manages all models via Ajax.
+	 */
+	public function _getGridViewPatientGrid()
+	{
+		$model=new Patient('search');
+		$model->unsetAttributes();  // clear any default values
+		if(isset($_GET['Patient']))
+			$model->attributes=$_GET['Patient'];
+
+		$this->renderPartial('_gridview',array(
+			'model'=>$model,
+		));
 	}
 }

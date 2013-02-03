@@ -13,7 +13,7 @@ $this->menu=array(
 );
 ?>
 
-<h1>View Hospital #<?php echo $model->id; ?></h1>
+<h3>View Hospital #<?php echo $model->id; ?></h3>
 
 <?php $this->widget('bootstrap.widgets.TbDetailView',array(
 	'data'=>$model,
@@ -21,11 +21,27 @@ $this->menu=array(
 		'id',
 		'name',
 		'phone',
-		'manager_id',
-		'status',
+        array(
+            'name'=>'manager_id',
+            'value'=>$model->manager->fullname,
+        ),
+        array(
+            'name'=>'status',
+            'value'=>$model->getStatusText(),
+        ),
 		'created_at',
 		'updated_at',
-		'created_user',
-		'updated_user',
+		array(
+            'name'=>'created_user',
+            'value'=>$model->creator->fullname,
+        ),
+		array(
+            'name'=>'updated_user',
+            'value'=>$model->updater->fullname,
+        ),
+        array(
+            'label'=>'Doctors count',
+            'value'=>count($model->doctors),
+        ),
 	),
 )); ?>

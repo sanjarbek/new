@@ -13,20 +13,17 @@
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('manager_id')); ?>:</b>
-	<?php echo CHtml::encode($data->manager_id); ?>
+	<?php echo CHtml::encode($data->manager->fullname); ?>
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('status')); ?>:</b>
-	<?php echo CHtml::encode($data->status); ?>
+	<?php echo CHtml::encode($data->getStatusText()); ?>
 	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('created_at')); ?>:</b>
-	<?php echo CHtml::encode($data->created_at); ?>
+    
+    <b><?php echo 'Doctors count'; ?>:</b>
+	<?php echo count($data->doctors); ?>
 	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('updated_at')); ?>:</b>
-	<?php echo CHtml::encode($data->updated_at); ?>
-	<br />
+    <hr />
 
 	<?php /*
 	<b><?php echo CHtml::encode($data->getAttributeLabel('created_user')); ?>:</b>

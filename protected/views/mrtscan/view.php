@@ -13,7 +13,7 @@ $this->menu=array(
 );
 ?>
 
-<h1>View Mrtscan #<?php echo $model->id; ?></h1>
+<h3>View Mrtscan #<?php echo $model->id; ?></h3>
 
 <?php $this->widget('bootstrap.widgets.TbDetailView',array(
 	'data'=>$model,
@@ -22,10 +22,19 @@ $this->menu=array(
 		'name',
 		'description',
 		'price',
-		'status',
+		array(
+            'name'=>'status',
+            'value'=>$model->getStatusText(),
+        ),
 		'created_at',
 		'updated_at',
-		'created_user',
-		'updated_user',
+		array(
+            'name'=>'created_user',
+            'value'=>CHtml::encode($model->creator->fullname),
+        ),
+		array(
+            'name'=>'updated_user',
+            'value'=>CHtml::encode($model->updater->fullname),
+        ),
 	),
 )); ?>

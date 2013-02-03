@@ -9,9 +9,11 @@ $this->menu=array(
 );
 ?>
 
-<h1>Hospitals</h1>
-
-<?php $this->widget('bootstrap.widgets.TbListView',array(
-	'dataProvider'=>$dataProvider,
-	'itemView'=>'_view',
-)); ?>
+<div class="well">
+    <h3>Hospitals</h3>
+    
+    <?php $this->widget('bootstrap.widgets.TbListView',array(
+        'dataProvider'=>$dataProvider,
+        'itemView'=>'_view',        
+    )); ?>
+</div>

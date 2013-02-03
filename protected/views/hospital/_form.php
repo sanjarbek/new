@@ -9,19 +9,11 @@
 
 	<?php echo $form->textFieldRow($model,'name',array('class'=>'span5','maxlength'=>45)); ?>
 
-	<?php echo $form->textFieldRow($model,'phone',array('class'=>'span5','maxlength'=>45)); ?>
+	<?php echo $form->textFieldRow($model,'phone',array('class'=>'span3','maxlength'=>20)); ?>
 
-	<?php echo $form->textFieldRow($model,'manager_id',array('class'=>'span5')); ?>
+	<?php echo $form->dropDownListRow($model,'manager_id', $model->getManagersList(), array('class'=>'span3')); ?>
 
-	<?php echo $form->textFieldRow($model,'status',array('class'=>'span5')); ?>
-
-	<?php echo $form->textFieldRow($model,'created_at',array('class'=>'span5')); ?>
-
-	<?php echo $form->textFieldRow($model,'updated_at',array('class'=>'span5')); ?>
-
-	<?php echo $form->textFieldRow($model,'created_user',array('class'=>'span5')); ?>
-
-	<?php echo $form->textFieldRow($model,'updated_user',array('class'=>'span5')); ?>
+	<?php echo $form->dropDownListRow($model,'status', $model->getStatusOptions(), array('class'=>'span2')); ?>
 
 	<div class="form-actions">
 		<?php $this->widget('bootstrap.widgets.TbButton', array(

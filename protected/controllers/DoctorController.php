@@ -13,9 +13,12 @@ class DoctorController extends Controller
 	 */
 	public function filters()
 	{
-		return array(
+		return CMap::mergeArray(parent::filters(), array(
 			'accessControl', // perform access control for CRUD operations
-		);
+            array( // handle gridview ajax update
+                'application.filters.GridViewHandler', //path to GridViewHandler.php class
+            ),
+		));
 	}
 
 	/**
@@ -36,7 +39,7 @@ class DoctorController extends Controller
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('admin','delete'),
-				'users'=>array('admin'),
+				'users'=>array('sanzhar'),
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),
@@ -127,7 +130,12 @@ class DoctorController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Doctor');
+		$dataProvider=new CActiveDataProvider('Doctor', array(
+            'criteria'=>array(
+                'condition'=>'t.status='.Doctor::STATUS_ENABLED,
+                'with'=>array('hospital'),
+            )
+        ));
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
@@ -173,4 +181,19 @@ class DoctorController extends Controller
 			Yii::app()->end();
 		}
 	}
+    /**
+	 * Manages all models via Ajax.
+	 */
+	public function _getGridViewDoctorGrid()
+	{
+		$model=new Doctor('search');
+		$model->unsetAttributes();  // clear any default values
+		if(isset($_GET['Doctor']))
+			$model->attributes=$_GET['Doctor'];
+
+		$this->renderPartial('_gridview',array(
+			'model'=>$model,
+		));
+	}
+    
 }
