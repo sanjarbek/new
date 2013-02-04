@@ -13,7 +13,13 @@
 
 	<?php echo $form->textFieldRow($model,'price',array('class'=>'span2','maxlength'=>10)); ?>
 
-	<?php echo $form->dropDownListRow($model,'status', $model->getStatusOptions(), array('class'=>'span2')); ?>
+	<?php echo $form->labelEx($model, 'status'); ?>
+    <?php $this->widget('bootstrap.widgets.TbSelect2', array(
+        'model'=>$model,
+        'attribute'=>'status',
+        'data'=>$model->getStatusOptions(),
+    )); ?>
+    <?php echo $form->error($model, 'status'); ?>
 
 	<div class="form-actions">
 		<?php $this->widget('bootstrap.widgets.TbButton', array(

@@ -69,3 +69,17 @@ body {
   width: auto;
 }
 
+.grid-view {
+    padding-top: 0px;
+}
+
+/*.select2-container .select2-choice div b {
+  height: 22px;
+  line-height: 22px;
+}*/
+
+.select2-container .select2-choice {
+  height: 22px;
+  line-height: 22px;
+}
+

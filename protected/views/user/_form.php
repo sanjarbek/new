@@ -15,11 +15,38 @@
 
 	<?php echo $form->textFieldRow($model,'email',array('class'=>'span5','maxlength'=>128)); ?>
 
-	<?php echo $form->dropDownListRow($model,'superuser', array(0=>'Super', 1=>'Not super'), array('class'=>'span2')); ?>
+    <?php echo $form->labelEx($model, 'superuser'); ?>
+    <?php $this->widget('bootstrap.widgets.TbSelect2', array(
+        'model'=>$model,
+        'attribute'=>'superuser',
+        'data'=>array(0=>'Super', 1=>'Not super'),
+        'options'=>array(
+            'width'=>'100px',
+        )
+    )); ?>
+    <?php echo $form->error($model, 'superuser'); ?>
 
-	<?php echo $form->dropDownListRow($model,'status', $model->getStatusOptions(), array('class'=>'span3')); ?>
-
-	<?php echo $form->dropDownListRow($model,'type', $model->getUserTYpes(), array('class'=>'span3')); ?>
+	<?php echo $form->labelEx($model, 'type'); ?>
+    <?php $this->widget('bootstrap.widgets.TbSelect2', array(
+        'model'=>$model,
+        'attribute'=>'type',
+        'data'=>$model->getUserTypes(),
+        'options'=>array(
+            'width'=>'150px',
+        )
+    )); ?>
+    <?php echo $form->error($model, 'type'); ?>
+    
+    <?php echo $form->labelEx($model, 'status'); ?>
+    <?php $this->widget('bootstrap.widgets.TbSelect2', array(
+        'model'=>$model,
+        'attribute'=>'status',
+        'data'=>$model->getStatusOptions(),
+        'options'=>array(
+            'width'=>'100px',
+        )
+    )); ?>
+    <?php echo $form->error($model, 'status'); ?>
 
 	<div class="form-actions">
 		<?php $this->widget('bootstrap.widgets.TbButton', array(

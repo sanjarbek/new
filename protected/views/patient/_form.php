@@ -24,11 +24,44 @@
         ),
     )); ?>
 
-	<?php echo $form->dropDownListRow($model,'sex',$model->getSexOptions(), array('class'=>'span2')); ?>
+    <?php echo $form->labelEx($model, 'sex'); ?>
+    <?php $this->widget('bootstrap.widgets.TbSelect2', array(
+        'model'=>$model,
+        'attribute'=>'sex',
+        'asDropDownList'=>true,
+        'data'=>$model->getSexOptions(),
+//        'options'=>array(
+//            'width'=>'200px',
+//        )
+    ));
+    ?>
+    <?php echo $form->error($model, 'sex'); ?>
 
-	<?php echo $form->dropDownListRow($model,'status',$model->getStatusOptions(), array('class'=>'span2')); ?>
-
-	<?php echo $form->dropDownListRow($model,'doctor_id', $model->getDoctorsList(), array('class'=>'span3')); ?>
+    <?php echo $form->labelEx($model, 'doctor_id'); ?>
+    <?php $this->widget('bootstrap.widgets.TbSelect2', array(
+        'model'=>$model,
+        'attribute'=>'doctor_id',
+        'asDropDownList'=>true,
+        'data'=>$model->getDoctorsList(),
+        'options'=>array(
+            'width'=>'200px',
+        )
+    ));
+    ?>
+    <?php echo $form->error($model, 'doctor_id'); ?>
+    
+    <?php echo $form->labelEx($model, 'status'); ?>
+    <?php $this->widget('bootstrap.widgets.TbSelect2', array(
+        'model'=>$model,
+        'attribute'=>'status',
+        'asDropDownList'=>true,
+        'data'=>$model->getStatusOptions(),
+        'options'=>array(
+            'width'=>'200px',
+        )
+    ));
+    ?>
+    <?php echo $form->error($model, 'status'); ?>
 
 	<div class="form-actions">
 		<?php $this->widget('bootstrap.widgets.TbButton', array(

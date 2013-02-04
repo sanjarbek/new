@@ -20,7 +20,7 @@ class RegistrationController extends Controller
 	{
         return CMap::mergeArray(parent::filters(),array(
 			'accessControl', // perform access control for CRUD operations
-            'patientContext + create', //check to ensure valid patient context
+            'patientContext + create getPatientRegistrations', //check to ensure valid patient context
 //            'postOnly + delete', // we only allow deletion via POST request
             array(
                 'application.filters.GridViewHandler' //path to GridViewHandler.php class
@@ -82,7 +82,7 @@ class RegistrationController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
+				'actions'=>array('create','update', 'patientregistrations'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -244,4 +244,14 @@ class RegistrationController extends Controller
 			'model'=>$model,
 		));
 	}
+    
+    /**
+     * Patient registrations
+     */
+    public function actionPatientRegistrations()
+    {
+        $this->renderPartial('_gridviewpatientsregistrations', array(
+            'patient_id'=>$this->_patient->id,
+        ));
+    }
 }

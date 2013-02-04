@@ -10,13 +10,26 @@ $this->menu=array(
 	array('label'=>'Update Patient','url'=>array('update','id'=>$model->id)),
 	array('label'=>'Delete Patient','url'=>'#','linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
 	array('label'=>'Manage Patient','url'=>array('admin')),
+    array('label'=>'Add registration', 'url'=>array('registration/create', 'pid'=>$model->id)),
 );
 ?>
 
-<h3>View Patient #<?php echo $model->id; ?></h3>
+<div class="row-fluid">
+<!--<h3>View Patient #<?php // echo $model->id; ?></h3>-->
 
-<?php $this->widget('bootstrap.widgets.TbDetailView',array(
+<?php 
+$this->beginWidget('bootstrap.widgets.TbBox', array(
+    'title' => 'Detail info',
+    'headerIcon' => 'icon-th-list',
+    // when displaying a table, if we include bootstra-widget-table class
+    // the table will be 0-padding to the box
+    'htmlOptions' => array('class'=>'bootstrap-widget-table span5')
+));
+$this->widget('bootstrap.widgets.TbDetailView',array(
 	'data'=>$model,
+    'htmlOptions'=>array(
+//        'class'=>'span4',
+    ),
 	'attributes'=>array(
 		'id',
 		'fullname',
@@ -45,4 +58,14 @@ $this->menu=array(
             'value'=>CHtml::encode($model->updater->fullname),
         ),
 	),
-)); ?>
+)); 
+$this->endWidget();
+?>
+    <div class="span7">
+    <?php
+        $this->widget('RegistrationsWidget', array(
+            'patient_id'=>$model->id,
+        ));
+    ?>
+    </div>
+</div>

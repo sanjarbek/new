@@ -26,7 +26,8 @@
     <?php 
     $this->widget('bootstrap.widgets.TbNavbar', array(
         'brand' => 'Title',
-        'fixed' => 'true',
+        'fixed' => 'false',
+        'collapse'=>true,
         'htmlOptions' => array(
             'class'=>'navbar-inverse',
         ),
@@ -39,6 +40,9 @@
                     array('label'=>'Contact', 'url'=>array('/site/contact')),
                     array('label'=>'Login', 'url'=>array('/user/login'), 'visible'=>Yii::app()->user->isGuest),
                     array('label'=>'Logout ('.Yii::app()->user->name.')', 'url'=>array('/user/logout'), 'visible'=>!Yii::app()->user->isGuest)
+                ),
+                'htmlOptions'=>array(
+                    'class'=>'nav span5',
                 ),
             ),
             array(

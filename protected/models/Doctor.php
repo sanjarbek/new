@@ -80,7 +80,7 @@ class Doctor extends MasterModel
     {
         return array(
             'active'=>array(
-                'condition'=>'status='.self::STATUS_ENABLED,
+                'condition'=>'t.status='.self::STATUS_ENABLED,
             )
         );
     }

@@ -62,8 +62,8 @@ return array(
 			'username' => 'semamed',
 			'password' => ',trth12',
 			'charset' => 'utf8',
-            'enableProfiling'=>true,
-            'enableParamLogging'=>true,
+            'enableProfiling'=>TRUE,
+            'enableParamLogging'=>TRUE,
 		),
         
 		'errorHandler'=>array(

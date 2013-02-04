@@ -31,9 +31,21 @@
 	
     <?php // echo $form->textFieldRow($model,'type',array('class'=>'span5','maxlength'=>45)); ?>
 
-	<?php echo $form->dropDownListRow($model,'hospital_id',$model->getHospitalsList(), array('class'=>'span4')); ?>
+    <?php echo $form->labelEx($model, 'hospital_id'); ?>
+    <?php $this->widget('bootstrap.widgets.TbSelect2', array(
+        'model'=>$model,
+        'attribute'=>'hospital_id',
+        'data'=>$model->getHospitalsList(),
+    )); ?>
+    <?php echo $form->error($model, 'hospital_id'); ?>
 
-	<?php echo $form->dropDownListRow($model,'status',$model->getStatusOptions(), array('class'=>'span2')); ?>
+    <?php echo $form->labelEx($model, 'status'); ?>
+    <?php $this->widget('bootstrap.widgets.TbSelect2', array(
+        'model'=>$model,
+        'attribute'=>'status',
+        'data'=>$model->getStatusOptions(),
+    )); ?>
+    <?php echo $form->error($model, 'status'); ?>
 
 	<div class="form-actions">
 		<?php $this->widget('bootstrap.widgets.TbButton', array(

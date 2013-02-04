@@ -195,6 +195,6 @@ class Patient extends MasterModel
     
     public function getDoctorsList()
     {
-        return CHtml::listData(Doctor::model()->active()->findAll(), 'id', 'fullname');
+        return CHtml::listData(Doctor::model()->active()->with('hospital')->findAll(), 'id', 'fullname', 'hospital.name');
     }
 }
