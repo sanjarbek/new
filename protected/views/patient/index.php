@@ -9,9 +9,20 @@ $this->menu=array(
 );
 ?>
 
-<h3>Patients</h3>
+<div class="row-fluid">
 
-<?php $this->widget('bootstrap.widgets.TbListView',array(
-	'dataProvider'=>$dataProvider,
-	'itemView'=>'_view',
-)); ?>
+    <?php 
+    $this->beginWidget('bootstrap.widgets.TbBox', array(
+        'title' => 'Manage patients',
+        'headerIcon' => 'icon-th-list',
+        // when displaying a table, if we include bootstra-widget-table class
+        // the table will be 0-padding to the box
+        'htmlOptions' => array('class'=>'bootstrap-widget-table span12')
+    )); 
+        $this->renderPartial('_registrator_gridview', array(
+            'model'=>$model,
+        ));
+    $this->endWidget();
+?>
+</div>
+

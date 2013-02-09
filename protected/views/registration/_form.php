@@ -13,7 +13,7 @@ $cs->registerScript(
 
 <script type="text/javascript">
 
-    $('#Registration_mrtscan_id').change();
+    $(document).ready(getMrtscanPrice)
     
     function getMrtscanPrice()
     {
@@ -26,7 +26,7 @@ $cs->registerScript(
             {
                 if (data.status == 'failure')
                 {
-                    alert('Please, check your internet connection.');
+                    //alert('Please, check your internet connection.');
                 }
                 else
                 {
@@ -50,14 +50,18 @@ $cs->registerScript(
 
 <?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
 	'id'=>'registration-form',
+    'type'=>'horizontal',
 	'enableAjaxValidation'=>false,
 )); ?>
 
-	<p class="help-block">Fields with <span class="required">*</span> are required.</p>
+	<!--<p class="help-block">Fields with <span class="required">*</span> are required.</p>-->
 
 	<?php echo $form->errorSummary($model); ?>
 
-	<?php echo $form->dropDownListRow($model,'mrtscan_id', $model->getMrtscansList(), array('class'=>'span3')); ?>
+	<?php echo $form->select2Row($model,'mrtscan_id', array(
+        'asDropDownList'=>true,
+        'data'=>$model->getNotYetSelectedMrtscansListData($patient),
+    )); ?>
 
 	<?php echo $form->textFieldRow($model,'price',array('class'=>'span2','maxlength'=>10, 'readonly'=>true)); ?>
 
@@ -65,7 +69,10 @@ $cs->registerScript(
 
 	<?php echo $form->textFieldRow($model,'price_with_discont',array('class'=>'span2','maxlength'=>10, 'readonly'=>true)); ?>
 
-	<?php echo $form->dropDownListRow($model,'status', $model->getStatusOptions(), array('class'=>'span5')); ?>
+	<?php echo $form->select2Row($model,'status', array(
+        'asDropDownList'=>true,
+        'data'=>$model->getStatusOptions()
+    )); ?>
 
 	<?php // echo $form->textFieldRow($model,'report_status',array('class'=>'span5')); ?>
 
@@ -76,6 +83,9 @@ $cs->registerScript(
 			'buttonType'=>'submit',
 			'type'=>'primary',
 			'label'=>$model->isNewRecord ? 'Create' : 'Save',
+            'htmlOptions'=>array(
+                'class'=>'pull-right',
+            )
 		)); ?>
 	</div>
 

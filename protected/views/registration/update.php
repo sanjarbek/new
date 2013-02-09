@@ -13,6 +13,6 @@ $this->menu=array(
 );
 ?>
 
-<h3>Update Registration <?php echo $model->id; ?></h3>
+<!--<h3>Update Registration <?php // echo $model->id; ?></h3>-->
 
-<?php echo $this->renderPartial('_form',array('model'=>$model)); ?>
+<?php echo $this->renderPartial('_form',array('model'=>$model, 'patient'=>$patient)); ?>

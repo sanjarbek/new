@@ -1,0 +1,78 @@
+/* 
+    Document   : iframe
+    Created on : Feb 6, 2013, 10:55:07 AM
+    Author     : Sanzharbek Amatov <asanjarbek@gmail.com>
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+    display: block;
+}
+
+body {
+  padding-left: 0;
+  padding-right: 10px;
+}
+
+.ui-dialog .ui-dialog-title {
+  color: #404040;
+  float: left;
+  font-weight: bold;
+  margin-bottom: 1px;
+  margin-top: 1px;
+  padding: 1px;
+}
+
+.ui-dialog .ui-dialog-titlebar {
+  background: none repeat scroll 0 0 transparent;
+  border-bottom: 1px solid #CCCCCC;
+  border-bottom-left-radius: 0;
+  border-color: white white #CCCCCC;
+  font-size: 14px;
+  padding: 5px;
+  position: relative;
+  text-decoration: none;
+}
+
+.input-large, .input-xlarge, .input-xxlarge, input[class*="span"], select[class*="span"], textarea[class*="span"], .uneditable-input {
+  -moz-box-sizing: border-box;
+  display: block;
+  min-height: 25px;
+  width: 100%;
+  font-size: 12px;
+}
+
+label, input, button, select, textarea {
+  font-size: 12px;
+  font-weight: normal;
+}
+form {
+  margin: 0 0 1px;
+}
+
+.container-fluid {
+    padding-bottom: 1px;
+}
+
+
+.form-horizontal .control-label {
+  float: left;
+  padding-top: 5px;
+  text-align: right;
+  width: 80px;
+}
+
+.form-horizontal .controls {
+  margin-left: 90px;
+}
+
+.form-actions {
+  background-color: #F5F5F5;
+  border-top: 1px solid #E5E5E5;
+  margin-bottom: 1px;
+  margin-top: 1px;
+  padding: 5px 5px 5px;
+}
+
+

@@ -12,37 +12,51 @@ $this->menu=array(
 	array('label'=>'Manage Registration','url'=>array('admin')),
 );
 ?>
+<div class="row-fluid">
+<?php
+    $this->beginWidget('bootstrap.widgets.TbBox', array(
+        'title' => 'View Registration #'. $model->id,
+        'headerIcon' => 'icon-th-list',
+        // when displaying a table, if we include bootstra-widget-table class
+        // the table will be 0-padding to the box
+        'htmlOptions' => array('class'=>'bootstrap-widget-table span5')
+    ));
 
-<h1>View Registration #<?php echo $model->id; ?></h1>
+    $this->widget('bootstrap.widgets.TbDetailView',array(
+        'data'=>$model,
+        'htmlOptions'=>array(
+            
+        ),
+        'attributes'=>array(
+            'id',
+            array(
+                'name'=>'patient_id',
+                'value'=>CHtml::encode($model->patient->fullname),
+            ),
+            array(
+                'name'=>'mrtscan_id',
+                'value'=>CHtml::encode($model->mrtscan->name),
+            ),
+            'price',
+            'discont',
+            'price_with_discont',
+            array(
+                'name'=>'status',
+                'value'=>$model->getStatusText(),
+            ),
+            'created_at',
+            'updated_at',
+            array(
+                'name'=>'created_user',
+                'value'=>CHtml::encode($model->creator->fullname),
+            ),
+            array(
+                'name'=>'updated_user',
+                'value'=>  CHtml::encode($model->updater->fullname),
+            ),
+        ),
+    )); 
+    $this->endWidget();
+?>
 
-<?php $this->widget('bootstrap.widgets.TbDetailView',array(
-	'data'=>$model,
-	'attributes'=>array(
-		'id',
-		array(
-            'name'=>'patient_id',
-            'value'=>CHtml::encode($model->patient->fullname),
-        ),
-        array(
-            'name'=>'mrtscan_id',
-            'value'=>CHtml::encode($model->mrtscan->name),
-        ),
-		'price',
-		'discont',
-		'price_with_discont',
-		array(
-            'name'=>'status',
-            'value'=>$model->getStatusText(),
-        ),
-		'created_at',
-		'updated_at',
-		array(
-            'name'=>'created_user',
-            'value'=>CHtml::encode($model->creator->fullname),
-        ),
-		array(
-            'name'=>'updated_user',
-            'value'=>  CHtml::encode($model->updater->fullname),
-        ),
-	),
-)); ?>
+</div>

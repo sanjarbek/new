@@ -28,6 +28,8 @@ class RegistrationsWidget extends CWidget
                 'route'=>Yii::app()->createUrl('/registration/patientregistrations', array('pid'=>$this->patient_id)),
             ),
         ));
+        Yii::import('application.controllers.RegistrationController');
+        $controller = new RegistrationController(2101);
 		$this->render('_registrationsgv',array(
 			'dataProvider'=>$dataProvider,
             'pid'=>$this->patient_id,

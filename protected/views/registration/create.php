@@ -10,6 +10,5 @@ $this->menu=array(
 );
 ?>
 
-<h3>Create Registration</h3>
 
-<?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+<?php echo $this->renderPartial('_form', array('model'=>$model, 'patient'=>$patient)); ?>

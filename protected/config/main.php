@@ -64,6 +64,7 @@ return array(
 			'charset' => 'utf8',
             'enableProfiling'=>TRUE,
             'enableParamLogging'=>TRUE,
+//            'schemaCachingDuration' => 3600,
 		),
         
 		'errorHandler'=>array(
@@ -75,7 +76,7 @@ return array(
 			'routes'=>array(
 				array(
 					'class'=>'CFileLogRoute',
-					'levels'=>'error, warning',
+					'levels'=>'info, error, warning',
 				),
 				// uncomment the following to show log messages on web pages
 				

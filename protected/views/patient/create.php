@@ -10,6 +10,6 @@ $this->menu=array(
 );
 ?>
 
-<h3>Create Patient</h3>
-
-<?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+<div class="span12">
+    <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+</div>

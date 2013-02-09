@@ -47,6 +47,10 @@ $this->widget('bootstrap.widgets.TbDetailView',array(
             'name'=>'doctor_id',
             'value'=>CHtml::encode($model->doctor->fullname),
         ),
+        array(
+            'name'=>'report_status', 
+            'value'=>$model->getReportStatusText(),
+        ),
 		'created_at',
 		'updated_at',
 		array(

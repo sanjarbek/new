@@ -84,7 +84,7 @@
 	</div><!-- footer -->
     
     <?php
-    if (YII_DEBUG): ?>
+    if (true): ?>
     <div class="row-fluid">
         <div class=" well">
             <div class="span4">

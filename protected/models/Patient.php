@@ -11,6 +11,8 @@
  * @property integer $sex
  * @property integer $status
  * @property integer $doctor_id
+ * @property integer $report_status
+ * @property integer $desc_doctor_id
  * @property string $created_at
  * @property string $updated_at
  * @property integer $created_user
@@ -30,6 +32,9 @@ class Patient extends MasterModel
     
     const SEX_MALE = 0;
     const SEX_FEMALE = 1;
+    
+    const REPORT_NOT_FINISHED = 0;
+    const REPORT_FINISHED = 1;
     
 	/**
 	 * @return string the associated database table name
@@ -71,6 +76,18 @@ class Patient extends MasterModel
                 self::SEX_MALE,
                 self::SEX_FEMALE,
             )),
+            array('report_status', 'in', 'range'=>array(
+                self::REPORT_NOT_FINISHED,
+                self::REPORT_FINISHED,
+            )),
+//            array('desc_doctor_id',
+//                'exist',
+//                'allowEmpty' => false,
+//                'attributeName' => 'id', 
+//                'className' => 'User',
+//                'message' => Yii::t('message', 'The selected doctor does not exist'),
+//                'skipOnError'=>false,
+//            ),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, fullname, phone, birthday, sex, status, doctor_id, created_at, updated_at, created_user, updated_user', 'safe', 'on'=>'search'),
@@ -105,7 +122,9 @@ class Patient extends MasterModel
 			'sex' => 'Sex',
 			'status' => 'Status',
 			'doctor_id' => 'Doctor',
-			'created_at' => 'Created At',
+            'report_status' => 'Report',
+            'desc_doctor_id' => 'Described by',
+			'created_at' => 'Register date',
 			'updated_at' => 'Updated At',
 			'created_user' => 'Created User',
 			'updated_user' => 'Updated User',
@@ -137,13 +156,19 @@ class Patient extends MasterModel
 		$criteria->compare('t.sex',$this->sex);
 		$criteria->compare('t.status',$this->status);
 		$criteria->compare('t.doctor_id',$this->doctor_id);
+        $criteria->compare('t.report_status', $this->report_status);
+        $criteria->compare('t.desc_doctor_id', $this->desc_doctor_id);
 		$criteria->compare('t.created_at',$this->created_at,true);
 		$criteria->compare('t.updated_at',$this->updated_at,true);
 		$criteria->compare('t.created_user',$this->created_user);
 		$criteria->compare('t.updated_user',$this->updated_user);
 
+        Yii::log('WWW : ' . $this->created_at, CLogger::LEVEL_INFO);
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+            'sort'=>array(
+                'defaultOrder'=>'t.created_at desc',
+            ),
 		));
 	}
 
@@ -175,6 +200,22 @@ class Patient extends MasterModel
         return isset($status_options[$this->status])
             ? $status_options[$this->status]
             : (Yii::t('status', 'Unknown status ') . $this->status);
+    }
+    
+    public function getReportStatusOptions()
+    {
+        return array(
+            self::REPORT_NOT_FINISHED=>  Yii::t('status', 'Not yet finished'),
+            self::REPORT_FINISHED=> Yii::t('status', 'Finished'),
+        );
+    }
+    
+    public function getReportStatusText()
+    {
+        $report_status_options = $this->getReportStatusOptions();
+        return isset($report_status_options[$this->report_status])
+            ? $report_status_options[$this->report_status]
+            : (Yii::t('status', 'Unknown status ')) . $this->report_status;
     }
 
     public function getSexOptions()

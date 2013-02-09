@@ -7,6 +7,8 @@
 $this->widget('bootstrap.widgets.TbGridView',array(
 	'id'=>'PatientGrid',
 	'dataProvider'=>$model->with('doctor')->search(),
+    'template'=>'{items}{pager}{summary}',
+    'type'=>'bordered condensed',
 	'filter'=>$model,
 	'columns'=>array(
 		array(
@@ -17,7 +19,9 @@ $this->widget('bootstrap.widgets.TbGridView',array(
         ),
 		'fullname',
 		'phone',
-		'birthday',
+		array(
+            'name'=>'birthday',   
+        ),
 		array(
             'name'=>'sex',
             'value'=>'$data->getSexText()',
@@ -41,7 +45,22 @@ $this->widget('bootstrap.widgets.TbGridView',array(
 		*/
 		array(
 			'class'=>'bootstrap.widgets.TbButtonColumn',
+            'buttons'=>array(
+                'update'=>array(
+                    'url'=>'$this->grid->controller->createUrl("update", array("id"=>$data->primaryKey,"asDialog"=>1,"gridId"=>$this->grid->id))',
+                    'click'=>'function(){$("#cru-frame").attr("src",$(this).attr("href")); $("#cru-dialog").dialog("open");  return false;}',
+                    'label'=>'',
+                ),
+                'view'=>array(
+                    'label'=>'',
+                ),
+                'delete'=>array(
+                    'label'=>'',
+                )
+            ),
+                
 		),
 	),
 ));
+
 ?>

@@ -23,8 +23,8 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
   border-radius: 4px 4px 4px 4px;
   color: #555555;
   display: inline-block;
-  font-size: 14px;
-  height: 20px;
+  font-size: 12px;
+  height: 14px;
   line-height: 20px;
   margin-bottom: 10px;
   padding: 2px 2px;
@@ -33,7 +33,7 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
 
 select, input[type="file"] {
   font-size: 12px;
-  height: 25px;
+  height: 21px;
   line-height: 25px;
 }
 
@@ -83,3 +83,50 @@ body {
   line-height: 22px;
 }
 
+.form-horizontal .control-label {
+  float: left;
+  padding-top: 5px;
+  text-align: right;
+  width: 100px;
+}
+
+.form-horizontal .controls {
+  margin-left: 110px;
+}
+
+.form-horizontal .control-group {
+  margin-bottom: 0px;
+}
+
+.form-horizontal .form-actions {
+  padding-left: 110px;
+}
+
+.form-actions {
+  background-color: #F5F5F5;
+  border-top: 1px solid #E5E5E5;
+  margin-top: 5px;
+  padding-top: 5px;
+  padding-left: 0px;
+  padding-bottom: 5px;
+  padding-right: 0px; 
+}
+.ui-dialog .ui-dialog-title {
+  color: #404040;
+  float: left;
+  font-weight: bold;
+  margin-bottom: 1px;
+  margin-top: 1px;
+  padding: 1px;
+}
+
+.ui-dialog .ui-dialog-titlebar {
+  background: none repeat scroll 0 0 transparent;
+  border-bottom: 1px solid #CCCCCC;
+  border-bottom-left-radius: 0;
+  border-color: white white #CCCCCC;
+  font-size: 14px;
+  padding: 5px;
+  position: relative;
+  text-decoration: none;
+}

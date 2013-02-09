@@ -20,7 +20,12 @@ class RegistrationController extends Controller
 	{
         return CMap::mergeArray(parent::filters(),array(
 			'accessControl', // perform access control for CRUD operations
-            'patientContext + create getPatientRegistrations', //check to ensure valid patient context
+            'patientContext + create 
+                patient 
+                update 
+                getPatientRegistrations 
+                getMrtscansList
+                addService', //check to ensure valid patient context
 //            'postOnly + delete', // we only allow deletion via POST request
             array(
                 'application.filters.GridViewHandler' //path to GridViewHandler.php class
@@ -82,7 +87,14 @@ class RegistrationController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update', 'patientregistrations'),
+				'actions'=>array(
+                    'create',
+                    'update', 
+                    'patient', 
+                    'getMrtscansList',
+                    'addService',
+                    'save',
+                ),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -122,12 +134,29 @@ class RegistrationController extends Controller
 			$model->attributes=$_POST['Registration'];
             $model->patient_id = $this->_patient->id;
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+            {
+                if (!empty($_GET['asDialog']))
+                {
+                    //Close the dialog, reset the iframe and update the grid
+                    echo CHtml::script("window.parent.$('#cru-dialog').dialog('close');
+                        window.parent.$('#cru-frame').attr('src','');
+                        window.parent.$.fn.yiiGridView.update('{$_GET['gridId']}');
+                        alert('Saved');");
+                    Yii::app()->end();
+                }
+                else
+                    $this->redirect(array('view','id'=>$model->id));
+            }
 		}
+        
+        if (!empty($_GET['asDialog']))
+            $this->layout = '//layouts/iframe';
+        
+        $this->render('create',array(
+            'model'=>$model,
+            'patient'=>$this->_patient,
+        ));
 
-		$this->render('create',array(
-			'model'=>$model,
-		));
 	}
 
 	/**
@@ -146,11 +175,24 @@ class RegistrationController extends Controller
 		{
 			$model->attributes=$_POST['Registration'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+            {
+                if (!empty($_GET['asDialog']))
+                {
+                    //Close the dialog, reset the iframe and update the grid
+                    echo CHtml::script("window.parent.$('#cru-dialog').dialog('close');window.parent.$('#cru-frame').attr('src','');window.parent.$.fn.yiiGridView.update('{$_GET['gridId']}');");
+                    Yii::app()->end();
+                }
+                else
+                    $this->redirect(array('view','id'=>$model->id));
+            }
 		}
+        
+        if (!empty($_GET['asDialog']))
+            $this->layout = '//layouts/iframe';
 
 		$this->render('update',array(
 			'model'=>$model,
+            'patient'=>$this->_patient,
 		));
 	}
 
@@ -246,6 +288,40 @@ class RegistrationController extends Controller
 	}
     
     /**
+     * The specified patient registrations only
+     */
+    public function _getGridViewPatientRegistrationGrid()
+    {
+        $model=new Registration('search');
+		$model->unsetAttributes();  // clear any default values
+		if(isset($_GET['Registration']))
+			$model->attributes=$_GET['Registration'];
+
+        $model->patient_id = $this->_patient->id;
+        
+        $this->renderPartial('_gridviewpatientsregistrations', array(
+            'model'=>$model,
+            'patient'=>$this->_patient,
+        ));
+    }
+    
+    public function _getGridViewPatientMrtscanGrid()
+    {
+        if (!empty($_GET['asDialog']))
+            $this->layout = '//layouts/iframe';
+        
+        $criteria = Registration::model()->getNotYetSelectedCriteria($this->_patient);
+        
+        $dataProvider=new CActiveDataProvider('Mrtscan', array(
+            'criteria'=>$criteria,
+        ));
+		$this->render('mrtscansdetail',array(
+			'dataProvider'=>$dataProvider,
+            'patientId'=>$this->_patient->id,
+		));
+    }
+    
+    /**
      * Patient registrations
      */
     public function actionPatientRegistrations()
@@ -253,5 +329,115 @@ class RegistrationController extends Controller
         $this->renderPartial('_gridviewpatientsregistrations', array(
             'patient_id'=>$this->_patient->id,
         ));
+    }
+    
+    public function actionPatient()
+    {
+        $model=new Registration('search');
+		$model->unsetAttributes();  // clear any default values
+		if(isset($_GET['Registration']))
+			$model->attributes=$_GET['Registration'];
+
+        $model->patient_id = $this->_patient->id;
+        
+        $this->render('patientdetails', array(
+            'model'=>$model,
+            'patient'=>$this->_patient,
+        ));
+    }
+    
+    public function actionGetMrtscansList()
+    {
+        if (!empty($_GET['asDialog']))
+            $this->layout = '//layouts/iframe';
+        
+        $criteria = Registration::model()->getNotYetSelectedCriteria($this->_patient);
+        
+        $dataProvider=new CActiveDataProvider('Mrtscan', array(
+            'criteria'=>$criteria,
+        ));
+		$this->render('mrtscansdetail',array(
+			'dataProvider'=>$dataProvider,
+            'patientId'=>$this->_patient->id,
+		));
+    }
+    
+    public function actionAddService()
+    {
+        
+        if (!empty($_GET['asDialog']))
+        {
+            $mrtscan = Mrtscan::model()->findByPk($_GET['id']);
+            
+            $registration = new Registration;
+            $registration->patient_id = $this->_patient->id;
+            $registration->mrtscan_id = $mrtscan->id;
+            $registration->price = $mrtscan->price;
+            $registration->discont = 0.0;
+            $registration->price_with_discont = $registration->price - $registration->discont;
+            $registration->status = Registration::STATUS_NOT_YET_STARTED;
+            
+            if ($registration->save())
+            {
+                Yii::log('New registration saved correctly', CLogger::LEVEL_INFO);
+            }
+            else
+            {
+                Yii::log('New registration saved errorly', CLogger::LEVEL_INFO);
+            }
+            
+            $this->layout = '//layouts/iframe';
+        
+            $criteria = Registration::model()->getNotYetSelectedCriteria($this->_patient);
+
+            $dataProvider=new CActiveDataProvider('Mrtscan', array(
+                'criteria'=>$criteria,
+            ));
+            $this->render('mrtscansdetail',array(
+                'dataProvider'=>$dataProvider,
+                'patientId'=>$this->_patient->id,
+            ));
+
+                //Close the dialog, reset the iframe and update the grid
+    //            echo CHtml::script("window.$.fn.yiiGridView.update('{$_GET['gridId']}');");
+        }        
+        Yii::app()->end();
+    }
+    
+    public function actionSave()
+    {
+        $r = Yii::app()->getRequest();
+        
+        $attribute = $r->getParam('attribute');
+        $value = $r->getParam('value');
+        $registrationId  = $r->getParam('id');
+       
+        $registration = Registration::model()->findByPk($registrationId);
+        if(is_null($registration))
+            Yii::app()->end();
+        
+        $old_value = $registration->{$attribute};
+        // we can check whether is comming from a specific grid id too
+        // avoided for the sake of the example
+        if($r->getParam('editable'))
+        {
+            $registration->{$attribute} = $value;
+            
+            if ($registration->saveAttributes(array('discont')))
+            {
+                echo $value;
+            }
+            else
+            {
+                $error = $registration->getError($attribute);
+
+                echo $old_value;                
+                echo CHtml::script("alert('{$error}');");
+            }
+                
+        }
+        
+        Yii::app()->end();
+        
     }
 }

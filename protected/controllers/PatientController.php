@@ -6,7 +6,7 @@ class PatientController extends Controller
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
-	public $layout='//layouts/column2';
+	public $layout='//layouts/patient';
 
 	/**
 	 * @return array action filters
@@ -34,7 +34,7 @@ class PatientController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
+				'actions'=>array('create','update', 'save', 'toggle',),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -46,6 +46,17 @@ class PatientController extends Controller
 			),
 		);
 	}
+    
+    public function actions()
+    {
+        return array(
+            'toggle' => array(
+                'class'=>'bootstrap.actions.TbToggleAction',
+                'modelName' => 'Patient',
+            )
+        );
+    }
+    
 
 	/**
 	 * Displays a particular model.
@@ -73,7 +84,7 @@ class PatientController extends Controller
 		{
 			$model->attributes=$_POST['Patient'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+				$this->redirect(array('/registration/patient','pid'=>$model->id));
 		}
 
 		$this->render('create',array(
@@ -97,8 +108,20 @@ class PatientController extends Controller
 		{
 			$model->attributes=$_POST['Patient'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+            {
+                if (!empty($_GET['asDialog']))
+                {
+                    //Close the dialog, reset the iframe and update the grid
+                    echo CHtml::script("window.parent.$('#cru-dialog').dialog('close');window.parent.$('#cru-frame').attr('src','');window.parent.$.fn.yiiGridView.update('{$_GET['gridId']}');");
+                    Yii::app()->end();
+                }
+                else
+                    $this->redirect(array('view','id'=>$model->id));
+            }
 		}
+        
+        if (!empty($_GET['asDialog']))
+            $this->layout = '//layouts/iframe';
 
 		$this->render('update',array(
 			'model'=>$model,
@@ -130,9 +153,13 @@ class PatientController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Patient');
+		$model=new Patient('search');
+		$model->unsetAttributes();  // clear any default values
+		if(isset($_GET['Patient']))
+			$model->attributes=$_GET['Patient'];
+
 		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
+			'model'=>$model,
 		));
 	}
 
@@ -191,4 +218,59 @@ class PatientController extends Controller
 			'model'=>$model,
 		));
 	}
+    
+    /**
+	 * Manages all models via Ajax.
+	 */
+	public function _getGridViewRegistratorPatientGrid()
+	{
+		$model=new Patient('search');
+		$model->unsetAttributes();  // clear any default values
+		if(isset($_GET['Patient']))
+			$model->attributes=$_GET['Patient'];
+        
+        Yii::log('WWW Ушундай эле кылыш керек болчу: '. $model->created_at, CLogger::LEVEL_INFO);
+
+		$this->renderPartial('_registrator_gridview',array(
+			'model'=>$model,
+            'created_at'=>$model->created_at,
+		));
+	}
+    
+    public function actionSave()
+    {
+        $r = Yii::app()->getRequest();
+        
+        $attribute = $r->getParam('attribute');
+        $value = $r->getParam('value');
+        $patientId  = $r->getParam('id');
+       
+        $patient = Patient::model()->findByPk($patientId);
+        if(is_null($patient))
+            Yii::app()->end();
+        
+        $old_value = $patient->{$attribute};
+        // we can check whether is comming from a specific grid id too
+        // avoided for the sake of the example
+        if($r->getParam('editable'))
+        {
+            $patient->{$attribute} = $value;
+            if ($patient->saveAttributes($attribute))
+            {
+                if ($attribute === 'status')
+                    echo $patient->getStatusText();
+                else
+                    echo $value;
+            }
+            else
+            {
+                $error = $patient->getError($attribute);
+
+                echo $old_value;                
+                echo CHtml::script("alert('{$error}');");
+            }
+                
+            Yii::app()->end();
+        }
+    }
 }

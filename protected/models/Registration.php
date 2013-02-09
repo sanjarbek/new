@@ -64,6 +64,8 @@ class Registration extends MasterModel
                 'skipOnError'=>false,
             ),
             array('price', 'priceValidation'),
+//            array('discont', 'discontValidation'),
+//            array('price_with_discont', 'priceWithDiscontValidation'),
             array('status', 'in', 'range'=>array(
                 self::STATUS_NOT_YET_STARTED,
                 self::STATUS_FINISHED,
@@ -79,10 +81,40 @@ class Registration extends MasterModel
     public function priceValidation($attribute)
     {
         $mrtscan = Mrtscan::model()->findByPk($this->mrtscan_id);
-        if ($this->price !== $mrtscan->price)
-          $this->addError($attribute, 'Don\'t change mrtscan\'s price!');
+        
+        if(is_null($mrtscan))
+            $this->addError($attribute, 'Please, select a mrtscan from listbox.');
+        else
+            if($this->price !== $mrtscan->price)
+                $this->addError($attribute, 'Don\'t change mrtscan\'s price!');
     }
 
+    public function discontValidation($attribute)
+    {
+        if (is_null($this->discont))
+        {
+            $this->discont = 0.0;
+        }
+        else
+        {
+            if ($this->discont < 0 || $this->discont > $this->price)
+                $this->addError($attribute, 'Please, enter a proper discont value.');
+        }
+    }
+    
+    public function priceWithDiscontValidation($attribute)
+    {
+        $mrtscan = Mrtscan::model()->findByPk($this->mrtscan_id);
+        if (is_null($mrtscan))
+        {
+            $this->addError($attribute, 'Please, select a mrtscan from listbox.');
+        }
+        else
+        {
+            $this->price_with_discont = $mrtscan->price - $this->discont;
+        }
+    }
+    
 	/**
 	 * @return array relational rules.
 	 */
@@ -171,6 +203,29 @@ class Registration extends MasterModel
     public function getMrtscansList()
     {
         return CHtml::listData(Mrtscan::model()->active()->findAll(), 'id', 'name');
+    }
+    
+    public function getNotYetSelectedCriteria($patient)
+    {
+        $mrtscans_id_list = array();
+        $registrations = $patient->registrations;
+        foreach ($registrations as $registration)
+        {
+            $mrtscans_id_list[] = $registration->mrtscan->id;
+        }
+        
+        $criteria = new CDbCriteria();
+        $criteria->addNotInCondition('id', $mrtscans_id_list);
+        
+        return $criteria;
+    }
+    
+    public function getNotYetSelectedMrtscansListData($patient)
+    {
+        $criteria = $this->getNotYetSelectedCriteria($patient);
+        
+        return CHtml::listData(Mrtscan::model()->active()->findAll($criteria
+        ), 'id', 'name');
     }
     
     public function getPatientsList()
