@@ -417,22 +417,28 @@ class RegistrationController extends Controller
             Yii::app()->end();
         
         $old_value = $registration->{$attribute};
+        $price_with_discont_old_value = $registration->price_with_discont;
         // we can check whether is comming from a specific grid id too
         // avoided for the sake of the example
         if($r->getParam('editable'))
         {
             $registration->{$attribute} = $value;
             
-            if ($registration->saveAttributes(array('discont')))
+            if ($attribute === 'discont')
             {
-                echo $value;
-            }
-            else
-            {
-                $error = $registration->getError($attribute);
+                $registration->price_with_discont = $registration->price-$registration->discont;
+                if ($registration->validate(array('discont', 'price_with_discont')) && $registration->saveAttributes(array('discont', 'price_with_discont')))
+                {
+                    echo $value;
+                    echo CHtml::script("window.$.fn.yiiGridView.update('PatientRegistrationGrid');");
+                }
+                else
+                {
+                    $error = $registration->getError($attribute);
 
-                echo $old_value;                
-                echo CHtml::script("alert('{$error}');");
+                    echo $old_value;                
+                    echo CHtml::script("alert('{$error}');");
+                }
             }
                 
         }

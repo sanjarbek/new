@@ -23,7 +23,7 @@ $this->menu=array(
 		'phone',
         array(
             'name'=>'manager_id',
-            'value'=>$model->manager->fullname,
+            'value'=>$model->manager->name,
         ),
         array(
             'name'=>'status',
@@ -33,11 +33,11 @@ $this->menu=array(
 		'updated_at',
 		array(
             'name'=>'created_user',
-            'value'=>$model->creator->fullname,
+            'value'=>$model->creator->name,
         ),
 		array(
             'name'=>'updated_user',
-            'value'=>$model->updater->fullname,
+            'value'=>$model->updater->name,
         ),
         array(
             'label'=>'Doctors count',

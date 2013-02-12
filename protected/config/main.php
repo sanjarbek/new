@@ -8,6 +8,8 @@
 return array(
 	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
 	'name'=>'My Web Application',
+    
+    'language'=>'en',
 
 	// preloading 'log' component
 	'preload'=>array(
@@ -19,6 +21,8 @@ return array(
 	'import'=>array(
 		'application.models.*',
 		'application.components.*',
+        'application.modules.rights.*',
+        'application.modules.rights.components.*',
 	),
 
 	'modules'=>array(
@@ -30,7 +34,15 @@ return array(
              ),
 			'ipFilters'=>array('127.0.0.1','::1'),
 		),
-		
+        'rights'=>array(
+            'superuserName'=>'Admin',
+            'userIdColumn'=>'id',
+            'userNameColumn'=>'username', 
+            'install'=>false,
+            'debug'=>TRUE,
+//            'errorAction'=>'site/error',
+        ),
+
 	),
 
 	// application components
@@ -39,10 +51,16 @@ return array(
 			// enable cookie-based authentication
 			'allowAutoLogin'=>true,
             'loginUrl'=>array('user/login'),
+            'class'=>'RWebUser',
 		),
+        'authManager'=>array(
+            'class'=>'RDbAuthManager',
+            'connectionID'=>'db',
+            'defaultRoles'=>array('Authenticated', 'Guest'),
+        ),
         'bootstrap' => array(
             'class' => 'ext.bootstrap.components.Bootstrap',
-            'responsiveCss' => true,
+            'responsiveCss' => false,
         ),
 		// uncomment the following to enable URLs in path-format
 		/*

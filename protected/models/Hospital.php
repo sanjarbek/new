@@ -163,6 +163,6 @@ class Hospital extends MasterModel
     
     public function getManagersList()
     {
-        return CHtml::listData(User::model()->managers()->active()->findAll(), 'id', 'fullname');
+        return CHtml::listData(User::model()->managers()->active()->findAll(), 'id', 'name');
     }
 }

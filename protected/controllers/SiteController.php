@@ -2,6 +2,12 @@
 
 class SiteController extends Controller
 {
+//    public function filters()
+//	{
+//		return CMap::mergeArray(parent::filters(), array(
+//		));
+//	}
+    
 	/**
 	 * Declares class-based actions.
 	 */

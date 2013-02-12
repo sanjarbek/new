@@ -21,7 +21,7 @@ $this->widget('bootstrap.widgets.TbGridView',array(
         array(
             'type'=>'raw',
             'name'=>'manager_id',
-            'value'=>'CHtml::link(CHtml::encode($data->manager->fullname),
+            'value'=>'CHtml::link(CHtml::encode($data->manager->name),
                 array("user/view", "id"=>$data->manager_id))',
             'filter'=>$model->getManagersList(),
         ),

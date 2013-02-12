@@ -14,7 +14,7 @@ class PatientController extends Controller
 	public function filters()
 	{
 		return CMap::mergeArray(parent::filters(), array(
-			'accessControl', // perform access control for CRUD operations
+			//'accessControl', // perform access control for CRUD operations
             array( // handle gridview ajax update
                 'application.filters.GridViewHandler', //path to GridViewHandler.php class
             ),
@@ -255,7 +255,7 @@ class PatientController extends Controller
         if($r->getParam('editable'))
         {
             $patient->{$attribute} = $value;
-            if ($patient->saveAttributes($attribute))
+            if ($patient->saveAttributes(array($attribute)))
             {
                 if ($attribute === 'status')
                     echo $patient->getStatusText();
@@ -272,5 +272,27 @@ class PatientController extends Controller
                 
             Yii::app()->end();
         }
+    }
+    
+    public function actionGetDoctorsListJson()
+    {
+        $listData = Patient::model()->getDoctorsList();
+        
+        $content = '';
+        foreach($listData as $optgroup=>$options)
+        {
+            $content = $content . '<optgroup label="'.$optgroup.'">';
+            foreach ($options as $key => $value)
+                $content = $content . CHtml::tag('option',
+                       array('value'=>$key),CHtml::encode($value),true);
+            $content = $content . '</optgroup';
+        }
+        
+        echo CJSON::encode(array(
+                        'status'=>'success',
+                        'content'=>$content,
+        ));
+
+        Yii::app()->end();
     }
 }

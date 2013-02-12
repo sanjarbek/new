@@ -37,7 +37,7 @@ $this->widget('bootstrap.widgets.TbGridView',array(
             'class'=>'bootstrap.widgets.TbJEditableColumn',
             'saveURL'=>Yii::app()->createUrl('registration/save'),
             'jEditableOptions' => array(
-                'tooltip'=>'Click to edit...',
+                'tooltip'=>'',
                 'type' => 'text',
                 // very important to get the attribute to update on the server!
                 'submitdata' => array(
@@ -62,19 +62,16 @@ $this->widget('bootstrap.widgets.TbGridView',array(
 		*/
 		array(
 			'class'=>'bootstrap.widgets.TbButtonColumn',
-            'template'=>'{view}{update}{delete}',
+            'template'=>'{delete}',
             'buttons'=>array(                
-                'update'=>array(
-                    'url'=>'$this->grid->controller->createUrl("update", array("id"=>$data->primaryKey,"asDialog"=>1,"gridId"=>$this->grid->id, "pid"=>$data->patient_id))',
-                    'click'=>'function(){$("#cru-frame").attr("src",$(this).attr("href")); $("#cru-dialog").dialog("open");  return false;}',
-                    'label'=>'',
-                ),
-                'view'=>array(
-                    'label'=>'',
-                ),
+//                'update'=>array(
+//                    'url'=>'$this->grid->controller->createUrl("update", array("id"=>$data->primaryKey,"asDialog"=>1,"gridId"=>$this->grid->id, "pid"=>$data->patient_id))',
+//                    'click'=>'function(){$("#cru-frame").attr("src",$(this).attr("href")); $("#cru-dialog").dialog("open");  return false;}',
+//                    'label'=>'',
+//                ),    
                 'delete'=>array(
                     'label'=>'',
-                )
+                )                    
             ),
 		),
 	),

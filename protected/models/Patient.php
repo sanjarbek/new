@@ -116,7 +116,7 @@ class Patient extends MasterModel
 	{
 		return array(
 			'id' => 'ID',
-			'fullname' => 'Fullname',
+			'fullname' => Yii::t('label', 'Fullname'),
 			'phone' => 'Phone',
 			'birthday' => 'Birthday',
 			'sex' => 'Sex',

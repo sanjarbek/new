@@ -24,11 +24,11 @@ class User extends MasterModel
     const USER_MANAGER = 1;
     const USER_REGISTRATOR = 2;
     
-    const STATUS_ENABLED = 0;
-    const STATUS_DISABLED = 1;
+    const STATUS_ENABLED = 1;
+    const STATUS_DISABLED = 0;
     
-    const TYPE_SUPERUSER = 0;
-    const TYPE_NOT_SUPERUSER = 1;
+    const TYPE_SUPERUSER = 1;
+    const TYPE_NOT_SUPERUSER = 0;
     
 	/**
 	 * @return string the associated database table name
@@ -132,16 +132,16 @@ class User extends MasterModel
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id',$this->id);
-		$criteria->compare('fullname',$this->fullname,true);
-		$criteria->compare('username',$this->username,true);
-		$criteria->compare('password',$this->password,true);
-		$criteria->compare('email',$this->email,true);
-		$criteria->compare('created_at',$this->created_at,true);
-		$criteria->compare('lastvisit_at',$this->lastvisit_at,true);
-		$criteria->compare('superuser',$this->superuser);
-		$criteria->compare('status',$this->status);
-		$criteria->compare('type',$this->type);
+		$criteria->compare('t.id',$this->id);
+		$criteria->compare('t.fullname',$this->fullname,true);
+		$criteria->compare('t.username',$this->username,true);
+		$criteria->compare('t.password',$this->password,true);
+		$criteria->compare('t.email',$this->email,true);
+		$criteria->compare('t.created_at',$this->created_at,true);
+		$criteria->compare('t.lastvisit_at',$this->lastvisit_at,true);
+		$criteria->compare('t.superuser',$this->superuser);
+		$criteria->compare('t.status',$this->status);
+		$criteria->compare('t.type',$this->type);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -166,7 +166,7 @@ class User extends MasterModel
     {
         parent::afterValidate();
         if(!$this->hasErrors())
-        $this->password = $this->hashPassword($this->password);
+            $this->password = $this->hashPassword($this->password);
     }
 
     /**

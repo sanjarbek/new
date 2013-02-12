@@ -14,7 +14,7 @@ class UserController extends Controller
 	public function filters()
 	{
 		return CMap::mergeArray(parent::filters(), array(
-			'accessControl', // perform access control for CRUD operations
+//			'accessControl', // perform access control for CRUD operations
             array( // handle gridview ajax update
                 'application.filters.GridViewHandler', //path to GridViewHandler.php class
             ),
@@ -39,7 +39,7 @@ class UserController extends Controller
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('admin','delete'),
-				'users'=>array('sanzhar'),
+				'users'=>array('admin'),
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),

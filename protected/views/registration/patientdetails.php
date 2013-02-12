@@ -1,15 +1,13 @@
 <?php
 $this->breadcrumbs=array(
-	'Patients'=>array('index'),
+	'Patients'=>array('/patient/index'),
 	$model->id,
 );
 
 $this->menu=array(
-	array('label'=>'List Patient','url'=>array('index')),
-	array('label'=>'Create Patient','url'=>array('create')),
-	array('label'=>'Update Patient','url'=>array('update','id'=>$model->id)),
-	array('label'=>'Delete Patient','url'=>'#','linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
-	array('label'=>'Manage Patient','url'=>array('admin')),
+	array('label'=>'List Patient','url'=>array('/patient/index')),
+	array('label'=>'Create Patient','url'=>array('/patient/create')),
+	'',
     array('label'=>'Add registration', 'url'=>'#', 'linkOptions'=>array(
         'onClick'=>'js: $("#cru-frame").attr("src", "' .
                     Yii::app()->createUrl('registration/getmrtscanslist', array(
@@ -28,7 +26,7 @@ $this->menu=array(
 
     <?php 
     $this->beginWidget('bootstrap.widgets.TbBox', array(
-        'title' => 'Detail info',
+        'title' => 'Patient details',
         'headerIcon' => 'icon-th-list',
         // when displaying a table, if we include bootstra-widget-table class
         // the table will be 0-padding to the box
@@ -53,8 +51,17 @@ $this->menu=array(
                 'value'=>$patient->getStatusText(),
             ),
             array(
+                'type'=>'raw',
                 'name'=>'doctor_id',
-                'value'=>CHtml::encode($patient->doctor->fullname),
+                'value'=> CHtml::link(CHtml::encode($patient->doctor->fullname), '#', array(
+                    'onClick'=>'js: $("#doctor-frame").attr("src", "' .
+                    Yii::app()->createUrl('doctor/getpatientdoctorinfo', array(
+                        'did'=>$patient->doctor_id,
+                        'asDialog'=>1,
+                    )) . '");' . 
+            '$("#doctor-dialog").dialog("open");  
+            return false;',
+                )),
             ),
             'created_at',
             'updated_at',
@@ -73,7 +80,7 @@ $this->menu=array(
     <div class="span8">
         <?php
         $this->beginWidget('bootstrap.widgets.TbBox', array(
-            'title' => 'Detail info',
+            'title' => 'Services',
             'headerIcon' => 'icon-th-list',
             // when displaying a table, if we include bootstra-widget-table class
             // the table will be 0-padding to the box
@@ -104,6 +111,28 @@ $this->menu=array(
         'closeOnEscape'=>true,
     ),
     ));
+    
+    
 ?>
 <iframe id="cru-frame" width="100%" height="100%" frameborder="no"></iframe>
+<?php $this->endWidget(); ?>
+
+<?php
+$this->beginWidget('zii.widgets.jui.CJuiDialog', array(
+    'id'=>'doctor-dialog',
+    'options'=>array(
+        'title'=>'Detail view',
+        'autoOpen'=>false,
+        'modal'=>true,
+        'width'=>500,
+        'height'=>310,
+        'class'=>'mydialogbox',
+        'close'=>"js: function(event, ui) { 
+            window.parent.$('#doctor-frame').attr('src','');
+            }",  
+        'closeOnEscape'=>true,
+    ),
+    ));
+?>
+<iframe id="doctor-frame" width="100%" height="100%" frameborder="no"></iframe>
 <?php $this->endWidget(); ?>

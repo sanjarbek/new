@@ -13,6 +13,8 @@ $this->widget('bootstrap.widgets.TbExtendedGridView',array(
     'enableSorting'=>false,
     'ajaxUrl'=> $this->createUrl('/patient/index'),
     'ajaxUpdate'=>false,
+    'pagerCssClass'=>'pagination pagination-mini pagination-centered',
+    'responsiveTable'=>FALSE,
 	'filter'=>$model,
 	'columns'=>array(
 		array(
@@ -30,7 +32,7 @@ $this->widget('bootstrap.widgets.TbExtendedGridView',array(
                 'type' => 'text',
                 // very important to get the attribute to update on the server!
                 'submitdata' => array(
-                    'attribute'=>'fullname'
+                    'attribute'=>'name'
                 ),
                 'cssclass' => 'form',
                 'width' => '150px',
@@ -99,6 +101,7 @@ $this->widget('bootstrap.widgets.TbExtendedGridView',array(
 		'updated_user',
 		*/
 		array(
+            'header'=>'Actions',
 			'class'=>'bootstrap.widgets.TbButtonColumn',
             'template'=>'{view}{delete}',
             'buttons'=>array(

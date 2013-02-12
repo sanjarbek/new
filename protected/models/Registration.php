@@ -64,8 +64,8 @@ class Registration extends MasterModel
                 'skipOnError'=>false,
             ),
             array('price', 'priceValidation'),
-//            array('discont', 'discontValidation'),
-//            array('price_with_discont', 'priceWithDiscontValidation'),
+            array('discont', 'discontValidation'),
+            array('price_with_discont', 'priceWithDiscontValidation'),
             array('status', 'in', 'range'=>array(
                 self::STATUS_NOT_YET_STARTED,
                 self::STATUS_FINISHED,

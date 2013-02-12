@@ -4,7 +4,7 @@
 	<?php echo CHtml::link(CHtml::encode($data->id),array('view','id'=>$data->id)); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('fullname')); ?>:</b>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('name')); ?>:</b>
 	<?php echo CHtml::encode($data->fullname); ?>
 	<br />
 
@@ -25,7 +25,7 @@
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('doctor_id')); ?>:</b>
-	<?php echo CHtml::encode($data->doctor->fullname); ?>
+	<?php echo CHtml::encode($data->doctor->name); ?>
 	<br />
     
     <b><?php echo CHtml::encode('Registration date'); ?>:</b>

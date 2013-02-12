@@ -14,7 +14,7 @@ class DoctorController extends Controller
 	public function filters()
 	{
 		return CMap::mergeArray(parent::filters(), array(
-			'accessControl', // perform access control for CRUD operations
+//			'accessControl', // perform access control for CRUD operations
             array( // handle gridview ajax update
                 'application.filters.GridViewHandler', //path to GridViewHandler.php class
             ),
@@ -34,7 +34,7 @@ class DoctorController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
+				'actions'=>array('create','update', 'getpatientdoctorinfo'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -73,8 +73,20 @@ class DoctorController extends Controller
 		{
 			$model->attributes=$_POST['Doctor'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+            {
+                if (!empty($_GET['asDialog']))
+                {
+                    //Close the dialog, reset the iframe and update the grid
+                    echo CHtml::script("window.parent.$('#new-doctor-dialog').dialog('close');window.parent.$('#new-doctor-frame').attr('src','');;");
+                    Yii::app()->end();
+                }
+                else
+                    $this->redirect(array('view','id'=>$model->id));
+            }
 		}
+        
+        if (!empty($_GET['asDialog']))
+            $this->layout = '//layouts/iframe';
 
 		$this->render('create',array(
 			'model'=>$model,
@@ -130,13 +142,22 @@ class DoctorController extends Controller
 	 */
 	public function actionIndex()
 	{
+        $model = new Doctor;
 		$dataProvider=new CActiveDataProvider('Doctor', array(
             'criteria'=>array(
                 'condition'=>'t.status='.Doctor::STATUS_ENABLED,
+                'order'=>'hospital_id, type, fullname',
                 'with'=>array('hospital'),
+            ),
+            'pagination'=>array(
+                'pageSize'=>100000,
             )
+//            'sort'=>array(
+//                'hospital_id',
+//            )
         ));
 		$this->render('index',array(
+            'model'=>$model,
 			'dataProvider'=>$dataProvider,
 		));
 	}
@@ -195,5 +216,16 @@ class DoctorController extends Controller
 			'model'=>$model,
 		));
 	}
+    
+    public function actionGetPatientDoctorInfo()
+    {
+        $doctor = $this->loadModel($_GET['did']);
+        
+        $this->layout = '//layouts/iframe';
+        
+        $this->render('patientdoctorinfo',array(
+			'model'=>$doctor,
+		));
+    }
     
 }

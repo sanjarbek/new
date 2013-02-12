@@ -1,3 +1,6 @@
 [submodule "protected/extensions/bootstrap"]
 	path = protected/extensions/bootstrap
 	url = git://github.com/clevertech/YiiBooster.git
+[submodule "protected/modules/rights"]
+	path = protected/modules/rights
+	url = git://github.com/stratosgear/yii-rights.git
