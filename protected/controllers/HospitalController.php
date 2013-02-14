@@ -73,12 +73,34 @@ class HospitalController extends Controller
 		{
 			$model->attributes=$_POST['Hospital'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+            {
+                if (!empty($_GET['asDialog']))
+                {
+                    //Close the dialog, reset the iframe and update the grid
+                    echo CHtml::script("window.parent.$('#new-hospital-dialog').dialog('close');window.parent.$('#new-hospital-frame').attr('src','');");
+                    Yii::app()->end();
+                }
+                else
+                {
+                    $this->redirect(array('view','id'=>$model->id));
+                }
+            }
 		}
+        
+        if (!empty($_GET['asDialog']))
+        {
+            $this->layout = '//layouts/iframe';
+            $this->render('_form', array(
+                'model'=>$model,
+            ));
+        }
+        else
+        {
+            $this->render('create',array(
+                'model'=>$model,
+            ));
+        }
 
-		$this->render('create',array(
-			'model'=>$model,
-		));
 	}
 
 	/**

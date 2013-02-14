@@ -99,7 +99,7 @@ $this->menu=array(
     $this->beginWidget('zii.widgets.jui.CJuiDialog', array(
     'id'=>'cru-dialog',
     'options'=>array(
-        'title'=>'Detail view',
+        'title'=>'Services list',
         'autoOpen'=>false,
         'modal'=>true,
         'width'=>500,
@@ -121,7 +121,7 @@ $this->menu=array(
 $this->beginWidget('zii.widgets.jui.CJuiDialog', array(
     'id'=>'doctor-dialog',
     'options'=>array(
-        'title'=>'Detail view',
+        'title'=>'Doctor details',
         'autoOpen'=>false,
         'modal'=>true,
         'width'=>500,

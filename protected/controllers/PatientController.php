@@ -285,7 +285,7 @@ class PatientController extends Controller
             foreach ($options as $key => $value)
                 $content = $content . CHtml::tag('option',
                        array('value'=>$key),CHtml::encode($value),true);
-            $content = $content . '</optgroup';
+            $content = $content . '</optgroup>';
         }
         
         echo CJSON::encode(array(

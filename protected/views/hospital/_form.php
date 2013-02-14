@@ -11,18 +11,13 @@
 
 	<?php echo $form->textFieldRow($model,'phone',array('class'=>'span3','maxlength'=>20)); ?>
 
-    <?php echo $form->labelEx($model, 'manager_id'); ?>
-    <?php $this->widget('bootstrap.widgets.TbSelect2', array(
-        'model'=>$model,
-        'attribute'=>'manager_id',
+    <?php echo $form->select2Row($model, 'manager_id', array(
+        'asDropDownList'=>true,
         'data'=>$model->getManagersList(),
     )); ?>
-    <?php echo $form->error($model, 'manager_id'); ?>
 
-	<?php echo $form->labelEx($model, 'status'); ?>
-    <?php $this->widget('bootstrap.widgets.TbSelect2', array(
-        'model'=>$model,
-        'attribute'=>'status',
+    <?php echo $form->select2Row($model, 'status', array(
+        'asDropDownList'=>true,
         'data'=>$model->getStatusOptions(),
     )); ?>
     <?php echo $form->error($model, 'status'); ?>

@@ -39,16 +39,16 @@ $this->widget('bootstrap.widgets.TbExtendedGridView',array(
             )
         ),
 		'phone',
-        array(
-            'class'=>'bootstrap.widgets.TbToggleColumn',
-            'toggleAction'=>'patient/toggle',
-            'name' => 'sex',
-            'checkedIcon'=>'icon-thumbs-up',
-            'uncheckedIcon'=>'icon-thumbs-down',
-            'uncheckedButtonLabel'=>'Мужчина',
-            'checkedButtonLabel'=>'Женщина',
-            'filter'=>$model->getSexOptions(),
-        ),
+//        array(
+//            'class'=>'bootstrap.widgets.TbToggleColumn',
+//            'toggleAction'=>'patient/toggle',
+//            'name' => 'sex',
+//            'checkedIcon'=>'icon-thumbs-up',
+//            'uncheckedIcon'=>'icon-thumbs-down',
+//            'uncheckedButtonLabel'=>'Мужчина',
+//            'checkedButtonLabel'=>'Женщина',
+//            'filter'=>$model->getSexOptions(),
+//        ),
         array(
             'name'=>'doctor_id',
             'value'=>'$data->doctor->fullname',

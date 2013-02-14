@@ -18,7 +18,7 @@
 
 	<?php echo $form->datepickerRow($model,'birthday',array(
         'class'=>'span5', 
-        'prepend'=>'<i class="icon-calendar"></i>',
+        'append'=>'<i class="icon-calendar"></i>',
         'options'=>array(
             'format'=>'yyyy-mm-dd',
             'calendarWeeks'=>true,
@@ -34,18 +34,15 @@
         'asDropDownList'=>true,
         'data'=>$model->getDoctorsList(),
         'class'=>'span4',
-    )); ?>
-    
-    <?php 
-        echo CHtml::link('Add new doctor', '#', array(
+        'hint'=>'&nbsp;&nbsp;&nbsp;' . CHtml::link('Add new doctor', '#', array(
             'onClick'=>'js: $("#new-doctor-frame").attr("src", "' .
                     Yii::app()->createUrl('doctor/create', array(
                         'asDialog'=>1,
                     )) . '");' . 
             '$("#new-doctor-dialog").dialog("open");  
             return false;',
-                ))
-    ?>
+                )),
+    )); ?>
     
     <?php echo $form->select2Row($model, 'status', array(
         'asDropDownList'=>true,
@@ -61,14 +58,14 @@
 			'type'=>'primary',
 			'label'=>$model->isNewRecord ? 'Create' : 'Save',
             'htmlOptions'=>array(
-                'class'=>'pull-right',
+//                'class'=>'pull-right',
             )
 		)); ?>
 	</div>
 
 <?php $this->endWidget(); ?>
 
-    <?php
+<?php
     $this->beginWidget('zii.widgets.jui.CJuiDialog', array(
     'id'=>'new-doctor-dialog',
     'options'=>array(

@@ -13,7 +13,7 @@
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('manager_id')); ?>:</b>
-	<?php echo CHtml::encode($data->manager->name); ?>
+	<?php echo CHtml::encode($data->manager->fullname); ?>
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('status')); ?>:</b>

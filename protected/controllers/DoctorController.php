@@ -81,16 +81,25 @@ class DoctorController extends Controller
                     Yii::app()->end();
                 }
                 else
+                {
                     $this->redirect(array('view','id'=>$model->id));
+                }
             }
 		}
         
         if (!empty($_GET['asDialog']))
+        {
             $this->layout = '//layouts/iframe';
-
-		$this->render('create',array(
-			'model'=>$model,
-		));
+            $this->render('_form', array(
+                'model'=>$model,
+            ));
+        }
+        else
+        {
+            $this->render('create',array(
+                'model'=>$model,
+            ));
+        }
 	}
 
 	/**
@@ -226,6 +235,23 @@ class DoctorController extends Controller
         $this->render('patientdoctorinfo',array(
 			'model'=>$doctor,
 		));
+    }
+    
+    public function actionGetHospitalsListJson()
+    {
+        $listData = Doctor::model()->getHospitalsList();
+        
+        $content = '';
+        foreach ($listData as $key => $value)
+                $content = $content . CHtml::tag('option',
+                       array('value'=>$key),CHtml::encode($value),true);
+        
+        echo CJSON::encode(array(
+                        'status'=>'success',
+                        'content'=>$content,
+        ));
+
+        Yii::app()->end();
     }
     
 }

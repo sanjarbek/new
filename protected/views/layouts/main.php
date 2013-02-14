@@ -26,8 +26,8 @@
     <?php 
     $this->widget('bootstrap.widgets.TbNavbar', array(
         'brand' => 'Title',
-        'fixed' => 'false',
-        'collapse'=>true,
+        'fixed' => 'true',
+        'collapse'=>FALSE,
         'htmlOptions' => array(
             'class'=>'navbar-inverse',
         ),
@@ -42,7 +42,7 @@
                     array('label'=>'Logout ('.Yii::app()->user->name.')', 'url'=>array('/user/logout'), 'visible'=>!Yii::app()->user->isGuest)
                 ),
                 'htmlOptions'=>array(
-                    'class'=>'nav span5',
+                    'class'=>'nav nav-inner span5',
                 ),
             ),
             array(

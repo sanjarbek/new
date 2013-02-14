@@ -39,7 +39,7 @@ select, input[type="file"] {
 
 .row-fluid [class*="span"] {
     -moz-box-sizing: border-box;
-    min-height: 25px;
+    min-height: 20px;
 }
 
 body {
@@ -47,8 +47,6 @@ body {
 }
 
 .bootstrap-widget-header {
-  background: -moz-linear-gradient(center top , #14FF3C 0%, #00D624 100%) repeat scroll 0 0 transparent;
-  border: 1px solid #64D864;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
   height: 25px;
@@ -84,8 +82,15 @@ body {
 }*/
 
 .select2-container .select2-choice {
-  height: 22px;
-  line-height: 22px;
+  height: 18px;
+  line-height: 18px;
+}
+
+.select2-container .select2-choice div b {
+  display: block;
+  height: 100%;
+  width: 100%;
+  margin-top: -4px;
 }
 
 .form-horizontal .control-label {
@@ -93,10 +98,12 @@ body {
   padding-top: 5px;
   text-align: right;
   width: 100px;
+  font-size: 12px;
 }
 
 .form-horizontal .controls {
   margin-left: 110px;
+  padding-top: 5px;
 }
 
 .form-horizontal .control-group {
@@ -116,6 +123,38 @@ body {
   padding-bottom: 5px;
   padding-right: 0px; 
 }
+
+.input-append .add-on, .input-prepend .add-on {
+  background-color: #EEEEEE;
+  border: 1px solid #CCCCCC;
+  display: inline-block;
+  font-size: 14px;
+  font-weight: normal;
+  height: 10px;
+  line-height: 18px;
+  min-width: 16px;
+  padding: 4px 5px;
+  text-align: center;
+  text-shadow: 0 1px 0 #FFFFFF;
+  width: auto;
+}
+
+.form-horizontal input + .help-block, .form-horizontal select + .help-block, .form-horizontal textarea + .help-block {
+  margin-top: 0;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /*background-image: url("../img/glyphicons-halflings.png");*/
+  /*background-position: 14px 14px;*/
+  /*background-repeat: no-repeat;*/
+  display: inline-block;
+  height: 14px;
+  line-height: 14px;
+  margin-top: -1px;
+  vertical-align: text-top;
+  width: 14px;
+}
+
 .ui-dialog .ui-dialog-title {
   color: #404040;
   float: left;

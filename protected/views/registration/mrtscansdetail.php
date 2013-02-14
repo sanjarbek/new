@@ -13,7 +13,6 @@ $this->widget('bootstrap.widgets.TbGridView',array(
 //    'patientId'=>$patientId,
     'enableSorting'=>false,
 	'columns'=>array(
-        'id',
 		array(
 			'class'=>'bootstrap.widgets.TbButtonColumn',
             'template'=>'{add}',
@@ -37,6 +36,7 @@ $this->widget('bootstrap.widgets.TbGridView',array(
                 ),
             )
 		),
+        'id',
         'name',
 		'price',
 	),

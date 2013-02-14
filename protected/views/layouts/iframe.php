@@ -16,7 +16,7 @@
 
 <body>
 
-<div class="container-fluid" id="page">
+<div>
 
 	<?php echo $content; ?>
 
