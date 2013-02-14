@@ -12,7 +12,10 @@ $this->widget('bootstrap.widgets.TbExtendedGridView',array(
 //    'rowCssClassExpression'=>'($data->status==Patient::STATUS_FINISHED)?"success":"warning"',
     'enableSorting'=>false,
     'ajaxUrl'=> $this->createUrl('/patient/index'),
-    'ajaxUpdate'=>false,
+    'ajaxUpdate'=>TRUE,
+    'afterAjaxUpdate'=>"js:function(){
+        $('#datepicker_for_created_at').bdatepicker({'format':'yyyy-mm-dd', 'weekStart':'1', 'language':'ru'});
+        }",
     'pagerCssClass'=>'pagination pagination-mini pagination-centered',
     'responsiveTable'=>FALSE,
 	'filter'=>$model,
@@ -39,20 +42,48 @@ $this->widget('bootstrap.widgets.TbExtendedGridView',array(
             )
         ),
 		'phone',
-//        array(
-//            'class'=>'bootstrap.widgets.TbToggleColumn',
-//            'toggleAction'=>'patient/toggle',
-//            'name' => 'sex',
-//            'checkedIcon'=>'icon-thumbs-up',
-//            'uncheckedIcon'=>'icon-thumbs-down',
-//            'uncheckedButtonLabel'=>'Мужчина',
-//            'checkedButtonLabel'=>'Женщина',
-//            'filter'=>$model->getSexOptions(),
-//        ),
+        array(            
+            'name' => 'sex',
+            'value'=> '$data->getSexText()',
+            'filter'=>$model->getSexOptions(),
+        ),
         array(
             'name'=>'doctor_id',
             'value'=>'$data->doctor->fullname',
             'filter'=>$model->getDoctorsList(),
+        ),
+		array(
+            'name'=>'created_at',
+            'filter' => $this->widget('bootstrap.widgets.TbDatePicker', array(
+                'model'=>$model, 
+                'attribute'=>'created_at',
+                'options'=>array(
+                    'language'=>'ru',
+                    'format'=>'yyyy-mm-dd',
+                    'weekStart'=>1,
+                ),
+                'htmlOptions' => array(
+                    'id' => 'datepicker_for_created_at',
+                    'size' => '10',
+                ),
+            ), 
+            true),
+        ),
+        array(
+            'class'=>'bootstrap.widgets.TbToggleColumn',
+            'toggleAction'=>'patient/toggle',
+            'name' => 'report',
+            'checkedButtonLabel'=>'Готово',
+            'uncheckedButtonLabel'=>'Пока не готово',
+            'filter'=>$model->getReportStatusOptions(),
+        ),
+        array(
+            'class'=>'bootstrap.widgets.TbToggleColumn',
+            'toggleAction'=>'patient/toggle',
+            'name' => 'payment',
+            'checkedButtonLabel'=>'Готово',
+            'uncheckedButtonLabel'=>'Пока не готово',
+            'filter'=>$model->getPaymentOptions(),
         ),
         array(
             'name'=>'status',
@@ -71,29 +102,6 @@ $this->widget('bootstrap.widgets.TbExtendedGridView',array(
                 'cssclass' => 'form',
 //                'width' => '150px',
             )
-        ),
-        array(
-            'class'=>'bootstrap.widgets.TbToggleColumn',
-            'toggleAction'=>'patient/toggle',
-            'name' => 'report_status',
-            'checkedButtonLabel'=>'Готово',
-            'uncheckedButtonLabel'=>'Пока не готово',
-            'filter'=>$model->getReportStatusOptions(),
-        ),
-		array(
-            'name'=>'created_at',
-            'filter' => $this->widget('bootstrap.widgets.TbDatePicker', array(
-                'model'=>$model, 
-                'attribute'=>'created_at',
-                'options'=>array(
-                    'format'=>'yyyy-mm-dd',
-                ),
-                'htmlOptions' => array(
-                    'id' => 'datepicker_for_created_at',
-                    'size' => '10',
-                ),
-            ), 
-            true),
         ),
 		/*
 		'updated_at',

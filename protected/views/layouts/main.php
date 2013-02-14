@@ -1,18 +1,9 @@
 <?php /* @var $this Controller */ ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html lang="en">
+<html lang="ru">
 <head>
 	<meta charset="utf-8" />
-	<!--<meta name="language" content="en" />-->
-
-	<!-- blueprint CSS framework -->
-	<!--<link rel="stylesheet" type="text/css" href="<?php // echo Yii::app()->request->baseUrl; ?>/css/screen.css" media="screen, projection" />-->
-	<!--<link rel="stylesheet" type="text/css" href="<?php // echo Yii::app()->request->baseUrl; ?>/css/print.css" media="print" />-->
-	<!--[if lt IE 8]>
-	<link rel="stylesheet" type="text/css" href="<?php // echo Yii::app()->request->baseUrl; ?>/css/ie.css" media="screen, projection" />
-	<![endif]-->
-
-	<!--<link rel="stylesheet" type="text/css" href="<?php // echo Yii::app()->request->baseUrl; ?>/css/main.css" />-->
+    
     <?php echo Yii::app()->bootstrap->registerCoreCss(); ?>
 
 	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
@@ -26,7 +17,7 @@
     <?php 
     $this->widget('bootstrap.widgets.TbNavbar', array(
         'brand' => 'Title',
-        'fixed' => 'true',
+        'fixed' => 'top',
         'collapse'=>FALSE,
         'htmlOptions' => array(
             'class'=>'navbar-inverse',
@@ -66,6 +57,9 @@
             ),
         )
     )); ?>
+    
+    <br/>
+    <br/>
 
 	<?php if(isset($this->breadcrumbs)):?>
 		<?php $this->widget('bootstrap.widgets.TbBreadcrumbs', array(
