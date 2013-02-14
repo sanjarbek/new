@@ -1,12 +1,12 @@
 <?php
 $this->breadcrumbs=array(
-	'Patients'=>array('index'),
-	'Create',
+	'Пациенты'=>array('index'),
+	'Создать',
 );
 
 $this->menu=array(
-	array('label'=>'List Patient','url'=>array('index')),
-	array('label'=>'Manage Patient','url'=>array('admin')),
+	array('label'=>'Список','url'=>array('index')),
+	array('label'=>'Управлять','url'=>array('admin')),
 );
 ?>
 

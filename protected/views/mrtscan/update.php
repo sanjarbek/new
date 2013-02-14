@@ -1,18 +1,18 @@
 <?php
 $this->breadcrumbs=array(
-	'Mrtscans'=>array('index'),
+	'Услуги'=>array('index'),
 	$model->name=>array('view','id'=>$model->id),
-	'Update',
+	'Редактировать',
 );
 
 $this->menu=array(
-	array('label'=>'List Mrtscan','url'=>array('index')),
-	array('label'=>'Create Mrtscan','url'=>array('create')),
-	array('label'=>'View Mrtscan','url'=>array('view','id'=>$model->id)),
-	array('label'=>'Manage Mrtscan','url'=>array('admin')),
+	array('label'=>'Список','url'=>array('index')),
+	array('label'=>'Создать','url'=>array('create')),
+	array('label'=>'Подробно','url'=>array('view','id'=>$model->id)),
+	array('label'=>'Управлять','url'=>array('admin')),
 );
 ?>
 
-<h1>Update Mrtscan <?php echo $model->id; ?></h1>
+<h4>Редактировать услугу #<?php echo $model->id; ?></h4>
 
 <?php echo $this->renderPartial('_form',array('model'=>$model)); ?>

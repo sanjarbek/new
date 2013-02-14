@@ -1,16 +1,17 @@
 <?php
 $this->breadcrumbs=array(
-	'Patients'=>array('index'),
+	'Пациенты'=>array('index'),
 	$model->id,
 );
 
 $this->menu=array(
-	array('label'=>'List Patient','url'=>array('index')),
-	array('label'=>'Create Patient','url'=>array('create')),
-	array('label'=>'Update Patient','url'=>array('update','id'=>$model->id)),
-	array('label'=>'Delete Patient','url'=>'#','linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
-	array('label'=>'Manage Patient','url'=>array('admin')),
-    array('label'=>'Add registration', 'url'=>array('registration/create', 'pid'=>$model->id)),
+	array('label'=>'Список','url'=>array('index')),
+	array('label'=>'Создать','url'=>array('create')),
+	array('label'=>'Редактировать','url'=>array('update','id'=>$model->id)),
+	array('label'=>'Управлять','url'=>array('admin')),
+	array('label'=>'Удалить','url'=>'#','linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Вы уверены что хотите удалить?')),
+    '',
+    array('label'=>'Добавить новый заказ', 'url'=>array('registration/create', 'pid'=>$model->id)),
 );
 ?>
 
@@ -19,7 +20,7 @@ $this->menu=array(
 
 <?php 
 $this->beginWidget('bootstrap.widgets.TbBox', array(
-    'title' => 'Detail info',
+    'title' => 'Подробно',
     'headerIcon' => 'icon-th-list',
     // when displaying a table, if we include bootstra-widget-table class
     // the table will be 0-padding to the box
@@ -52,11 +53,11 @@ $this->widget('bootstrap.widgets.TbDetailView',array(
             'value'=>$model->getReportStatusText(),
         ),
 		'created_at',
-		'updated_at',
 		array(
             'name'=>'created_user',
             'value'=>CHtml::encode($model->creator->fullname),
         ),
+		'updated_at',
         array(
             'name'=>'updated_user',
             'value'=>CHtml::encode($model->updater->fullname),
@@ -65,11 +66,4 @@ $this->widget('bootstrap.widgets.TbDetailView',array(
 )); 
 $this->endWidget();
 ?>
-    <div class="span7">
-    <?php
-        $this->widget('RegistrationsWidget', array(
-            'patient_id'=>$model->id,
-        ));
-    ?>
-    </div>
 </div>

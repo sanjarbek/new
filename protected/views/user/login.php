@@ -5,7 +5,7 @@
 
 $this->pageTitle=Yii::app()->name . ' - Login';
 $this->breadcrumbs=array(
-	'Login',
+	'Вход',
 );
 ?>
 <div class="row-fluid">
@@ -29,7 +29,7 @@ $this->breadcrumbs=array(
     <div class="span6">
     <?php 
     $this->beginWidget('bootstrap.widgets.TbBox', array(
-        'title'=>'Login',
+        'title'=>'Вход',
         'headerIcon'=>'icon-user',
         'htmlOptions'=>array(
 //            'class'=>'span6'
@@ -50,10 +50,11 @@ $this->breadcrumbs=array(
             )); ?>
             <?php echo $form->passwordFieldRow($model,'password'); ?>
             <?php echo $form->checkBoxRow($model,'rememberMe'); ?>
-
+            <hr />
             <?php $this->widget('bootstrap.widgets.TbButton', array(
                 'buttonType'=>'submit',
-                'label'=>'Login',
+                'type'=>'primary',
+                'label'=>'Вход',
             )) ?>
 
 

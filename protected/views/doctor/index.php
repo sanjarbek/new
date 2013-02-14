@@ -1,15 +1,15 @@
 <?php
 $this->breadcrumbs=array(
-	'Doctors',
+	'Докторы',
 );
 
 $this->menu=array(
-	array('label'=>'Create Doctor','url'=>array('create')),
-	array('label'=>'Manage Doctor','url'=>array('admin')),
+	array('label'=>'Создать','url'=>array('create')),
+	array('label'=>'Управлять','url'=>array('admin')),
 );
 ?>
 
-<h3>Doctors</h3>
+<h4>Список действующих докторов</h4>
 
 <?php 
 //$this->widget('bootstrap.widgets.TbListView',array(
@@ -42,7 +42,7 @@ $this->widget('bootstrap.widgets.TbGroupGridView',array(
 		'type',
 		'phone',
         array(
-            'header'=>'Manager',
+            'header'=>'Менеджер',
             'value'=>'CHtml::encode($data->hospital->manager->fullname)',
         ),
 //		array(

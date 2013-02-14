@@ -90,14 +90,14 @@ class Hospital extends MasterModel
 	{
 		return array(
 			'id' => 'ID',
-			'name' => 'Name',
-			'phone' => 'Phone',
-			'manager_id' => 'Manager',
-			'status' => 'Status',
-			'created_at' => 'Created At',
-			'updated_at' => 'Updated At',
-			'created_user' => 'Created User',
-			'updated_user' => 'Updated User',
+			'name' => 'Название',
+			'phone' => 'Телефон',
+			'manager_id' => 'Менеджер',
+			'status' => 'Статус',
+			'created_at' => 'Дата создания',
+			'updated_at' => 'Дата редактирования',
+			'created_user' => 'Создавщий пользователь',
+			'updated_user' => 'Редактировавщий пользователь',
 		);
 	}
 
@@ -148,8 +148,8 @@ class Hospital extends MasterModel
     public function getStatusOptions()
     {
         return array(
-            self::STATUS_DISABLED => Yii::t('status', 'Inactive'),
-            self::STATUS_ENABLED => Yii::t('status', 'Active'),
+            self::STATUS_DISABLED => Yii::t('status', 'Неактивный'),
+            self::STATUS_ENABLED => Yii::t('status', 'Активный'),
         );
     }
     
@@ -158,7 +158,7 @@ class Hospital extends MasterModel
         $statusOptions = $this->getStatusOptions();
         return (isset($statusOptions[$this->status]) ? 
                 $statusOptions[$this->status] : 
-            Yii::t('message', 'Unknown status: ') . $this->status);
+            Yii::t('message', 'Неизвестный статус: ') . $this->status);
     }
     
     public function getManagersList()

@@ -1,17 +1,17 @@
 <?php
 $this->breadcrumbs=array(
-	'Registrations'=>array('index'),
-	'Manage',
+	'Заказы'=>array('index'),
+	'Управлять',
 );
 
 $this->menu=array(
-	array('label'=>'List Registration','url'=>array('index')),
-	array('label'=>'Create Registration','url'=>array('create')),
+	array('label'=>'Список','url'=>array('index')),
+	array('label'=>'Создать','url'=>array('create')),
 );
 
 ?>
 
-<h3>Manage Registrations</h3>
+<h4>Управление заказами</h4>
 
 <?php $this->renderPartial('_gridview', array(
     'model'=>$model

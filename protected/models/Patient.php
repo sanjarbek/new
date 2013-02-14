@@ -116,18 +116,18 @@ class Patient extends MasterModel
 	{
 		return array(
 			'id' => 'ID',
-			'fullname' => Yii::t('label', 'Fullname'),
-			'phone' => 'Phone',
-			'birthday' => 'Birthday',
-			'sex' => 'Sex',
-			'status' => 'Status',
-			'doctor_id' => 'Doctor',
-            'report_status' => 'Report',
-            'desc_doctor_id' => 'Described by',
-			'created_at' => 'Register date',
-			'updated_at' => 'Updated At',
-			'created_user' => 'Created User',
-			'updated_user' => 'Updated User',
+			'fullname' => 'ФИО',
+			'phone' => 'Телефон',
+			'birthday' => 'Дата рождения',
+			'sex' => 'Пол',
+			'status' => 'Статус',
+			'doctor_id' => 'Доктор',
+            'report_status' => 'Статус отчета',
+            'desc_doctor_id' => 'Описавщий доктор',
+			'created_at' => 'Дата регистрации',
+			'updated_at' => 'Дата редактирования',
+			'created_user' => 'Регистрировал',
+			'updated_user' => 'Редактировал',
 		);
 	}
 
@@ -186,11 +186,11 @@ class Patient extends MasterModel
     public function getStatusOptions()
     {
         return array(
-            self::STATUS_NOT_YET_STARTED => Yii::t('status', 'Not yet started'),
-            self::STATUS_STARTED => Yii::t('status', 'Started'),
-            self::STATUS_FINISHED => Yii::t('status', 'Finished'),
-            self::STATUS_CANCELED => Yii::t('status', 'Canceled'),
-            self::STATUS_DELAYED => Yii::t('status', 'Delayed'),
+            self::STATUS_NOT_YET_STARTED => Yii::t('status', 'Еще не начата'),
+            self::STATUS_STARTED => Yii::t('status', 'Начата'),
+            self::STATUS_FINISHED => Yii::t('status', 'Закончено'),
+            self::STATUS_CANCELED => Yii::t('status', 'Отменено'),
+            self::STATUS_DELAYED => Yii::t('status', 'Отложено'),
         );
     }
 
@@ -205,8 +205,8 @@ class Patient extends MasterModel
     public function getReportStatusOptions()
     {
         return array(
-            self::REPORT_NOT_FINISHED=>  Yii::t('status', 'Not yet finished'),
-            self::REPORT_FINISHED=> Yii::t('status', 'Finished'),
+            self::REPORT_NOT_FINISHED=>  Yii::t('status', 'Еще не закончено'),
+            self::REPORT_FINISHED=> Yii::t('status', 'Закончено'),
         );
     }
     
@@ -215,14 +215,14 @@ class Patient extends MasterModel
         $report_status_options = $this->getReportStatusOptions();
         return isset($report_status_options[$this->report_status])
             ? $report_status_options[$this->report_status]
-            : (Yii::t('status', 'Unknown status ')) . $this->report_status;
+            : (Yii::t('status', 'Неизвестный статус ')) . $this->report_status;
     }
 
     public function getSexOptions()
     {
         return array(
-            self::SEX_MALE => Yii::t('status', 'Male'),
-            self::SEX_FEMALE => Yii::t('status', 'Female'),
+            self::SEX_MALE => Yii::t('status', 'Мужчина'),
+            self::SEX_FEMALE => Yii::t('status', 'Женщина'),
         );
     }
 
@@ -231,7 +231,7 @@ class Patient extends MasterModel
         $sex_options = $this->getSexOptions();
         return isset($sex_options[$this->sex])
             ? $sex_options[$this->sex]
-            : (Yii::t('value', 'Unknown status ') . $this->sex);
+            : (Yii::t('value', 'Неизвестный статус ') . $this->sex);
     }
     
     public function getDoctorsList()

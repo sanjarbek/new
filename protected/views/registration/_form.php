@@ -82,10 +82,7 @@ $cs->registerScript(
 		<?php $this->widget('bootstrap.widgets.TbButton', array(
 			'buttonType'=>'submit',
 			'type'=>'primary',
-			'label'=>$model->isNewRecord ? 'Create' : 'Save',
-            'htmlOptions'=>array(
-                'class'=>'pull-right',
-            )
+			'label'=>$model->isNewRecord ? 'Создать' : 'Сохранить',
 		)); ?>
 	</div>
 

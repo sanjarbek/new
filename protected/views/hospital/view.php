@@ -1,19 +1,20 @@
 <?php
 $this->breadcrumbs=array(
-	'Hospitals'=>array('index'),
+	'Больницы'=>array('index'),
 	$model->name,
 );
 
 $this->menu=array(
-	array('label'=>'List Hospital','url'=>array('index')),
-	array('label'=>'Create Hospital','url'=>array('create')),
-	array('label'=>'Update Hospital','url'=>array('update','id'=>$model->id)),
-	array('label'=>'Delete Hospital','url'=>'#','linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
-	array('label'=>'Manage Hospital','url'=>array('admin')),
+	array('label'=>'Список','url'=>array('index')),
+	array('label'=>'Создать','url'=>array('create')),
+	array('label'=>'Редактировать','url'=>array('update','id'=>$model->id)),
+	array('label'=>'Управлять','url'=>array('admin')),
+    '',
+	array('label'=>'Удалить','url'=>'#','linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
 );
 ?>
 
-<h3>View Hospital #<?php echo $model->id; ?></h3>
+<h4>Больница #<?php echo $model->id; ?></h4>
 
 <?php $this->widget('bootstrap.widgets.TbDetailView',array(
 	'data'=>$model,
@@ -23,7 +24,7 @@ $this->menu=array(
 		'phone',
         array(
             'name'=>'manager_id',
-            'value'=>$model->manager->name,
+            'value'=>$model->manager->fullname,
         ),
         array(
             'name'=>'status',
@@ -33,15 +34,11 @@ $this->menu=array(
 		'updated_at',
 		array(
             'name'=>'created_user',
-            'value'=>$model->creator->name,
+            'value'=>$model->creator->fullname,
         ),
 		array(
             'name'=>'updated_user',
-            'value'=>$model->updater->name,
-        ),
-        array(
-            'label'=>'Doctors count',
-            'value'=>count($model->doctors),
+            'value'=>$model->updater->fullname,
         ),
 	),
 )); ?>

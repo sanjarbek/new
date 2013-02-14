@@ -6,6 +6,7 @@
  */
 $this->widget('bootstrap.widgets.TbGridView',array(
 	'id'=>'UserGrid',
+    'type'=>'striped condensed bordered',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
 	'columns'=>array(

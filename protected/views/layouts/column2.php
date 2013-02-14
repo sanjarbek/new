@@ -47,7 +47,7 @@
         <div class="row-fluid">
             <div class="span12">
             <?php
-            $operations = array(array('label'=>'Operations', 'itemOptions'=>array('class'=>'nav-header'))); 
+            $operations = array(array('label'=>'Функции', 'itemOptions'=>array('class'=>'nav-header'))); 
             $this->widget('bootstrap.widgets.TbMenu', array(
                 'type'=>'list',
                 'htmlOptions'=>array(

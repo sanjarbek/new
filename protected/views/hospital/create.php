@@ -1,17 +1,17 @@
 <?php
 $this->breadcrumbs=array(
-	'Hospitals'=>array('index'),
-	'Create',
+	'Больницы'=>array('index'),
+	'Создать',
 );
 
 $this->menu=array(
-	array('label'=>'List Hospital','url'=>array('index')),
-	array('label'=>'Manage Hospital','url'=>array('admin')),
+	array('label'=>'Список','url'=>array('index')),
+	array('label'=>'Управлять','url'=>array('admin')),
 );
 ?>
 
 <div class="well">
-    <h3>Create Hospital</h3>
+    <h4>Создать новую</h4>
 
     <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
 </div>

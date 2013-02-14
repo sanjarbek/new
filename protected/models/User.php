@@ -102,15 +102,15 @@ class User extends MasterModel
 	{
 		return array(
 			'id' => 'ID',
-			'fullname' => 'Fullname',
-			'username' => 'Username',
-			'password' => 'Password',
-			'email' => 'Email',
-			'created_at' => 'Created At',
-			'lastvisit_at' => 'Lastvisit At',
-			'superuser' => 'Superuser',
-			'status' => 'Status',
-			'type' => 'Type',
+			'fullname' => 'ФИО',
+			'username' => 'Имя пользователя',
+			'password' => 'Пароль',
+			'email' => 'Электронный адрес',
+			'created_at' => 'Дата создания',
+			'lastvisit_at' => 'Последний визит',
+			'superuser' => 'Супер-пользователь',
+			'status' => 'Статус',
+			'type' => 'Тип',
 		);
 	}
 
@@ -195,8 +195,8 @@ class User extends MasterModel
     public function getStatusOptions()
     {
         return array(
-            self::STATUS_DISABLED => Yii::t('status', 'Inactive'),
-            self::STATUS_ENABLED => Yii::t('status', 'Active'),
+            self::STATUS_DISABLED => Yii::t('status', 'Неактивный'),
+            self::STATUS_ENABLED => Yii::t('status', 'Активный'),
         );
     }
     
@@ -219,9 +219,9 @@ class User extends MasterModel
     public function getUserTypes()
     {
         return array(
-            self::USER_ADMIN => Yii::t('status', 'Admin'),
-            self::USER_MANAGER => Yii::t('status', 'Manager'),
-            self::USER_REGISTRATOR => Yii::t('status', 'Registrator'),
+            self::USER_ADMIN => Yii::t('status', 'Администратор'),
+            self::USER_MANAGER => Yii::t('status', 'Менеджер'),
+            self::USER_REGISTRATOR => Yii::t('status', 'Регистратор'),
         );
     }
     

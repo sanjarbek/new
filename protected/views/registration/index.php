@@ -1,15 +1,15 @@
 <?php
 $this->breadcrumbs=array(
-	'Registrations',
+	'Заказы',
 );
 
 $this->menu=array(
-	array('label'=>'Create Registration','url'=>array('create')),
-	array('label'=>'Manage Registration','url'=>array('admin')),
+	array('label'=>'Создать','url'=>array('create')),
+	array('label'=>'Управлять','url'=>array('admin')),
 );
 ?>
 
-<h3>Registrations</h3>
+<h4>Список заказов</h4>
 
 <?php $this->widget('bootstrap.widgets.TbListView',array(
 	'dataProvider'=>$dataProvider,

@@ -35,28 +35,28 @@
             array(
                 'class' => 'bootstrap.widgets.TbMenu',
                 'items' => array(
-                    array('label'=>'Home', 'url'=>array('/site/index')),
-                    array('label'=>'About', 'url'=>array('/site/page', 'view'=>'about')),
-                    array('label'=>'Contact', 'url'=>array('/site/contact')),
-                    array('label'=>'Login', 'url'=>array('/user/login'), 'visible'=>Yii::app()->user->isGuest),
-                    array('label'=>'Logout ('.Yii::app()->user->name.')', 'url'=>array('/user/logout'), 'visible'=>!Yii::app()->user->isGuest)
+                    array('label'=>'Главная', 'url'=>array('/site/index')),
+                    array('label'=>'О нас', 'url'=>array('/site/page', 'view'=>'about')),
+                    array('label'=>'Связаться с нами', 'url'=>array('/site/contact')),
+                    array('label'=>'Вход', 'url'=>array('/user/login'), 'visible'=>Yii::app()->user->isGuest),
+                    array('label'=>'Выход ('.Yii::app()->user->name.')', 'url'=>array('/user/logout'), 'visible'=>!Yii::app()->user->isGuest)
                 ),
                 'htmlOptions'=>array(
-                    'class'=>'nav nav-inner span5',
+                    'class'=>'nav nav-inner span7',
                 ),
             ),
             array(
                 'class' => 'bootstrap.widgets.TbMenu',
                 'items'=>array(
                     array(
-                        'label'=>Yii::t('title', 'Configure'),
+                        'label'=>Yii::t('title', 'Настройки'),
                         'icon'=>'icon-wrench', 
                         'items'=>array(
-                            array('label'=>Yii::t('title', 'Patients'), 'url'=>array('/patient/admin'), 'visible'=>!Yii::app()->user->isGuest),
-                            array('label'=>Yii::t('title', 'Registrations'), 'url'=>array('/registration/admin'), 'visible'=>!Yii::app()->user->isGuest),
-                            array('label'=>Yii::t('title', 'Hospitals'), 'url'=>array('/hospital'), 'visible'=>!Yii::app()->user->isGuest),
-                            array('label'=>Yii::t('title', 'Doctors'), 'url'=>array('/doctor'), 'visible'=>!Yii::app()->user->isGuest),
-                            array('label'=>Yii::t('title', 'MRT scans'), 'url'=>array('/mrtscan'), 'visible'=>!Yii::app()->user->isGuest),
+                            array('label'=>Yii::t('title', 'Пациенты'), 'url'=>array('/patient'), 'visible'=>!Yii::app()->user->isGuest),
+                            array('label'=>Yii::t('title', 'Заказы'), 'url'=>array('/registration/admin'), 'visible'=>!Yii::app()->user->isGuest),
+                            array('label'=>Yii::t('title', 'Больницы'), 'url'=>array('/hospital'), 'visible'=>!Yii::app()->user->isGuest),
+                            array('label'=>Yii::t('title', 'Доктора'), 'url'=>array('/doctor'), 'visible'=>!Yii::app()->user->isGuest),
+                            array('label'=>Yii::t('title', 'Услуги'), 'url'=>array('/mrtscan'), 'visible'=>!Yii::app()->user->isGuest),
                         )
                     ),
 				),

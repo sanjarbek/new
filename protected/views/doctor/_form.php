@@ -39,7 +39,7 @@
     <?php echo $form->select2Row($model, 'hospital_id', array(
         'asDropDownList'=>true,
         'data'=>$model->getHospitalsList(),
-        'hint'=>'&nbsp;&nbsp;&nbsp;' . CHtml::link('Add new hospital', '#', array(
+        'hint'=>'&nbsp;&nbsp;&nbsp;' . CHtml::link('Новая больница', '#', array(
             'onClick'=>'js: $("#new-hospital-frame").attr("src", "' .
                     Yii::app()->createUrl('hospital/create', array(
                         'asDialog'=>1,
@@ -58,7 +58,7 @@
 		<?php $this->widget('bootstrap.widgets.TbButton', array(
 			'buttonType'=>'submit',
 			'type'=>'primary',
-			'label'=>$model->isNewRecord ? 'Create' : 'Save',
+			'label'=>$model->isNewRecord ? 'Создать' : 'Сохранить',
 		)); ?>
 	</div>
 

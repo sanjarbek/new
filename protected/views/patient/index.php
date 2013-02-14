@@ -1,19 +1,20 @@
 <?php
 $this->breadcrumbs=array(
-	'Patients',
+	'Пациенты',
 );
 
 $this->menu=array(
-	array('label'=>'Create Patient','url'=>array('create')),
-	array('label'=>'Manage Patient','url'=>array('admin')),
+	array('label'=>'Создать','url'=>array('create')),
+	array('label'=>'Управлять','url'=>array('admin')),
 );
 ?>
 
 <div class="row-fluid">
 
-    <?php 
+    <?php
+    $this->layout = '//layouts/column1';
     $this->beginWidget('bootstrap.widgets.TbBox', array(
-        'title' => 'Patients list',
+        'title' => 'Список пациентов',
         'headerIcon' => 'icon-th-list',
         // when displaying a table, if we include bootstra-widget-table class
         // the table will be 0-padding to the box

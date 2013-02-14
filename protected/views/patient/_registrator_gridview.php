@@ -101,7 +101,7 @@ $this->widget('bootstrap.widgets.TbExtendedGridView',array(
 		'updated_user',
 		*/
 		array(
-            'header'=>'Actions',
+            'header'=>'<span class="icon-wrench"></span>',
 			'class'=>'bootstrap.widgets.TbButtonColumn',
             'template'=>'{view}{delete}',
             'buttons'=>array(
