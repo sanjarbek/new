@@ -16,38 +16,46 @@
 <div class="container-fluid" id="page">
     <?php 
     $this->widget('bootstrap.widgets.TbNavbar', array(
-        'brand' => 'Title',
+        'brand' => 'Semamed',
         'fixed' => 'top',
-        'collapse'=>FALSE,
+        'collapse'=>TRUE,
         'htmlOptions' => array(
             'class'=>'navbar-inverse',
+            'height'=>'50px',
         ),
         'items' => array(
             array(
                 'class' => 'bootstrap.widgets.TbMenu',
                 'items' => array(
                     array('label'=>'Главная', 'url'=>array('/site/index')),
-                    array('label'=>'О нас', 'url'=>array('/site/page', 'view'=>'about')),
-                    array('label'=>'Связаться с нами', 'url'=>array('/site/contact')),
-                    array('label'=>'Вход', 'url'=>array('/user/login'), 'visible'=>Yii::app()->user->isGuest),
-                    array('label'=>'Выход ('.Yii::app()->user->name.')', 'url'=>array('/user/logout'), 'visible'=>!Yii::app()->user->isGuest)
+                    array('label'=>'Пациенты', 'url'=>array('/patient/index'), 'visible'=>!Yii::app()->user->isGuest),
+                    array('label'=>'Больницы', 'url'=>array('/hospital/index'), 'visible'=>!Yii::app()->user->isGuest),
+                    array('label'=>'Докторы', 'url'=>array('/doctor/index'), 'visible'=>!Yii::app()->user->isGuest),
+                    array('label'=>'Услуги', 'url'=>array('/mrtscan/index')),
+                    
                 ),
-                'htmlOptions'=>array(
-                    'class'=>'nav nav-inner span7',
-                ),
+//                'htmlOptions'=>array(
+//                    'class'=>'nav nav-inner span7',
+//                ),
             ),
             array(
                 'class' => 'bootstrap.widgets.TbMenu',
                 'items'=>array(
+                    array('label'=>'Вход', 'url'=>array('/user/login'), 'visible'=>Yii::app()->user->isGuest),
+                    array('label'=>'Выход ('.Yii::app()->user->name.')', 'url'=>array('/user/logout'), 'visible'=>!Yii::app()->user->isGuest),
                     array(
                         'label'=>Yii::t('title', 'Настройки'),
                         'icon'=>'icon-wrench', 
+                        'visible'=>!Yii::app()->user->isGuest,
                         'items'=>array(
-                            array('label'=>Yii::t('title', 'Пациенты'), 'url'=>array('/patient'), 'visible'=>!Yii::app()->user->isGuest),
+                            array('label'=>Yii::t('title', 'Пациенты'), 'url'=>array('/patient/admin'), 'visible'=>!Yii::app()->user->isGuest),
                             array('label'=>Yii::t('title', 'Заказы'), 'url'=>array('/registration/admin'), 'visible'=>!Yii::app()->user->isGuest),
-                            array('label'=>Yii::t('title', 'Больницы'), 'url'=>array('/hospital'), 'visible'=>!Yii::app()->user->isGuest),
-                            array('label'=>Yii::t('title', 'Доктора'), 'url'=>array('/doctor'), 'visible'=>!Yii::app()->user->isGuest),
-                            array('label'=>Yii::t('title', 'Услуги'), 'url'=>array('/mrtscan'), 'visible'=>!Yii::app()->user->isGuest),
+                            array('label'=>Yii::t('title', 'Больницы'), 'url'=>array('/hospital/admin'), 'visible'=>!Yii::app()->user->isGuest),
+                            array('label'=>Yii::t('title', 'Доктора'), 'url'=>array('/doctor/admin'), 'visible'=>!Yii::app()->user->isGuest),
+                            array('label'=>Yii::t('title', 'Услуги'), 'url'=>array('/mrtscan/admin'), 'visible'=>!Yii::app()->user->isGuest),
+                            '',
+                            array('label'=>Yii::t('title', 'Пользователи'), 'url'=>array('/user/admin'), 'visible'=>!Yii::app()->user->isGuest),
+                            array('label'=>Yii::t('title', 'Права доступа'), 'url'=>array('/rights'), 'visible'=>!Yii::app()->user->isGuest),
                         )
                     ),
 				),

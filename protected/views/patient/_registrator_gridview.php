@@ -8,7 +8,7 @@ $this->widget('bootstrap.widgets.TbExtendedGridView',array(
 	'id'=>'RegistratorPatientGrid',
 	'dataProvider'=>$model->with('doctor')->search(),
     'template'=>'{items}{pager}{summary}',
-    'type'=>'bordered condensed striped',
+    'type'=>'bordered condensed',
 //    'rowCssClassExpression'=>'($data->status==Patient::STATUS_FINISHED)?"success":"warning"',
     'enableSorting'=>false,
     'ajaxUrl'=> $this->createUrl('/patient/index'),
@@ -51,6 +51,9 @@ $this->widget('bootstrap.widgets.TbExtendedGridView',array(
             'name'=>'doctor_id',
             'value'=>'$data->doctor->fullname',
             'filter'=>$model->getDoctorsList(),
+            'htmlOptions'=>array(
+                'width'=>'100px',
+            )
         ),
 		array(
             'name'=>'created_at',
@@ -109,7 +112,19 @@ $this->widget('bootstrap.widgets.TbExtendedGridView',array(
 		'updated_user',
 		*/
 		array(
-            'header'=>'<span class="icon-wrench"></span>',
+//            'header'=>
+//            $this->widget('bootstrap.widgets.TbButtonGroup', array(
+//                'size'=>'mini',
+////                'icon'=>'icon-wrench',
+//                'buttons'=>array(
+//                    array(
+//                        'label'=>'Создать',
+//                        'icon'=>'icon-plus',
+//                        'url'=>array('create'),
+//                    )
+//                )
+//            )),
+            'header'=>'<a href="'. Yii::app()->createUrl('patient/create').'" class="btn icon-plus">Создать</a>',
 			'class'=>'bootstrap.widgets.TbButtonColumn',
             'template'=>'{view}{delete}',
             'buttons'=>array(

@@ -9,11 +9,10 @@ $this->menu=array(
 );
 ?>
 
-<div class="well">
-    <h4>Больницы</h4>
-    
-    <?php $this->widget('bootstrap.widgets.TbListView',array(
+<h4>Список больниц</h4> 
+<?php 
+    $this->renderPartial('_listview', array(
         'dataProvider'=>$dataProvider,
-        'itemView'=>'_view',        
-    )); ?>
-</div>
+    ));
+?>
+    

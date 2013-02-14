@@ -174,6 +174,9 @@ class Patient extends MasterModel
             'sort'=>array(
                 'defaultOrder'=>'t.created_at desc',
             ),
+            'pagination'=>array(
+                'pageSize'=>5,
+            )
 		));
 	}
 

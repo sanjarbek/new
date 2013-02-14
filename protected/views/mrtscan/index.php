@@ -13,15 +13,8 @@ $this->menu=array(
 
 <h4>Список услуг</h4>
 
-<?php $this->widget('bootstrap.widgets.TbGridView',array(
-	'dataProvider'=>$dataProvider,
-    'type'=>'bordered condensed striped',
-    'template'=>'{summary}{items}{pager}',
-    'enableSorting'=>false,
-    'columns'=>array(
-        'name',
-        'description',
-        'price',
-    )
-//	'itemView'=>'_view',
-)); ?>
+<?php 
+$this->renderPartial('_listview', array(
+    'dataProvider'=>$dataProvider,
+));
+?>

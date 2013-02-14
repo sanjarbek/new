@@ -7,7 +7,7 @@
 // CWebApplication properties can be configured here.
 return array(
 	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
-	'name'=>'My Web Application',
+	'name'=>'Semamed',
     
     'language'=>'ru',
 
@@ -60,7 +60,7 @@ return array(
         ),
         'bootstrap' => array(
             'class' => 'ext.bootstrap.components.Bootstrap',
-            'responsiveCss' => false,
+            'responsiveCss' => TRUE,
         ),
 		// uncomment the following to enable URLs in path-format
 		/*
@@ -82,7 +82,7 @@ return array(
 			'charset' => 'utf8',
             'enableProfiling'=>TRUE,
             'enableParamLogging'=>TRUE,
-//            'schemaCachingDuration' => 3600,
+            'schemaCachingDuration' => 3600,
 		),
         
 		'errorHandler'=>array(
@@ -96,10 +96,9 @@ return array(
 					'class'=>'CFileLogRoute',
 					'levels'=>'info, error, warning',
 				),
-				// uncomment the following to show log messages on web pages
-//				array(
-//					'class'=>'CWebLogRoute',
-//				),
+				array(
+					'class'=>'CWebLogRoute',
+				),
 				
 			),
 		),

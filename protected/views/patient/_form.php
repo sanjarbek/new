@@ -69,7 +69,7 @@
     $this->beginWidget('zii.widgets.jui.CJuiDialog', array(
     'id'=>'new-doctor-dialog',
     'options'=>array(
-        'title'=>'Add new doctor',
+        'title'=>'Создать нового доктора',
         'autoOpen'=>false,
         'modal'=>true,
         'width'=>500,

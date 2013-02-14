@@ -26,6 +26,7 @@
         
 		<?php echo $content; ?>
 	</div><!-- content -->
+    <?php if (!Yii::app()->user->isGuest): ?>
     <div class="span3">
 <!--        <div class="row-fluid">
             <div class="span12">
@@ -44,6 +45,7 @@
             ?>
             </div>
         </div>-->
+        
         <div class="row-fluid">
             <div class="span12">
             <?php
@@ -69,7 +71,9 @@
             ?>
             </div>
         </div>
+        
     </div><!-- sidebar -->
+    <?php endif; ?>
 </div>
 
 <?php $this->endContent(); ?>

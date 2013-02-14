@@ -14,37 +14,10 @@ class DoctorController extends Controller
 	public function filters()
 	{
 		return CMap::mergeArray(parent::filters(), array(
-//			'accessControl', // perform access control for CRUD operations
-            array( // handle gridview ajax update
-                'application.filters.GridViewHandler', //path to GridViewHandler.php class
+            array( 
+                'application.filters.GridViewHandler',
             ),
 		));
-	}
-
-	/**
-	 * Specifies the access control rules.
-	 * This method is used by the 'accessControl' filter.
-	 * @return array access control rules
-	 */
-	public function accessRules()
-	{
-		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
-				'users'=>array('*'),
-			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update', 'getpatientdoctorinfo'),
-				'users'=>array('@'),
-			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
-				'users'=>array('sanzhar'),
-			),
-			array('deny',  // deny all users
-				'users'=>array('*'),
-			),
-		);
 	}
 
 	/**
@@ -151,22 +124,15 @@ class DoctorController extends Controller
 	 */
 	public function actionIndex()
 	{
-        $model = new Doctor;
 		$dataProvider=new CActiveDataProvider('Doctor', array(
             'criteria'=>array(
                 'condition'=>'t.status='.Doctor::STATUS_ENABLED,
                 'order'=>'hospital_id, type, fullname',
                 'with'=>array('hospital'),
             ),
-            'pagination'=>array(
-                'pageSize'=>100000,
-            )
-//            'sort'=>array(
-//                'hospital_id',
-//            )
         ));
+        
 		$this->render('index',array(
-            'model'=>$model,
 			'dataProvider'=>$dataProvider,
 		));
 	}
@@ -223,6 +189,24 @@ class DoctorController extends Controller
 
 		$this->renderPartial('_gridview',array(
 			'model'=>$model,
+		));
+	}
+    
+    /**
+	 * Lists all models via Ajax.
+	 */
+	public function _getGridViewDoctorsList()
+	{
+		$dataProvider=new CActiveDataProvider('Doctor', array(
+            'criteria'=>array(
+                'condition'=>'t.status='.Doctor::STATUS_ENABLED,
+                'order'=>'hospital_id, type, fullname',
+                'with'=>array('hospital'),
+            ),
+        ));
+        
+		$this->renderPartial('_listview',array(
+			'dataProvider'=>$dataProvider,
 		));
 	}
     
