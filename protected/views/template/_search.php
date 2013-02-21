@@ -7,7 +7,7 @@
 
 	<?php echo $form->textFieldRow($model,'owner_id',array('class'=>'span5')); ?>
 
-	<?php echo $form->textAreaRow($model,'path',array('rows'=>6, 'cols'=>50, 'class'=>'span8')); ?>
+	<?php echo $form->textAreaRow($model,'name',array('rows'=>6, 'cols'=>50, 'class'=>'span8')); ?>
 
 	<?php echo $form->textAreaRow($model,'description',array('rows'=>6, 'cols'=>50, 'class'=>'span8')); ?>
 

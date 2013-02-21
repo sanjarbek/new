@@ -16,12 +16,22 @@ $this->menu=array(
 
 <h4>Подробнее о шаблоне №<?php echo $model->id; ?></h4>
 
-<?php $this->widget('bootstrap.widgets.TbDetailView',array(
+<?php 
+$this->widget('bootstrap.widgets.TbDetailView',array(
 	'data'=>$model,
 	'attributes'=>array(
 		'id',
-		'owner_id',
-		'file',
+        array(
+            'name'=>'owner_id',
+            'value'=>  CHtml::encode($model->owner->fullname),
+        ),
+        array(
+            'type'=>'raw',
+            'name'=>'file',            
+            'value'=>'<a href="'.$model->downloadfilepath.DIRECTORY_SEPARATOR.$model->file.'">'.$model->name.'</a>',
+        ),
 		'description',
 	),
-)); ?>
+)); 
+
+?>

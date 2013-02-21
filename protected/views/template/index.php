@@ -11,7 +11,6 @@ $this->menu=array(
 
 <h4>Список шаблонов</h4>
 
-<?php $this->widget('bootstrap.widgets.TbListView',array(
+<?php $this->renderPartial('_listview',array(
 	'dataProvider'=>$dataProvider,
-	'itemView'=>'_view',
 )); ?>

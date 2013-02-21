@@ -5,9 +5,7 @@ $this->pageTitle=Yii::app()->name;
 
 ?>
 
-<!--<div class="well">-->
-<?php
-//    echo CHtml::image('images/buklet.jpg', 'Semamed');
-?>
+<div class="well-transparent">
     <img src="images/buklet.jpg" alt="Semamed" />
-<!--</div>  End of about -->
+</div>
+<br />

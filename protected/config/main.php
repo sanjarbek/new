@@ -3,6 +3,15 @@
 // uncomment the following to define a path alias
 // Yii::setPathOfAlias('local','path/to/local-folder');
 
+$uploads_path = DIRECTORY_SEPARATOR.'data'.DIRECTORY_SEPARATOR.
+            'uploads'.DIRECTORY_SEPARATOR;
+
+$templates_path = $uploads_path.'templates'.DIRECTORY_SEPARATOR;
+$conclusions_path = $uploads_path.'conclusions'.DIRECTORY_SEPARATOR;
+
+Yii::setPathOfAlias('uploads.templates', $templates_path );
+Yii::setPathOfAlias('uploads.conclusions', $conclusions_path);
+
 // This is the main Web application configuration. Any writable
 // CWebApplication properties can be configured here.
 return array(
@@ -38,8 +47,10 @@ return array(
             'superuserName'=>'Admin',
             'userIdColumn'=>'id',
             'userNameColumn'=>'username', 
-            'install'=>false,
-            'debug'=>TRUE,
+            'install'=>FALSE,
+            'debug'=>true,
+            'enableBizRule'=>true,
+            'enableBizRuleData'=>false,
 //            'errorAction'=>'site/error',
         ),
 

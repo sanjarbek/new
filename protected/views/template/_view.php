@@ -8,6 +8,10 @@
 	<?php echo CHtml::encode($data->owner_id); ?>
 	<br />
 
+    <b><?php echo CHtml::encode($data->getAttributeLabel('name')); ?>:</b>
+	<?php echo CHtml::encode($data->name); ?>
+	<br />
+    
 	<b><?php echo CHtml::encode($data->getAttributeLabel('file')); ?>:</b>
 	<?php echo CHtml::encode($data->file); ?>
 	<br />

@@ -11,6 +11,9 @@
  */
 class Template extends MasterModel
 {
+    
+    
+    public $template;
 	/**
 	 * @return string the associated database table name
 	 */
@@ -27,7 +30,10 @@ class Template extends MasterModel
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('owner_id, file, description', 'required'),
+            array('template', 'length', 'max' => 255, 'tooLong' => '{attribute} слишком длинный (max {max} chars).', 'on' => 'upload'),
+            array('template', 'file', 'types' => 'docx,xlsx', 'maxSize' => 1024 * 512, 'tooLarge' => 'Размер файлы должен быть меньше 512 КБ !!!', 'on'=>'upload'),
+			array('owner_id, name, file, description', 'required'),
+            array('name', 'length', 'max'=>250),
 			array('owner_id', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
@@ -43,8 +49,18 @@ class Template extends MasterModel
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+            'owner'=>array(self::BELONGS_TO, 'User', 'owner_id'),
 		);
 	}
+    
+    public function scopes() 
+    {
+        return array(
+            'my'=>array(
+                'condition'=>'t.owner_id='.Yii::app()->user->id,
+            )
+        );
+    }
 
 	/**
 	 * @return array customized attribute labels (name=>label)
@@ -54,6 +70,7 @@ class Template extends MasterModel
 		return array(
 			'id' => 'ID',
 			'owner_id' => 'Владелец',
+            'name' => 'Название',
 			'file' => 'Файл',
 			'description' => 'Описание файла',
 		);
@@ -77,10 +94,13 @@ class Template extends MasterModel
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id',$this->id);
-		$criteria->compare('owner_id',$this->owner_id);
-		$criteria->compare('file',$this->file,true);
-		$criteria->compare('description',$this->description,true);
+		$criteria->compare('t.id',$this->id);
+		$criteria->compare('t.owner_id',$this->owner_id);
+        $criteria->compare('t.name', $this->name, true);
+		$criteria->compare('t.file',$this->file,true);
+		$criteria->compare('t.description',$this->description,true);
+        
+        $criteria->with = array('owner');
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -97,4 +117,16 @@ class Template extends MasterModel
 	{
 		return parent::model($className);
 	}
+    
+    public function getUploadFilePath()
+    {
+        return Yii::app()->basePath . DIRECTORY_SEPARATOR .'..'.
+                    Yii::getPathOfAlias('uploads.templates').
+                    DIRECTORY_SEPARATOR.Yii::app()->user->id;
+    }
+    
+    public function getDownloadFilePath()
+    {
+        return Yii::getPathOfAlias('uploads.templates').DIRECTORY_SEPARATOR.$this->owner_id;
+    }
 }
