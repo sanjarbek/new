@@ -46,8 +46,9 @@ class User extends MasterModel
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('fullname, username, password, email, created_at', 'required'),
+			array('fullname, username, email, created_at', 'required'),
 			array('superuser, status, type', 'numerical', 'integerOnly'=>true),
+            array('password', 'required', 'on'=>'create'),
 			array('fullname', 'length', 'max'=>50),
 			array('username', 'length', 'max'=>20),
 			array('password, email', 'length', 'max'=>128),
@@ -235,6 +236,24 @@ class User extends MasterModel
         return (isset($typeOptions[$this->type]) ? 
                 $typeOptions[$this->type] : 
             Yii::t('message', 'Unknown type: ') . $this->type);
+    }
+    
+    public function getUsersList($role)
+    {
+        $sql = "SELECT * FROM " . Yii::app()->getAuthManager()->assignmentTable . " WHERE itemname=:itemname";
+		$command = Yii::app()->db->createCommand($sql);
+		$command->bindValue(':itemname', $role);
+        
+        $users_ids=array();
+		foreach($command->queryAll($sql) as $row)
+		{
+            $users_ids[] = $row['userid'];
+		}
+        
+        $criteria = new CDbCriteria();
+        $criteria->addInCondition('id', $users_ids);
+        
+        return CHtml::listData(User::model()->findAll($criteria), 'id', 'fullname');
     }
     
 
