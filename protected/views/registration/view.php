@@ -1,25 +1,25 @@
 <?php
 $this->breadcrumbs=array(
-	'Registrations'=>array('index'),
+	'Заказы'=>array('index'),
 	$model->id,
 );
 
 $this->menu=array(
-	array('label'=>'List Registration','url'=>array('index')),
-	array('label'=>'Create Registration','url'=>array('create')),
-	array('label'=>'Update Registration','url'=>array('update','id'=>$model->id)),
-	array('label'=>'Delete Registration','url'=>'#','linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
-	array('label'=>'Manage Registration','url'=>array('admin')),
+	array('label'=>'Список','url'=>array('index')),
+	array('label'=>'Создать','url'=>array('create')),
+	array('label'=>'Редактировать','url'=>array('update','id'=>$model->id)),
+	array('label'=>'Управлять','url'=>array('admin')),
+	array('label'=>'Удалить','url'=>'#','linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
 );
 ?>
 <div class="row-fluid">
 <?php
     $this->beginWidget('bootstrap.widgets.TbBox', array(
-        'title' => 'View Registration #'. $model->id,
+        'title' => 'Подробно о заказе #'. $model->id,
         'headerIcon' => 'icon-th-list',
         // when displaying a table, if we include bootstra-widget-table class
         // the table will be 0-padding to the box
-        'htmlOptions' => array('class'=>'bootstrap-widget-table span5')
+        'htmlOptions' => array('class'=>'bootstrap-widget-table span9')
     ));
 
     $this->widget('bootstrap.widgets.TbDetailView',array(

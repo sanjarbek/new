@@ -1,17 +1,17 @@
 <?php
 $this->breadcrumbs=array(
-	'Doctors'=>array('index'),
-	'Manage',
+	'Докторы'=>array('index'),
+	'Управлять',
 );
 
 $this->menu=array(
-	array('label'=>'List Doctor','url'=>array('index')),
-	array('label'=>'Create Doctor','url'=>array('create')),
+	array('label'=>'Список','url'=>array('index')),
+	array('label'=>'Создать','url'=>array('create')),
 );
 
 ?>
 
-<h3>Manage Doctors</h3>
+<h4>Управление докторами</h4>
 
 <?php $this->renderPartial('_gridview', array(
     'model'=>$model,

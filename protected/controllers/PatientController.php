@@ -6,7 +6,7 @@ class PatientController extends Controller
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
-	public $layout='//layouts/patient';
+	public $layout='//layouts/column2';
 
 	/**
 	 * @return array action filters
@@ -20,32 +20,6 @@ class PatientController extends Controller
             ),
 		));
 	}
-
-	/**
-	 * Specifies the access control rules.
-	 * This method is used by the 'accessControl' filter.
-	 * @return array access control rules
-	 */
-	public function accessRules()
-	{
-		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
-				'users'=>array('*'),
-			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update', 'save', 'toggle',),
-				'users'=>array('@'),
-			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
-				'users'=>array('sanzhar'),
-			),
-			array('deny',  // deny all users
-				'users'=>array('*'),
-			),
-		);
-	}
     
     public function actions()
     {
@@ -57,6 +31,40 @@ class PatientController extends Controller
         );
     }
     
+    public function actionReport()
+    {
+        $attribute = $_GET['attribute'];
+        if ($attribute === 'report' && 
+                Yii::app()->user->checkAccess('Manager'))
+        {
+            $model = $this->loadModel($_GET['id']);
+            $model->reported_at = new CDbExpression('NOW()');
+            $model->saveAttributes(array('reported_at'));
+            $this->forward('toggle');
+        }
+        else
+        {
+            Yii::log('I am inside of checkToggleAction and its false', CLogger::LEVEL_INFO);
+            return false;
+        }
+    }
+    
+    public function checkToggleAction()
+    {
+        $attribute = $_POST['attribute'];
+        if ($attribute === 'report' && 
+                Yii::app()->user->checkAccess('Manager'))
+        {
+            Yii::log('I am inside of checkToggleAction and its true', CLogger::LEVEL_INFO);
+            return true;
+        }
+        else
+        {
+            Yii::log('I am inside of checkToggleAction and its false', CLogger::LEVEL_INFO);
+            return false;
+        }
+        
+    }
 
 	/**
 	 * Displays a particular model.
@@ -64,9 +72,28 @@ class PatientController extends Controller
 	 */
 	public function actionView($id)
 	{
-		$this->render('view',array(
-			'model'=>$this->loadModel($id),
-		));
+        $model = $this->loadModel($id);
+        
+        $registrationDataProvider = new CActiveDataProvider('Registration', array(
+            'criteria'=>array(
+                'condition'=>'patient_id='.$model->id,
+            )
+        ));
+        
+        if (Yii::app()->user->checkAccess('Doctor'))
+        {
+            $this->render('doctor_view', array(
+                'model'=>$model,
+                'registrationDataProvider'=>$registrationDataProvider,
+            ));
+        }
+        else if (Yii::app()->user->checkAccess('Registrator'))
+        {
+            $this->render('view',array(
+                'model'=>$model,
+                'registrationDataProvider'=>$registrationDataProvider,
+            ));
+        }
 	}
 
 	/**
@@ -158,9 +185,18 @@ class PatientController extends Controller
 		if(isset($_GET['Patient']))
 			$model->attributes=$_GET['Patient'];
 
-		$this->render('index',array(
-			'model'=>$model,
-		));
+        if (Yii::app()->user->checkAccess('Doctor'))
+        {
+            $this->render('index_doctor',array(
+                'model'=>$model,
+            ));
+        }
+        else if (Yii::app()->user->checkAccess('Registrator'))
+        {
+            $this->render('index',array(
+                'model'=>$model,
+            ));
+        }
 	}
 
 	/**
@@ -229,11 +265,24 @@ class PatientController extends Controller
 		if(isset($_GET['Patient']))
 			$model->attributes=$_GET['Patient'];
         
-        Yii::log('WWW Ушундай эле кылыш керек болчу: '. $model->created_at, CLogger::LEVEL_INFO);
-
 		$this->renderPartial('_registrator_gridview',array(
 			'model'=>$model,
             'created_at'=>$model->created_at,
+		));
+	}
+    
+    /**
+	 * Manages all models via Ajax.
+	 */
+	public function _getGridViewDoctorPatientGrid()
+	{
+		$model=new Patient('search');
+		$model->unsetAttributes();  // clear any default values
+		if(isset($_GET['Patient']))
+			$model->attributes=$_GET['Patient'];
+        
+		$this->renderPartial('_doctor_gridview',array(
+			'model'=>$model,
 		));
 	}
     

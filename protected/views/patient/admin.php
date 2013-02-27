@@ -1,12 +1,12 @@
 <?php
 $this->breadcrumbs=array(
-	'Patients'=>array('index'),
-	'Manage',
+	'Пациенты'=>array('index'),
+	'Управлять',
 );
 
 $this->menu=array(
-	array('label'=>'List Patient','url'=>array('index')),
-	array('label'=>'Create Patient','url'=>array('create')),
+	array('label'=>'Список','url'=>array('index')),
+	array('label'=>'Создать','url'=>array('create')),
 );
 
 ?>
@@ -15,7 +15,7 @@ $this->menu=array(
 
     <?php 
     $this->beginWidget('bootstrap.widgets.TbBox', array(
-        'title' => 'Manage patients',
+        'title' => 'Управление пациентами',
         'headerIcon' => 'icon-th-list',
         // when displaying a table, if we include bootstra-widget-table class
         // the table will be 0-padding to the box

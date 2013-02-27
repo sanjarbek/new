@@ -5,7 +5,7 @@
         <div class="row-fluid">
         <?php
             $this->beginWidget('bootstrap.widgets.TbBox', array(
-                'title'=>'Operations',
+                'title'=>'Функции',
             ));
             $this->widget('bootstrap.widgets.TbMenu', array(
                 'items'=>$this->menu,

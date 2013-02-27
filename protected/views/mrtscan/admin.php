@@ -1,16 +1,16 @@
 <?php
 $this->breadcrumbs=array(
-	'Mrtscans'=>array('index'),
-	'Manage',
+	'Услуги'=>array('index'),
+	'Управлять',
 );
 
 $this->menu=array(
-	array('label'=>'List Mrtscan','url'=>array('index')),
-	array('label'=>'Create Mrtscan','url'=>array('create')),
+	array('label'=>'Список','url'=>array('index')),
+	array('label'=>'Создать','url'=>array('create')),
 );
 ?>
 
-<h3>Manage Mrtscans</h3>
+<h4>Управлять услугами</h4>
 
 <?php $this->renderPartial('_gridview', array(
     'model'=>$model

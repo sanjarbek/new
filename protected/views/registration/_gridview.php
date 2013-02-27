@@ -6,6 +6,7 @@
  */
 $this->widget('bootstrap.widgets.TbGridView',array(
 	'id'=>'RegistrationGrid',
+    'type'=>'striped condensed bordered',
 	'dataProvider'=>$model->with('patient', 'mrtscan')->search(),
 	'filter'=>$model,
 	'columns'=>array(

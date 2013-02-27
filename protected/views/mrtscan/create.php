@@ -1,15 +1,15 @@
 <?php
 $this->breadcrumbs=array(
-	'Mrtscans'=>array('index'),
-	'Create',
+	'Услуги'=>array('index'),
+	'Создать',
 );
 
 $this->menu=array(
-	array('label'=>'List Mrtscan','url'=>array('index')),
-	array('label'=>'Manage Mrtscan','url'=>array('admin')),
+	array('label'=>'Список','url'=>array('index')),
+	array('label'=>'Управлять','url'=>array('admin')),
 );
 ?>
 
-<h1>Create Mrtscan</h1>
+<h4>Создать новую услугу</h4>
 
 <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>

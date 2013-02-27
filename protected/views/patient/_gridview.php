@@ -37,12 +37,10 @@ $this->widget('bootstrap.widgets.TbGridView',array(
             'value'=>'$data->getStatusText()',
             'filter'=>$model->getStatusOptions(),
         ),
-		/*
 		'created_at',
 		'updated_at',
-		'created_user',
-		'updated_user',
-		*/
+//		'created_user',
+//		'updated_user',
 		array(
 			'class'=>'bootstrap.widgets.TbButtonColumn',
             'buttons'=>array(

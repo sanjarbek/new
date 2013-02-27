@@ -1,19 +1,20 @@
 <?php
 $this->breadcrumbs=array(
-	'Mrtscans'=>array('index'),
+	'Услуги'=>array('index'),
 	$model->name,
 );
 
 $this->menu=array(
-	array('label'=>'List Mrtscan','url'=>array('index')),
-	array('label'=>'Create Mrtscan','url'=>array('create')),
-	array('label'=>'Update Mrtscan','url'=>array('update','id'=>$model->id)),
-	array('label'=>'Delete Mrtscan','url'=>'#','linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
-	array('label'=>'Manage Mrtscan','url'=>array('admin')),
+	array('label'=>'Список','url'=>array('index')),
+	array('label'=>'Создать','url'=>array('create')),
+	array('label'=>'Редактировать','url'=>array('update','id'=>$model->id)),
+	array('label'=>'Управлять','url'=>array('admin')),
+    '',
+	array('label'=>'Удалить','url'=>'#','linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
 );
 ?>
 
-<h3>View Mrtscan #<?php echo $model->id; ?></h3>
+<h4>Подробно об услуге #<?php echo $model->id; ?></h4>
 
 <?php $this->widget('bootstrap.widgets.TbDetailView',array(
 	'data'=>$model,

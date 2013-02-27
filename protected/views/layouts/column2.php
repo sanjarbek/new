@@ -26,6 +26,7 @@
         
 		<?php echo $content; ?>
 	</div><!-- content -->
+    <?php if (!Yii::app()->user->isGuest): ?>
     <div class="span3">
 <!--        <div class="row-fluid">
             <div class="span12">
@@ -44,32 +45,25 @@
             ?>
             </div>
         </div>-->
+        
         <div class="row-fluid">
             <div class="span12">
             <?php
-            $operations = array(array('label'=>'Operations', 'itemOptions'=>array('class'=>'nav-header'))); 
+            $operations = array(array('label'=>'Функции', 'itemOptions'=>array('class'=>'nav-header'))); 
             $this->widget('bootstrap.widgets.TbMenu', array(
                 'type'=>'list',
                 'htmlOptions'=>array(
                     'class'=>'well',
                 ),
                 'items' => array_merge($operations, $this->menu),
-//                array(
-//                    array('label'=>'Operations', 'itemOptions'=>array('class'=>'nav-header')),
-//                    array('label'=>'Home', 'url'=>'#', 'itemOptions'=>array('class'=>'active')),
-//                    array('label'=>'Library', 'url'=>'#'),
-//                    array('label'=>'Applications', 'url'=>'#'),
-//                    array('label'=>'Another list header', 'itemOptions'=>array('class'=>'nav-header')),
-//                    array('label'=>'Profile', 'url'=>'#'),
-//                    array('label'=>'Settings', 'url'=>'#'),
-//                    '',
-//                    array('label'=>'Help', 'url'=>'#'),
-//                    )
                 ));
             ?>
             </div>
         </div>
+        
     </div><!-- sidebar -->
+    <?php endif; ?>
 </div>
+<br />
 
 <?php $this->endContent(); ?>

@@ -34,7 +34,7 @@
         'asDropDownList'=>true,
         'data'=>$model->getDoctorsList(),
         'class'=>'span4',
-        'hint'=>'&nbsp;&nbsp;&nbsp;' . CHtml::link('Add new doctor', '#', array(
+        'hint'=>'&nbsp;&nbsp;&nbsp;' . CHtml::link('Добавить нового доктора', '#', array(
             'onClick'=>'js: $("#new-doctor-frame").attr("src", "' .
                     Yii::app()->createUrl('doctor/create', array(
                         'asDialog'=>1,
@@ -56,7 +56,7 @@
 		<?php $this->widget('bootstrap.widgets.TbButton', array(
 			'buttonType'=>'submit',
 			'type'=>'primary',
-			'label'=>$model->isNewRecord ? 'Create' : 'Save',
+			'label'=>$model->isNewRecord ? 'Создать' : 'Сохранить',
             'htmlOptions'=>array(
 //                'class'=>'pull-right',
             )
@@ -69,7 +69,7 @@
     $this->beginWidget('zii.widgets.jui.CJuiDialog', array(
     'id'=>'new-doctor-dialog',
     'options'=>array(
-        'title'=>'Add new doctor',
+        'title'=>'Создать нового доктора',
         'autoOpen'=>false,
         'modal'=>true,
         'width'=>500,

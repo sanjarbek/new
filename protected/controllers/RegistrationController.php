@@ -19,7 +19,6 @@ class RegistrationController extends Controller
 	public function filters()
 	{
         return CMap::mergeArray(parent::filters(),array(
-			'accessControl', // perform access control for CRUD operations
             'patientContext + create 
                 patient 
                 update 
@@ -73,39 +72,6 @@ class RegistrationController extends Controller
         }
         return $this->_patient;
     }
-
-	/**
-	 * Specifies the access control rules.
-	 * This method is used by the 'accessControl' filter.
-	 * @return array access control rules
-	 */
-	public function accessRules()
-	{
-		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
-				'users'=>array('*'),
-			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array(
-                    'create',
-                    'update', 
-                    'patient', 
-                    'getMrtscansList',
-                    'addService',
-                    'save',
-                ),
-				'users'=>array('@'),
-			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
-				'users'=>array('sanzhar'),
-			),
-			array('deny',  // deny all users
-				'users'=>array('*'),
-			),
-		);
-	}
 
 	/**
 	 * Displays a particular model.

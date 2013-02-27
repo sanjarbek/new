@@ -79,14 +79,14 @@ class Mrtscan extends MasterModel
 	{
 		return array(
 			'id' => 'ID',
-			'name' => 'Name',
-			'description' => 'Description',
-			'price' => 'Price',
-			'status' => 'Status',
-			'created_at' => 'Created At',
-			'updated_at' => 'Updated At',
-			'created_user' => 'Created User',
-			'updated_user' => 'Updated User',
+			'name' => 'Название',
+			'description' => 'Описание',
+			'price' => 'Цена',
+			'status' => 'Статус',
+			'created_at' => 'Дата создания',
+			'updated_at' => 'Дата редактирования',
+			'created_user' => 'Создавщий пользователь',
+			'updated_user' => 'Редактировавщий пользователь',
 		);
 	}
 
@@ -137,8 +137,8 @@ class Mrtscan extends MasterModel
     public function getStatusOptions()
     {
         return array(
-            self::STATUS_DISABLED => Yii::t('status', 'Inactive'),
-            self::STATUS_ENABLED => Yii::t('status', 'Active'),
+            self::STATUS_DISABLED => Yii::t('status', 'Неактивный'),
+            self::STATUS_ENABLED => Yii::t('status', 'Активный'),
         );
     }
     

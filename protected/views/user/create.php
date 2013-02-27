@@ -1,17 +1,17 @@
 <?php
 $this->breadcrumbs=array(
-	'Users'=>array('index'),
-	'Create',
+	'Пользователя'=>array('index'),
+	'Создать',
 );
 
 $this->menu=array(
-	array('label'=>'List User','url'=>array('index')),
-	array('label'=>'Manage User','url'=>array('admin')),
+	array('label'=>'Список','url'=>array('index')),
+	array('label'=>'Управлять','url'=>array('admin')),
 );
 ?>
 
 <div class="well">
-    <h3>Create User</h3>
+    <h4>Создать нового пользователя</h4>
 
     <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
 </div>

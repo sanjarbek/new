@@ -1,14 +1,14 @@
 <?php
 $this->breadcrumbs=array(
-	'Patients'=>array('/patient/index'),
+	'Пациенты'=>array('/patient/index'),
 	$model->id,
 );
 
 $this->menu=array(
-	array('label'=>'List Patient','url'=>array('/patient/index')),
-	array('label'=>'Create Patient','url'=>array('/patient/create')),
+	array('label'=>'Список','url'=>array('/patient/index')),
+	array('label'=>'Создать','url'=>array('/patient/create')),
 	'',
-    array('label'=>'Add registration', 'url'=>'#', 'linkOptions'=>array(
+    array('label'=>'Добавить новый заказ', 'url'=>'#', 'linkOptions'=>array(
         'onClick'=>'js: $("#cru-frame").attr("src", "' .
                     Yii::app()->createUrl('registration/getmrtscanslist', array(
                         'pid'=>$patient->id,
@@ -22,15 +22,14 @@ $this->menu=array(
 ?>
 
 <div class="row-fluid">
-    <!--<h3>View Patient #<?php // echo $model->id; ?></h3>-->
 
     <?php 
     $this->beginWidget('bootstrap.widgets.TbBox', array(
-        'title' => 'Patient details',
+        'title' => 'Подробно о пациенте',
         'headerIcon' => 'icon-th-list',
         // when displaying a table, if we include bootstra-widget-table class
         // the table will be 0-padding to the box
-        'htmlOptions' => array('class'=>'bootstrap-widget-table span4')
+        'htmlOptions' => array('class'=>'bootstrap-widget-table span5')
     ));
     $this->widget('bootstrap.widgets.TbDetailView',array(
         'data'=>$patient,
@@ -64,11 +63,11 @@ $this->menu=array(
                 )),
             ),
             'created_at',
-            'updated_at',
             array(
                 'name'=>'created_user',
                 'value'=>CHtml::encode($patient->creator->fullname),
             ),
+            'updated_at',
             array(
                 'name'=>'updated_user',
                 'value'=>CHtml::encode($patient->updater->fullname),
@@ -77,10 +76,10 @@ $this->menu=array(
     )); 
     $this->endWidget();
     ?>
-    <div class="span8">
+    <div class="span7">
         <?php
         $this->beginWidget('bootstrap.widgets.TbBox', array(
-            'title' => 'Services',
+            'title' => 'Заказы',
             'headerIcon' => 'icon-th-list',
             // when displaying a table, if we include bootstra-widget-table class
             // the table will be 0-padding to the box
@@ -99,7 +98,7 @@ $this->menu=array(
     $this->beginWidget('zii.widgets.jui.CJuiDialog', array(
     'id'=>'cru-dialog',
     'options'=>array(
-        'title'=>'Services list',
+        'title'=>'Услуги',
         'autoOpen'=>false,
         'modal'=>true,
         'width'=>500,

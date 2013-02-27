@@ -20,9 +20,6 @@
 	<?php echo CHtml::encode($data->getStatusText()); ?>
 	<br />
     
-    <b><?php echo 'Doctors count'; ?>:</b>
-	<?php echo count($data->doctors); ?>
-	<br />
     <hr />
 
 	<?php /*

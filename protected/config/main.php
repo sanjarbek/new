@@ -3,13 +3,22 @@
 // uncomment the following to define a path alias
 // Yii::setPathOfAlias('local','path/to/local-folder');
 
+$uploads_path = DIRECTORY_SEPARATOR.'data'.DIRECTORY_SEPARATOR.
+            'uploads'.DIRECTORY_SEPARATOR;
+
+$templates_path = $uploads_path.'templates'.DIRECTORY_SEPARATOR;
+$conclusions_path = $uploads_path.'conclusions'.DIRECTORY_SEPARATOR;
+
+Yii::setPathOfAlias('uploads.templates', $templates_path );
+Yii::setPathOfAlias('uploads.conclusions', $conclusions_path);
+
 // This is the main Web application configuration. Any writable
 // CWebApplication properties can be configured here.
 return array(
 	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
-	'name'=>'My Web Application',
+	'name'=>'Semamed',
     
-    'language'=>'en',
+    'language'=>'ru',
 
 	// preloading 'log' component
 	'preload'=>array(
@@ -38,8 +47,10 @@ return array(
             'superuserName'=>'Admin',
             'userIdColumn'=>'id',
             'userNameColumn'=>'username', 
-            'install'=>false,
-            'debug'=>TRUE,
+            'install'=>FALSE,
+            'debug'=>true,
+            'enableBizRule'=>true,
+            'enableBizRuleData'=>false,
 //            'errorAction'=>'site/error',
         ),
 
@@ -60,7 +71,7 @@ return array(
         ),
         'bootstrap' => array(
             'class' => 'ext.bootstrap.components.Bootstrap',
-            'responsiveCss' => false,
+            'responsiveCss' => TRUE,
         ),
 		// uncomment the following to enable URLs in path-format
 		/*
@@ -82,7 +93,7 @@ return array(
 			'charset' => 'utf8',
             'enableProfiling'=>TRUE,
             'enableParamLogging'=>TRUE,
-//            'schemaCachingDuration' => 3600,
+            'schemaCachingDuration' => 3600,
 		),
         
 		'errorHandler'=>array(
@@ -96,10 +107,9 @@ return array(
 					'class'=>'CFileLogRoute',
 					'levels'=>'info, error, warning',
 				),
-				// uncomment the following to show log messages on web pages
-//				array(
-//					'class'=>'CWebLogRoute',
-//				),
+				array(
+					'class'=>'CWebLogRoute',
+				),
 				
 			),
 		),

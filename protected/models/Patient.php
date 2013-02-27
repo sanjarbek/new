@@ -11,8 +11,10 @@
  * @property integer $sex
  * @property integer $status
  * @property integer $doctor_id
- * @property integer $report_status
+ * @property integer $report
+ * @property datetime $reported_at
  * @property integer $desc_doctor_id
+ * @property integer $payment Description
  * @property string $created_at
  * @property string $updated_at
  * @property integer $created_user
@@ -24,17 +26,18 @@
  */
 class Patient extends MasterModel
 {
-    const STATUS_NOT_YET_STARTED = 0;
-    const STATUS_STARTED = 1;
-    const STATUS_FINISHED = 2;
-    const STATUS_CANCELED = 3;
-    const STATUS_DELAYED = 4;
+    const STATUS_NOT_FINISHED = 0;
+    const STATUS_FINISHED = 1;
+    const STATUS_CANCELED = 2;
     
     const SEX_MALE = 0;
     const SEX_FEMALE = 1;
     
     const REPORT_NOT_FINISHED = 0;
     const REPORT_FINISHED = 1;
+    
+    const PAYMENT_IS_NOT_MADE = 0;
+    const PAYMENT_IS_MADE = 1;
     
 	/**
 	 * @return string the associated database table name
@@ -66,19 +69,21 @@ class Patient extends MasterModel
                 'skipOnError'=>false,
             ),
             array('status', 'in', 'range'=>array(
-                self::STATUS_NOT_YET_STARTED,
-                self::STATUS_STARTED,
+                self::STATUS_NOT_FINISHED,
                 self::STATUS_FINISHED,
                 self::STATUS_CANCELED,
-                self::STATUS_DELAYED,
             )),
             array('sex', 'in', 'range'=>array(
                 self::SEX_MALE,
                 self::SEX_FEMALE,
             )),
-            array('report_status', 'in', 'range'=>array(
+            array('report', 'in', 'range'=>array(
                 self::REPORT_NOT_FINISHED,
                 self::REPORT_FINISHED,
+            )),
+            array('payment', 'in', 'range'=>array(
+                self::PAYMENT_IS_NOT_MADE,
+                self::PAYMENT_IS_MADE,
             )),
 //            array('desc_doctor_id',
 //                'exist',
@@ -108,6 +113,15 @@ class Patient extends MasterModel
             'updater'=>array(self::BELONGS_TO, 'User', 'updated_user'),
 		);
 	}
+    
+    public function scopes() 
+    {
+        return array(
+            'paid'=>array(
+                'condition'=>'t.payment='.self::PAYMENT_IS_MADE,
+            )
+        );
+    }
 
 	/**
 	 * @return array customized attribute labels (name=>label)
@@ -116,18 +130,20 @@ class Patient extends MasterModel
 	{
 		return array(
 			'id' => 'ID',
-			'fullname' => Yii::t('label', 'Fullname'),
-			'phone' => 'Phone',
-			'birthday' => 'Birthday',
-			'sex' => 'Sex',
-			'status' => 'Status',
-			'doctor_id' => 'Doctor',
-            'report_status' => 'Report',
-            'desc_doctor_id' => 'Described by',
-			'created_at' => 'Register date',
-			'updated_at' => 'Updated At',
-			'created_user' => 'Created User',
-			'updated_user' => 'Updated User',
+			'fullname' => 'ФИО',
+			'phone' => 'Телефон',
+			'birthday' => 'Дата рождения',
+			'sex' => 'Пол',
+			'status' => 'Статус',
+			'doctor_id' => 'Доктор',
+            'report' => 'Заключение',
+            'reported_at'=>'Дата заключения',
+            'desc_doctor_id' => 'Описавщий доктор',
+            'payment' => 'Оплата',
+			'created_at' => 'Дата регистр.',
+			'updated_at' => 'Дата редактирования',
+			'created_user' => 'Регистрировал',
+			'updated_user' => 'Редактировал',
 		);
 	}
 
@@ -156,19 +172,23 @@ class Patient extends MasterModel
 		$criteria->compare('t.sex',$this->sex);
 		$criteria->compare('t.status',$this->status);
 		$criteria->compare('t.doctor_id',$this->doctor_id);
-        $criteria->compare('t.report_status', $this->report_status);
+        $criteria->compare('t.report', $this->report);
+        $criteria->compare('t.reported_at', $this->reported_at, true);
         $criteria->compare('t.desc_doctor_id', $this->desc_doctor_id);
+        $criteria->compare('t.payment', $this->payment);
 		$criteria->compare('t.created_at',$this->created_at,true);
 		$criteria->compare('t.updated_at',$this->updated_at,true);
 		$criteria->compare('t.created_user',$this->created_user);
 		$criteria->compare('t.updated_user',$this->updated_user);
-
-        Yii::log('WWW : ' . $this->created_at, CLogger::LEVEL_INFO);
+        
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
             'sort'=>array(
                 'defaultOrder'=>'t.created_at desc',
             ),
+            'pagination'=>array(
+                'pageSize'=>5,
+            )
 		));
 	}
 
@@ -186,11 +206,9 @@ class Patient extends MasterModel
     public function getStatusOptions()
     {
         return array(
-            self::STATUS_NOT_YET_STARTED => Yii::t('status', 'Not yet started'),
-            self::STATUS_STARTED => Yii::t('status', 'Started'),
-            self::STATUS_FINISHED => Yii::t('status', 'Finished'),
-            self::STATUS_CANCELED => Yii::t('status', 'Canceled'),
-            self::STATUS_DELAYED => Yii::t('status', 'Delayed'),
+            self::STATUS_NOT_FINISHED => Yii::t('status', 'Не закончено'),
+            self::STATUS_FINISHED => Yii::t('status', 'Закончено'),
+            self::STATUS_CANCELED => Yii::t('status', 'Отменено'),
         );
     }
 
@@ -205,24 +223,40 @@ class Patient extends MasterModel
     public function getReportStatusOptions()
     {
         return array(
-            self::REPORT_NOT_FINISHED=>  Yii::t('status', 'Not yet finished'),
-            self::REPORT_FINISHED=> Yii::t('status', 'Finished'),
+            self::REPORT_NOT_FINISHED=>  Yii::t('status', 'Не готово'),
+            self::REPORT_FINISHED=> Yii::t('status', 'Готово'),
         );
     }
     
     public function getReportStatusText()
     {
-        $report_status_options = $this->getReportStatusOptions();
-        return isset($report_status_options[$this->report_status])
-            ? $report_status_options[$this->report_status]
-            : (Yii::t('status', 'Unknown status ')) . $this->report_status;
+        $report_options = $this->getReportStatusOptions();
+        return isset($report_options[$this->report])
+            ? $report_options[$this->report]
+            : (Yii::t('status', 'Неизвестный статус ')) . $this->report;
+    }    
+    
+    public function getPaymentOptions()
+    {
+        return array(
+            self::PAYMENT_IS_NOT_MADE => Yii::t('status', 'Не оплатил'),
+            self::PAYMENT_IS_MADE => Yii::t('status', 'Оплатил'),
+        );
     }
 
+    public function getPaymentText()
+    {
+        $payment_options = $this->getPaymentOptions();
+        return isset($payment_options[$this->payment])
+            ? $payment_options[$this->payment]
+            : (Yii::t('status', 'Неизвестный статус ')) . $this->payment;
+    }
+    
     public function getSexOptions()
     {
         return array(
-            self::SEX_MALE => Yii::t('status', 'Male'),
-            self::SEX_FEMALE => Yii::t('status', 'Female'),
+            self::SEX_MALE => Yii::t('status', 'Мужчина'),
+            self::SEX_FEMALE => Yii::t('status', 'Женщина'),
         );
     }
 
@@ -231,7 +265,7 @@ class Patient extends MasterModel
         $sex_options = $this->getSexOptions();
         return isset($sex_options[$this->sex])
             ? $sex_options[$this->sex]
-            : (Yii::t('value', 'Unknown status ') . $this->sex);
+            : (Yii::t('value', 'Неизвестный статус ') . $this->sex);
     }
     
     public function getDoctorsList()

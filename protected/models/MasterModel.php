@@ -19,14 +19,16 @@ abstract class MasterModel extends CActiveRecord{
             if ($this->hasAttribute('created_at')) // if model have created_at field
                 $this->created_at = new CDbExpression('NOW()'); // set created_at value
             if ($this->hasAttribute('created_user'))
-                $this->created_user = Yii::app()->user->getId();
+                $this->created_user = Yii::app()->user->id;
             if ($this->hasAttribute('user_id'))
-                $this->user_id = Yii::app()->user->getId();
+                $this->user_id = Yii::app()->user->id;
         }
         if ($this->hasAttribute('updated_at')) // if model have updated_at field
             $this->updated_at = new CDbExpression('NOW()'); // set updated_at value
         if ($this->hasAttribute('updated_user'))
-            $this->updated_user = Yii::app()->user->getId();
+            $this->updated_user = Yii::app()->user->id;
+        if ($this->hasAttribute('owner_id'))
+            $this->owner_id = Yii::app()->user->id;
 
         return parent::beforeValidate();
     }

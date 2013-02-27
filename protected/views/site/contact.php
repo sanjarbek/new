@@ -5,7 +5,7 @@
 
 $this->pageTitle=Yii::app()->name . ' - Contact Us';
 $this->breadcrumbs=array(
-	'Contact',
+	'Связаться с нами',
 );
 ?>
 
@@ -15,7 +15,7 @@ $this->breadcrumbs=array(
 <?php else: ?>
 <div class="span12 well">
 <p>
-If you have business inquiries or other questions, please fill out the following form to contact us. Thank you.
+Если у вас имеются вопросы, пожалуйста, заполните форму чтобы связаться с нами. Спасибо вам.
 </p>  
 
 <?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(
@@ -26,9 +26,7 @@ If you have business inquiries or other questions, please fill out the following
 	),
 )); ?>
 
-	<p class="note">Fields with <span class="required">*</span> are required.</p>
-
-	<?php // echo $form->errorSummaryRow($model); ?>
+	<?php  echo $form->errorSummary($model); ?>
 
 		<?php echo $form->textFieldRow($model,'name', array('class'=>'span3', 'maxLength'=>20)); ?>
 		<?php echo $form->textFieldRow($model,'email'); ?>
@@ -40,13 +38,12 @@ If you have business inquiries or other questions, please fill out the following
 		<?php $this->widget('CCaptcha'); ?>
 		<?php echo $form->textField($model,'verifyCode'); ?>
 		</div>
-		<div class="hint">Please enter the letters as they are shown in the image above.
-		<br/>Letters are not case-sensitive.</div>
 		<?php echo $form->error($model,'verifyCode'); ?>
 	<?php endif; ?>
+        <hr />
 		<?php $this->widget('bootstrap.widgets.TbButton', array(
             'buttonType'=>'submit',
-            'label'=>'Submit',
+            'label'=>'Отправить',
             'type'=>'primary',
         )); ?>
 

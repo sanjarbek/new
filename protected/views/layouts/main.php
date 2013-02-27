@@ -1,18 +1,9 @@
 <?php /* @var $this Controller */ ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html lang="en">
+<html lang="ru">
 <head>
 	<meta charset="utf-8" />
-	<!--<meta name="language" content="en" />-->
-
-	<!-- blueprint CSS framework -->
-	<!--<link rel="stylesheet" type="text/css" href="<?php // echo Yii::app()->request->baseUrl; ?>/css/screen.css" media="screen, projection" />-->
-	<!--<link rel="stylesheet" type="text/css" href="<?php // echo Yii::app()->request->baseUrl; ?>/css/print.css" media="print" />-->
-	<!--[if lt IE 8]>
-	<link rel="stylesheet" type="text/css" href="<?php // echo Yii::app()->request->baseUrl; ?>/css/ie.css" media="screen, projection" />
-	<![endif]-->
-
-	<!--<link rel="stylesheet" type="text/css" href="<?php // echo Yii::app()->request->baseUrl; ?>/css/main.css" />-->
+    
     <?php echo Yii::app()->bootstrap->registerCoreCss(); ?>
 
 	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
@@ -25,38 +16,47 @@
 <div class="container-fluid" id="page">
     <?php 
     $this->widget('bootstrap.widgets.TbNavbar', array(
-        'brand' => 'Title',
-        'fixed' => 'true',
-        'collapse'=>FALSE,
+        'brand' => '<strong><span class="first-part">Sema</span><span class="second-part" style="color: red">med</span></strong>',
+//        'brand'=>'Semamed',
+        'fixed' => 'top',
+        'collapse'=>TRUE,
         'htmlOptions' => array(
-            'class'=>'navbar-inverse',
+//            'class'=>'navbar-inverse',
+            'height'=>'50px',
         ),
         'items' => array(
             array(
                 'class' => 'bootstrap.widgets.TbMenu',
                 'items' => array(
-                    array('label'=>'Home', 'url'=>array('/site/index')),
-                    array('label'=>'About', 'url'=>array('/site/page', 'view'=>'about')),
-                    array('label'=>'Contact', 'url'=>array('/site/contact')),
-                    array('label'=>'Login', 'url'=>array('/user/login'), 'visible'=>Yii::app()->user->isGuest),
-                    array('label'=>'Logout ('.Yii::app()->user->name.')', 'url'=>array('/user/logout'), 'visible'=>!Yii::app()->user->isGuest)
+                    array('label'=>'Главная', 'url'=>array('/site/index')),
+                    array('label'=>'Пациенты', 'url'=>array('/patient/index'), 'visible'=>!Yii::app()->user->isGuest),
+                    array('label'=>'Больницы', 'url'=>array('/hospital/index'), 'visible'=>!Yii::app()->user->isGuest),
+                    array('label'=>'Докторы', 'url'=>array('/doctor/index'), 'visible'=>!Yii::app()->user->isGuest),
+                    array('label'=>'Услуги', 'url'=>array('/mrtscan/index')),
+                    array('label'=>'Шаблоны', 'url'=>array('template/index'), 'visible'=>Yii::app()->user->checkAccess('Manager')),
                 ),
-                'htmlOptions'=>array(
-                    'class'=>'nav nav-inner span5',
-                ),
+//                'htmlOptions'=>array(
+//                    'class'=>'nav nav-inner span7',
+//                ),
             ),
             array(
                 'class' => 'bootstrap.widgets.TbMenu',
                 'items'=>array(
+                    array('label'=>'Вход', 'url'=>array('/user/login'), 'visible'=>Yii::app()->user->isGuest),
+                    array('label'=>'Выход ('.Yii::app()->user->name.')', 'url'=>array('/user/logout'), 'visible'=>!Yii::app()->user->isGuest),
                     array(
-                        'label'=>Yii::t('title', 'Configure'),
+                        'label'=>Yii::t('title', 'Настройки'),
                         'icon'=>'icon-wrench', 
+                        'visible'=>Yii::app()->user->checkAccess('Admin'),
                         'items'=>array(
-                            array('label'=>Yii::t('title', 'Patients'), 'url'=>array('/patient/admin'), 'visible'=>!Yii::app()->user->isGuest),
-                            array('label'=>Yii::t('title', 'Registrations'), 'url'=>array('/registration/admin'), 'visible'=>!Yii::app()->user->isGuest),
-                            array('label'=>Yii::t('title', 'Hospitals'), 'url'=>array('/hospital'), 'visible'=>!Yii::app()->user->isGuest),
-                            array('label'=>Yii::t('title', 'Doctors'), 'url'=>array('/doctor'), 'visible'=>!Yii::app()->user->isGuest),
-                            array('label'=>Yii::t('title', 'MRT scans'), 'url'=>array('/mrtscan'), 'visible'=>!Yii::app()->user->isGuest),
+                            array('label'=>Yii::t('title', 'Пациенты'), 'url'=>array('/patient/admin'), 'visible'=>!Yii::app()->user->isGuest),
+                            array('label'=>Yii::t('title', 'Заказы'), 'url'=>array('/registration/admin'), 'visible'=>!Yii::app()->user->isGuest),
+                            array('label'=>Yii::t('title', 'Больницы'), 'url'=>array('/hospital/admin'), 'visible'=>!Yii::app()->user->isGuest),
+                            array('label'=>Yii::t('title', 'Доктора'), 'url'=>array('/doctor/admin'), 'visible'=>!Yii::app()->user->isGuest),
+                            array('label'=>Yii::t('title', 'Услуги'), 'url'=>array('/mrtscan/admin'), 'visible'=>!Yii::app()->user->isGuest),
+                            '',
+                            array('label'=>Yii::t('title', 'Пользователи'), 'url'=>array('/user/admin'), 'visible'=>Yii::app()->user->checkAccess('Admin')),
+                            array('label'=>Yii::t('title', 'Права доступа'), 'url'=>array('/rights'), 'visible'=>Yii::app()->user->checkAccess('Admin')),
                         )
                     ),
 				),
@@ -66,6 +66,9 @@
             ),
         )
     )); ?>
+    
+    <br/>
+    <br/>
 
 	<?php if(isset($this->breadcrumbs)):?>
 		<?php $this->widget('bootstrap.widgets.TbBreadcrumbs', array(

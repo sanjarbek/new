@@ -137,18 +137,18 @@ class Registration extends MasterModel
 	{
 		return array(
 			'id' => 'ID',
-			'patient_id' => 'Patient',
-			'mrtscan_id' => 'Mrtscan',
-			'price' => 'Price',
-			'discont' => 'Discont',
-			'price_with_discont' => 'Final price',
-			'status' => 'Status',
-			'report_status' => 'Report Status',
-			'report_text' => 'Report Text',
-			'created_at' => 'Created At',
-			'updated_at' => 'Updated At',
-			'created_user' => 'Created User',
-			'updated_user' => 'Updated User',
+			'patient_id' => 'Пациент',
+			'mrtscan_id' => 'Услуга',
+			'price' => 'Цена',
+			'discont' => 'Скидка',
+			'price_with_discont' => 'Конечная цена',
+			'status' => 'Статус',
+			'report_status' => 'Статус отчета',
+			'report_text' => 'Тескт отчета',
+			'created_at' => 'Дата создания',
+			'updated_at' => 'Дата редактирования',
+			'created_user' => 'Создавщий пользователь',
+			'updated_user' => 'Редактировавщий пользователь',
 		);
 	}
 
@@ -236,9 +236,9 @@ class Registration extends MasterModel
     public function getStatusOptions()
     {
         return array(
-            self::STATUS_NOT_YET_STARTED => Yii::t('status', 'Not yet started'),
-            self::STATUS_FINISHED => Yii::t('status', 'Finished'),
-            self::STATUS_CANCELED => Yii::t('status', 'Canceled'),
+            self::STATUS_NOT_YET_STARTED => Yii::t('status', 'Еще не начата'),
+            self::STATUS_FINISHED => Yii::t('status', 'Закончено'),
+            self::STATUS_CANCELED => Yii::t('status', 'Отменено'),
         );
     }
 
@@ -247,6 +247,6 @@ class Registration extends MasterModel
         $status_options = $this->getStatusOptions();
         return isset($status_options[$this->status])
             ? $status_options[$this->status]
-            : (Yii::t('status', 'Unknown status ') . $this->status);
+            : (Yii::t('status', 'Неизвестный статус ') . $this->status);
     }
 }

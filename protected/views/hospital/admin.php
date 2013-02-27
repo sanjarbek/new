@@ -1,16 +1,16 @@
 <?php
 $this->breadcrumbs=array(
-	'Hospitals'=>array('index'),
-	'Manage',
+	'Больницы'=>array('index'),
+	'Управлять',
 );
 
 $this->menu=array(
-	array('label'=>'List Hospital','url'=>array('index')),
-	array('label'=>'Create Hospital','url'=>array('create')),
+	array('label'=>'Список','url'=>array('index')),
+	array('label'=>'Создать','url'=>array('create')),
 );
 ?>
 
-<h3>Manage Hospitals</h3>
+<h4>Управлять</h4>
 
 <?php
 $this->renderPartial('_gridview', array(

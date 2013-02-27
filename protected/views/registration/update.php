@@ -1,15 +1,15 @@
 <?php
 $this->breadcrumbs=array(
-	'Registrations'=>array('index'),
+	'Заказы'=>array('index'),
 	$model->id=>array('view','id'=>$model->id),
-	'Update',
+	'Редактировать',
 );
 
 $this->menu=array(
-	array('label'=>'List Registration','url'=>array('index')),
-	array('label'=>'Create Registration','url'=>array('create')),
-	array('label'=>'View Registration','url'=>array('view','id'=>$model->id)),
-	array('label'=>'Manage Registration','url'=>array('admin')),
+	array('label'=>'Список','url'=>array('index')),
+	array('label'=>'Создать','url'=>array('create')),
+	array('label'=>'Подробно','url'=>array('view','id'=>$model->id)),
+	array('label'=>'Управлять','url'=>array('admin')),
 );
 ?>
 

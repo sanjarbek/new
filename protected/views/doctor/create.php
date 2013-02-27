@@ -1,17 +1,15 @@
 <?php
 $this->breadcrumbs=array(
-	'Doctors'=>array('index'),
-	'Create',
+	'Докторы'=>array('index'),
+	'Создать',
 );
 
 $this->menu=array(
-	array('label'=>'List Doctor','url'=>array('index')),
-	array('label'=>'Manage Doctor','url'=>array('admin')),
+	array('label'=>'Список','url'=>array('index')),
+	array('label'=>'Управлять','url'=>array('admin')),
 );
 ?>
 
-<div class="well">
-    <h3>Create Doctor</h3>
+    <h4>Создать доктора</h4>
 
     <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
-</div>

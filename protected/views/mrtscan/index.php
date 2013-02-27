@@ -1,28 +1,20 @@
 <?php
 $this->breadcrumbs=array(
-	'Mrtscans',
+	'Услуги',
 );
 
 
 $this->menu=array(
-	array('label'=>'Create Mrtscan','url'=>array('create')),
-	array('label'=>'Manage Mrtscan','url'=>array('admin')),
+	array('label'=>'Создать','url'=>array('create')),
+	array('label'=>'Управлять','url'=>array('admin')),
 );
 
 ?>
 
+<h4>Список услуг</h4>
 
-<!--<h3>Mrtscans</h3>-->
-
-<?php $this->widget('bootstrap.widgets.TbGridView',array(
-	'dataProvider'=>$dataProvider,
-    'type'=>'bordered condensed striped',
-    'template'=>'{summary}{items}{pager}',
-    'enableSorting'=>false,
-    'columns'=>array(
-        'name',
-        'description',
-        'price',
-    )
-//	'itemView'=>'_view',
-)); ?>
+<?php 
+$this->renderPartial('_listview', array(
+    'dataProvider'=>$dataProvider,
+));
+?>

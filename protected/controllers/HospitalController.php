@@ -14,37 +14,12 @@ class HospitalController extends Controller
 	public function filters()
 	{
 		return CMap::mergeArray(parent::filters(), array(
-			'accessControl', // perform access control for CRUD operations
-            array( // handle gridview ajax update
-                'application.filters.GridViewHandler', //path to GridViewHandler.php class
+            array( 
+                // handle gridview ajax update
+                // path to GridViewHandler.php class
+                'application.filters.GridViewHandler', 
             ),
 		));
-	}
-
-	/**
-	 * Specifies the access control rules.
-	 * This method is used by the 'accessControl' filter.
-	 * @return array access control rules
-	 */
-	public function accessRules()
-	{
-		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
-				'users'=>array('*'),
-			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
-				'users'=>array('@'),
-			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
-				'users'=>array('sanzhar'),
-			),
-			array('deny',  // deny all users
-				'users'=>array('*'),
-			),
-		);
 	}
 
 	/**
@@ -155,6 +130,7 @@ class HospitalController extends Controller
 		$dataProvider=new CActiveDataProvider('Hospital', array(
             'criteria'=>array(
                 'condition'=>'t.status='.Hospital::STATUS_ENABLED,
+                'order'=>'name',
                 'with'=>array('manager'),
             )
         ));
@@ -217,5 +193,50 @@ class HospitalController extends Controller
         $this->renderPartial('_gridview',array(
             'model'=>$model,
         ));
+    }
+    
+    /**
+	 * Lists all models via Ajax.
+	 */
+	public function _getGridViewHospitalsList()
+	{
+		$dataProvider=new CActiveDataProvider('Hospital', array(
+            'criteria'=>array(
+                'condition'=>'t.status='.Hospital::STATUS_ENABLED,
+                'order'=>'name',
+                'with'=>array('manager'),
+            )
+        ));
+		$this->renderPartial('_listview',array(
+			'dataProvider'=>$dataProvider,
+		));
+	}
+    
+    public function actionGetManagerHospitalsList()
+    {
+        $manager = 0;
+        if (isset($_POST['manager']))
+            $manager = $_POST['manager'];
+        
+        $hospitals = '';
+        if ($manager != 0)
+        {
+            $hospitals = Hospital::model()->findAll(
+                'manager_id=:managerId',
+                array(':managerId'=>(int)$manager)
+            );
+        }
+        else
+        {
+            $hospitals = Hospital::model()->findAll();
+        }
+         
+        
+        echo CHtml::tag('option', array('value'=>0),CHtml::encode('Все'), true);
+        foreach ($hospitals as $hospital)
+            echo CHtml::tag('option', array('value'=>$hospital->id),CHtml::encode($hospital->name),true);
+
+        Yii::app()->end();
+        
     }
 }

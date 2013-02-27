@@ -92,15 +92,15 @@ class Doctor extends MasterModel
 	{
 		return array(
 			'id' => 'ID',
-			'fullname' => 'Fullname',
-			'phone' => 'Phone',
-			'type' => 'Type',
-			'hospital_id' => 'Hospital',
-			'status' => 'Status',
-			'created_at' => 'Created At',
-			'updated_at' => 'Updated At',
-			'created_user' => 'Created User',
-			'updated_user' => 'Updated User',
+			'fullname' => 'ФИО',
+			'phone' => 'Телефон',
+			'type' => 'Специализация',
+			'hospital_id' => 'Больница',
+			'status' => 'Статус',
+			'created_at' => 'Дата создания',
+			'updated_at' => 'Дата обнавления',
+			'created_user' => 'Создавщий пользователь',
+			'updated_user' => 'Обновивщий пользователь',
 		);
 	}
 
@@ -152,8 +152,8 @@ class Doctor extends MasterModel
     public function getStatusOptions()
     {
         return array(
-            self::STATUS_DISABLED => Yii::t('status', 'Inactive'),
-            self::STATUS_ENABLED => Yii::t('status', 'Active'),
+            self::STATUS_DISABLED => Yii::t('status', 'Неактивно'),
+            self::STATUS_ENABLED => Yii::t('status', 'Активно'),
         );
     }
     
@@ -162,7 +162,7 @@ class Doctor extends MasterModel
         $statusOptions = $this->getStatusOptions();
         return (isset($statusOptions[$this->status]) ? 
                 $statusOptions[$this->status] : 
-            Yii::t('message', 'Unknown status: ') . $this->status);
+            Yii::t('message', 'Неизвестный статус: ') . $this->status);
     }
     
     public function getHospitalsList()
