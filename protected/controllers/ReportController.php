@@ -147,8 +147,8 @@ GROUP BY h.name, d.id, d.fullname, month(p.created_at)';
                         $days_count_month = cal_days_in_month(CAL_GREGORIAN, $model->month, $model->year);
                         $command = Yii::app()->db->createCommand($sql);
                         $command->bindValue(':month', $model->month);
-                        $command->bindValue(':year', $model->manager);
-                        $command->bindValue(':manager', $model->year);
+                        $command->bindValue(':year', $model->year);
+                        $command->bindValue(':manager', $model->manager);
                         $command->bindValue(':hospital', $model->hospital);
                         
                         $this->render('manager/index', array(
@@ -218,8 +218,7 @@ GROUP BY h.name, d.id, d.fullname, month(p.created_at)';
             {
                 if ((int)$model->month!=0)
                 {
-                    $sql = 'SELECT 
-                        h.id as hospitalId,
+                    $sql = 'SELECT h.id as hospitalId,
                         h.name as hospital, 
                         day(p.created_at) as day, 
                         count(p.doctor_id) as count 

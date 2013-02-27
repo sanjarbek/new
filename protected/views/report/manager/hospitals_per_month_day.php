@@ -1,5 +1,5 @@
 <?php
-    $array_data_provider = ManagerForm::getHospitalsPerMonthDay($command, $days_count);
+    $array_data_provider = ManagerForm::getHospitalsPerMonthDay($days_count, $command);
 ?>
 
 <?php

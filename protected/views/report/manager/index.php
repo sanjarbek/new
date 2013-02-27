@@ -2,7 +2,7 @@
 
 $this->breadcrumbs=array(
 	'Отчеты'=>array('manager'),
-	'Показать',
+	'Отчет менеджера',
 );
 ?>
 
