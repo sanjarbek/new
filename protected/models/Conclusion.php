@@ -20,8 +20,9 @@
  * @property Patients $patient
  * @property Mrtscans $mrtscan
  */
-class Conclusion extends CActiveRecord
+class Conclusion extends MasterModel
 {
+    public $conclusion;
 	/**
 	 * @return string the associated database table name
 	 */
@@ -38,6 +39,8 @@ class Conclusion extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
+            array('conclusion', 'length', 'max' => 255, 'tooLong' => '{attribute} слишком длинный (max {max} chars).', 'on' => 'upload'),
+            array('conclusion', 'file', 'types' => 'docx,xlsx', 'maxSize' => 1024 * 512, 'tooLarge' => 'Размер файлы должен быть меньше 512 КБ !!!', 'on'=>'upload'),
 			array('patient_id, mrtscan_id, owner_id, file, description, created_at, updated_at, created_user, updated_user', 'required'),
 			array('patient_id, mrtscan_id, owner_id, created_user, updated_user', 'numerical', 'integerOnly'=>true),
 			array('file, description', 'length', 'max'=>255),
@@ -55,9 +58,9 @@ class Conclusion extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'owner' => array(self::BELONGS_TO, 'Users', 'owner_id'),
-			'patient' => array(self::BELONGS_TO, 'Patients', 'patient_id'),
-			'mrtscan' => array(self::BELONGS_TO, 'Mrtscans', 'mrtscan_id'),
+			'owner' => array(self::BELONGS_TO, 'User', 'owner_id'),
+			'patient' => array(self::BELONGS_TO, 'Patient', 'patient_id'),
+			'mrtscan' => array(self::BELONGS_TO, 'Mrtscan', 'mrtscan_id'),
 		);
 	}
 
@@ -68,15 +71,16 @@ class Conclusion extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'patient_id' => 'Patient',
-			'mrtscan_id' => 'Mrtscan',
-			'owner_id' => 'Owner',
-			'file' => 'File',
-			'description' => 'Description',
-			'created_at' => 'Created At',
-			'updated_at' => 'Updated At',
-			'created_user' => 'Created User',
-			'updated_user' => 'Updated User',
+			'patient_id' => 'Пациент',
+			'mrtscan_id' => 'Область исследования',
+			'owner_id' => 'Исследовавший врач',
+			'file' => 'Файл',
+			'description' => 'Описание',
+			'created_at' => 'Дата создания',
+			'updated_at' => 'Дата редактирования',
+			'created_user' => 'Создал',
+			'updated_user' => 'Редактировал',
+            'conclusion' => 'Заключение',
 		);
 	}
 
@@ -98,16 +102,16 @@ class Conclusion extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id',$this->id);
-		$criteria->compare('patient_id',$this->patient_id);
-		$criteria->compare('mrtscan_id',$this->mrtscan_id);
-		$criteria->compare('owner_id',$this->owner_id);
-		$criteria->compare('file',$this->file,true);
-		$criteria->compare('description',$this->description,true);
-		$criteria->compare('created_at',$this->created_at,true);
-		$criteria->compare('updated_at',$this->updated_at,true);
-		$criteria->compare('created_user',$this->created_user);
-		$criteria->compare('updated_user',$this->updated_user);
+		$criteria->compare('t.id',$this->id);
+		$criteria->compare('t.patient_id',$this->patient_id);
+		$criteria->compare('t.mrtscan_id',$this->mrtscan_id);
+		$criteria->compare('t.owner_id',$this->owner_id);
+		$criteria->compare('t.file',$this->file,true);
+		$criteria->compare('t.description',$this->description,true);
+		$criteria->compare('t.created_at',$this->created_at,true);
+		$criteria->compare('t.updated_at',$this->updated_at,true);
+		$criteria->compare('t.created_user',$this->created_user);
+		$criteria->compare('t.updated_user',$this->updated_user);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -124,4 +128,37 @@ class Conclusion extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+    
+    public function getMrtscansList($patientId)
+    {
+        $query = 'select m.id, m.name 
+            from mrtscans m, registrations r            
+            where m.id=r.mrtscan_id and 
+                    r.patient_id=22 and 
+                    r.mrtscan_id not in (select c.mrtscan_id 
+                        from conclusions c where c.patient_id=22)';
+        $command = Yii::app()->db->createCommand($query);
+        $command->bindValue(':patientId', $patientId);
+        
+        $patientMrtscans = array();
+        $patientMrtscans = $command->queryAll();
+        
+        $listData = array();
+        foreach ($patientMrtscans as $mrtscan)
+            $listData[$mrtscan['id']] = $mrtscan['name'];
+        
+        return $listData;
+    }
+    
+    public function getUploadFilePath($patientId)
+    {
+        return Yii::app()->basePath . DIRECTORY_SEPARATOR .'..'.
+                    Yii::getPathOfAlias('uploads.conclusions').
+                    DIRECTORY_SEPARATOR.$patientId;
+    }
+    
+    public function getDownloadFilePath()
+    {
+        return Yii::getPathOfAlias('uploads.conclusions').DIRECTORY_SEPARATOR.$this->patient_id;
+    }
 }

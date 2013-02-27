@@ -8,41 +8,64 @@ class ConclusionController extends Controller
 	 */
 	public $layout='//layouts/column2';
 
+    /**
+     * @var private property containing the associated Patient model instance.
+     */
+    private $_patient = null;
+    
 	/**
 	 * @return array action filters
 	 */
 	public function filters()
 	{
-		return array(
-			'accessControl', // perform access control for CRUD operations
-		);
+		return CMap::mergeArray(parent::filters(), array(
+            'patientContext + create',
+            array( 
+                'application.filters.GridViewHandler',
+            ),
+		));
 	}
+    
+    /**
+     * In-class defined filter method, configured for use in the above filters() method
+     * It is called before the actionCreate() action method is run in order to ensure a proper patient context
+     */
 
-	/**
-	 * Specifies the access control rules.
-	 * This method is used by the 'accessControl' filter.
-	 * @return array access control rules
-	 */
-	public function accessRules()
-	{
-		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
-				'users'=>array('*'),
-			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
-				'users'=>array('@'),
-			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
-				'users'=>array('admin'),
-			),
-			array('deny',  // deny all users
-				'users'=>array('*'),
-			),
-		);
-	}
+    public function filterPatientContext($filterChain)
+    {
+        //set the project identifier based on either the GET or POST input
+        //request variables, since we allow both types for our actions
+
+        $patientId = null;
+        if(isset($_GET['pid']))
+            $patientId = $_GET['pid'];
+        else if (isset($_POST['pid']))
+            $patientId = $_POST['pid'];
+
+        $this->loadPatient($patientId);
+
+        // complete the running of other filters and execute the requested action
+        $filterChain->run();
+    }
+    
+    /**
+    * Protected method to load the associated Patient model class
+    * @patient_id the primary identifier of the associated Patient
+    * @return object the Project data model based on the primary key
+    */
+    protected function loadPatient($patient_id)
+    {
+        //if the project property is null, create it based on input id
+        if($this->_patient===null)
+        {
+            $this->_patient=Patient::model()->findbyPk($patient_id);
+            if($this->_patient===null)
+            {
+                throw new CHttpException(404,'Пациент не указан.');
+            }
+        }
+        return $this->_patient;
+    }
 
 	/**
 	 * Displays a particular model.
@@ -69,8 +92,28 @@ class ConclusionController extends Controller
 		if(isset($_POST['Conclusion']))
 		{
 			$model->attributes=$_POST['Conclusion'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+            $model->patient_id = $this->_patient->id;
+            
+            $model->conclusion = CUploadedFile::getInstance($model, 'conclusion');
+            if ($model->conclusion !== null  && 
+                    $model->validate(array('conclusion')))
+            {
+                $file_path = $model->getUploadFilePath($model->patient_id);
+                
+                // проверка на существования директории пациента
+                if (!file_exists($file_path))
+                {
+                    mkdir ($file_path);
+                }
+                
+                $name = uniqid().'.'.$model->conclusion->extensionName;
+                
+                $model->conclusion->saveAs($file_path.DIRECTORY_SEPARATOR.$name);
+                $model->file = $name;
+                
+                if($model->save())
+                    $this->redirect(array('view','id'=>$model->id));
+            }
 		}
 
 		$this->render('create',array(
@@ -112,7 +155,20 @@ class ConclusionController extends Controller
 		if(Yii::app()->request->isPostRequest)
 		{
 			// we only allow deletion via POST request
-			$this->loadModel($id)->delete();
+			$model = $this->loadModel($id);
+            
+            $params = array("owner"=>$model->owner_id);
+            
+            if (!Yii::app()->user->checkAccess('deleteOwnConclusion',$params))
+            {
+                throw  new CHttpException(403, 'У вас недостаточно прав для выполнения указанного действия.');
+            }
+   
+            $file_path = $model->getUploadFilePath($model->patient_id).DIRECTORY_SEPARATOR.$model->file;
+
+            if(file_exists($file_path))
+                unlink($file_path);
+            $model->delete();
 
 			// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 			if(!isset($_GET['ajax']))
@@ -173,4 +229,16 @@ class ConclusionController extends Controller
 			Yii::app()->end();
 		}
 	}
+    
+    public function _getGridViewConclusionGrid()
+    {
+        $model=new Conclusion('search');
+		$model->unsetAttributes();  // clear any default values
+		if(isset($_GET['Conclusion']))
+			$model->attributes=$_GET['Conclusion'];
+
+		$this->renderPartial('_gridview',array(
+			'model'=>$model,
+		));
+    }
 }

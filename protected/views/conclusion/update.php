@@ -1,18 +1,18 @@
 <?php
 $this->breadcrumbs=array(
-	'Conclusions'=>array('index'),
+	'Заключения'=>array('index'),
 	$model->id=>array('view','id'=>$model->id),
-	'Update',
+	'Редактировать',
 );
 
 $this->menu=array(
-	array('label'=>'List Conclusion','url'=>array('index')),
-	array('label'=>'Create Conclusion','url'=>array('create')),
-	array('label'=>'View Conclusion','url'=>array('view','id'=>$model->id)),
-	array('label'=>'Manage Conclusion','url'=>array('admin')),
+	array('label'=>'Список','url'=>array('index')),
+	array('label'=>'Создать','url'=>array('create')),
+	array('label'=>'Показать','url'=>array('view','id'=>$model->id)),
+	array('label'=>'Управлятьы','url'=>array('admin')),
 );
 ?>
 
-<h1>Update Conclusion <?php echo $model->id; ?></h1>
+<h4>Редактирование заключения №<?php echo $model->id; ?></h4>
 
 <?php echo $this->renderPartial('_form',array('model'=>$model)); ?>
