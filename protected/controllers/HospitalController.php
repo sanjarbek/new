@@ -211,4 +211,32 @@ class HospitalController extends Controller
 			'dataProvider'=>$dataProvider,
 		));
 	}
+    
+    public function actionGetManagerHospitalsList()
+    {
+        $manager = 0;
+        if (isset($_POST['manager']))
+            $manager = $_POST['manager'];
+        
+        $hospitals = '';
+        if ($manager != 0)
+        {
+            $hospitals = Hospital::model()->findAll(
+                'manager_id=:managerId',
+                array(':managerId'=>(int)$manager)
+            );
+        }
+        else
+        {
+            $hospitals = Hospital::model()->findAll();
+        }
+         
+        
+        echo CHtml::tag('option', array('value'=>0),CHtml::encode('Все'), true);
+        foreach ($hospitals as $hospital)
+            echo CHtml::tag('option', array('value'=>$hospital->id),CHtml::encode($hospital->name),true);
+
+        Yii::app()->end();
+        
+    }
 }

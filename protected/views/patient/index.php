@@ -11,32 +11,21 @@ $this->menu=array(
 
 <div class="row-fluid">
 
-    <?php
+<?php
     $this->layout = '//layouts/column1';
-//    $this->beginWidget('bootstrap.widgets.TbBox', array(
-//        'title' => 'Список пациентов',
-//        'headerIcon' => 'icon-th-list',
-//        // when displaying a table, if we include bootstra-widget-table class
-//        // the table will be 0-padding to the box
-//        'htmlOptions' => array('class'=>'bootstrap-widget-table span12'),
-////        'headerButtons'=>array(
-////            array(
-////                'class'=>'bootstrap.widgets.TbButtonGroup',
-////                'size'=>'mini',
-////                'buttons'=>array(
-////                    array(
-////                        'label'=>'Создать',
-////                        'icon'=>'icon-plus',                        
-////                        'url'=>array('create'),
-////                    ),
-////                )
-////            )
-////        )
-//    )); 
+    
+    if (Yii::app()->user->checkAccess('Registrator'))
+    {
         $this->renderPartial('_registrator_gridview', array(
             'model'=>$model,
         ));
-//    $this->endWidget();
+    }
+    else if (Yii::app()->user->checkAccess('Doctor'))
+    {
+        $this->renderPartial('_doctor_gridview', array(
+            'model'=>$model,
+        ));
+    }
     
 //    $this->beginWidget('bootstrap.widgets.TbModal', array(
 //        'id'=>'myModal',

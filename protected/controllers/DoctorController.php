@@ -237,5 +237,28 @@ class DoctorController extends Controller
 
         Yii::app()->end();
     }
+    public function actionGetHospitalDoctorsList()
+    {
+        $hospital = 0;
+        if (isset($_POST['hospital']))
+            $hospital = (int)$_POST['hospital'];
+        
+        $doctors = array();
+        if ($hospital != 0)
+        {
+            $doctors = Doctor::model()->findAll(
+                'hospital_id=:hospitalId',
+                array(':hospitalId'=>$hospital)
+            );
+        }
+        
+        echo CHtml::tag('option',
+                array('value'=>'0'),CHtml::encode('Все'),true);
+        foreach ($doctors as $doctor)
+            echo CHtml::tag('option',
+                array('value'=>$doctor->id),CHtml::encode($doctor->fullname),true);
+        
+        Yii::app()->end();
+    }
     
 }

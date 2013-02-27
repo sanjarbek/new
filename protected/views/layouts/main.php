@@ -16,11 +16,12 @@
 <div class="container-fluid" id="page">
     <?php 
     $this->widget('bootstrap.widgets.TbNavbar', array(
-        'brand' => 'Semamed',
+        'brand' => '<strong><span class="first-part">Sema</span><span class="second-part" style="color: red">med</span></strong>',
+//        'brand'=>'Semamed',
         'fixed' => 'top',
         'collapse'=>TRUE,
         'htmlOptions' => array(
-            'class'=>'navbar-inverse',
+//            'class'=>'navbar-inverse',
             'height'=>'50px',
         ),
         'items' => array(
@@ -32,7 +33,7 @@
                     array('label'=>'Больницы', 'url'=>array('/hospital/index'), 'visible'=>!Yii::app()->user->isGuest),
                     array('label'=>'Докторы', 'url'=>array('/doctor/index'), 'visible'=>!Yii::app()->user->isGuest),
                     array('label'=>'Услуги', 'url'=>array('/mrtscan/index')),
-                    
+                    array('label'=>'Шаблоны', 'url'=>array('template/index'), 'visible'=>Yii::app()->user->checkAccess('Manager')),
                 ),
 //                'htmlOptions'=>array(
 //                    'class'=>'nav nav-inner span7',
@@ -46,7 +47,7 @@
                     array(
                         'label'=>Yii::t('title', 'Настройки'),
                         'icon'=>'icon-wrench', 
-                        'visible'=>!Yii::app()->user->isGuest,
+                        'visible'=>Yii::app()->user->checkAccess('Admin'),
                         'items'=>array(
                             array('label'=>Yii::t('title', 'Пациенты'), 'url'=>array('/patient/admin'), 'visible'=>!Yii::app()->user->isGuest),
                             array('label'=>Yii::t('title', 'Заказы'), 'url'=>array('/registration/admin'), 'visible'=>!Yii::app()->user->isGuest),
@@ -54,8 +55,8 @@
                             array('label'=>Yii::t('title', 'Доктора'), 'url'=>array('/doctor/admin'), 'visible'=>!Yii::app()->user->isGuest),
                             array('label'=>Yii::t('title', 'Услуги'), 'url'=>array('/mrtscan/admin'), 'visible'=>!Yii::app()->user->isGuest),
                             '',
-                            array('label'=>Yii::t('title', 'Пользователи'), 'url'=>array('/user/admin'), 'visible'=>!Yii::app()->user->isGuest),
-                            array('label'=>Yii::t('title', 'Права доступа'), 'url'=>array('/rights'), 'visible'=>!Yii::app()->user->isGuest),
+                            array('label'=>Yii::t('title', 'Пользователи'), 'url'=>array('/user/admin'), 'visible'=>Yii::app()->user->checkAccess('Admin')),
+                            array('label'=>Yii::t('title', 'Права доступа'), 'url'=>array('/rights'), 'visible'=>Yii::app()->user->checkAccess('Admin')),
                         )
                     ),
 				),

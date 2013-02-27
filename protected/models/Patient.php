@@ -12,6 +12,7 @@
  * @property integer $status
  * @property integer $doctor_id
  * @property integer $report
+ * @property datetime $reported_at
  * @property integer $desc_doctor_id
  * @property integer $payment Description
  * @property string $created_at
@@ -112,6 +113,15 @@ class Patient extends MasterModel
             'updater'=>array(self::BELONGS_TO, 'User', 'updated_user'),
 		);
 	}
+    
+    public function scopes() 
+    {
+        return array(
+            'paid'=>array(
+                'condition'=>'t.payment='.self::PAYMENT_IS_MADE,
+            )
+        );
+    }
 
 	/**
 	 * @return array customized attribute labels (name=>label)
@@ -127,9 +137,10 @@ class Patient extends MasterModel
 			'status' => 'Статус',
 			'doctor_id' => 'Доктор',
             'report' => 'Заключение',
+            'reported_at'=>'Дата заключения',
             'desc_doctor_id' => 'Описавщий доктор',
             'payment' => 'Оплата',
-			'created_at' => 'Регистрация',
+			'created_at' => 'Дата регистр.',
 			'updated_at' => 'Дата редактирования',
 			'created_user' => 'Регистрировал',
 			'updated_user' => 'Редактировал',
@@ -162,13 +173,14 @@ class Patient extends MasterModel
 		$criteria->compare('t.status',$this->status);
 		$criteria->compare('t.doctor_id',$this->doctor_id);
         $criteria->compare('t.report', $this->report);
+        $criteria->compare('t.reported_at', $this->reported_at, true);
         $criteria->compare('t.desc_doctor_id', $this->desc_doctor_id);
+        $criteria->compare('t.payment', $this->payment);
 		$criteria->compare('t.created_at',$this->created_at,true);
 		$criteria->compare('t.updated_at',$this->updated_at,true);
 		$criteria->compare('t.created_user',$this->created_user);
 		$criteria->compare('t.updated_user',$this->updated_user);
-
-        Yii::log('WWW : ' . $this->created_at, CLogger::LEVEL_INFO);
+        
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
             'sort'=>array(
@@ -211,8 +223,8 @@ class Patient extends MasterModel
     public function getReportStatusOptions()
     {
         return array(
-            self::REPORT_NOT_FINISHED=>  Yii::t('status', 'Еще не закончено'),
-            self::REPORT_FINISHED=> Yii::t('status', 'Закончено'),
+            self::REPORT_NOT_FINISHED=>  Yii::t('status', 'Не готово'),
+            self::REPORT_FINISHED=> Yii::t('status', 'Готово'),
         );
     }
     

@@ -24,7 +24,7 @@ $this->beginWidget('bootstrap.widgets.TbBox', array(
     // the table will be 0-padding to the box
     'htmlOptions' => array('class'=>'bootstrap-widget-table span6')
 ));
-$this->widget('bootstrap.widgets.TbDetailView',array(
+$this->widget('bootstrap.widgets.TbEditableDetailView',array(
 	'data'=>$model,
     'htmlOptions'=>array(
 //        'class'=>'span4',
@@ -47,18 +47,21 @@ $this->widget('bootstrap.widgets.TbDetailView',array(
             'value'=>CHtml::encode($model->doctor->fullname),
         ),
         array(
+            'name'=>'payment',
+            'value'=>$model->getPaymentText(),
+        ),
+        array(
             'name'=>'report', 
-            'value'=>$model->getReportStatusText(),
+//            'value'=>$model->getReportStatusText(),
+            'editable' => array(
+                'type' => 'select',
+                'source' => $model->getReportStatusOptions(),
+            )
         ),
 		'created_at',
 		array(
             'name'=>'created_user',
             'value'=>CHtml::encode($model->creator->fullname),
-        ),
-		'updated_at',
-        array(
-            'name'=>'updated_user',
-            'value'=>CHtml::encode($model->updater->fullname),
         ),
 	),
 )); 

@@ -24,7 +24,7 @@
                     'autocomplete' => 'off',
                 ),
                 'options'=>array(
-                    'source'=> $model->getTypeOptions(),
+                    'source' => $model->getTypeOptions(),
                     'items'=>4,
                     'matcher'=>"js:function(item) {
                 return ~item.toLowerCase().indexOf(this.query.toLowerCase());
@@ -38,7 +38,9 @@
 
     <?php echo $form->select2Row($model, 'hospital_id', array(
         'asDropDownList'=>true,
+//        'prompt'=>'Please, select ...',
         'data'=>$model->getHospitalsList(),
+        'class'=>'span5',
         'hint'=>'&nbsp;&nbsp;&nbsp;' . CHtml::link('Новая больница', '#', array(
             'onClick'=>'js: $("#new-hospital-frame").attr("src", "' .
                     Yii::app()->createUrl('hospital/create', array(

@@ -4,6 +4,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
+
+//$visible=Yii::app()->user->checkAccess("Registrator")? false : true;
+
 $this->widget('bootstrap.widgets.TbExtendedGridView',array(
 	'id'=>'RegistratorPatientGrid',
 	'dataProvider'=>$model->with('doctor')->search(),
@@ -14,7 +17,7 @@ $this->widget('bootstrap.widgets.TbExtendedGridView',array(
     'ajaxUrl'=> $this->createUrl('/patient/index'),
     'ajaxUpdate'=>TRUE,
     'afterAjaxUpdate'=>"js:function(){
-        $('#datepicker_for_created_at').bdatepicker({'format':'yyyy-mm-dd', 'weekStart':'1', 'language':'ru'});
+        $('#datepicker_for_created_at').bdatepicker({'format':'yyyy-mm-dd', 'weekStart':'1', 'language':'ru', 'autoclose':'true'});
         }",
     'pagerCssClass'=>'pagination pagination-mini pagination-centered',
     'responsiveTable'=>FALSE,
@@ -64,6 +67,7 @@ $this->widget('bootstrap.widgets.TbExtendedGridView',array(
                     'language'=>'ru',
                     'format'=>'yyyy-mm-dd',
                     'weekStart'=>1,
+                    'autoclose'=>true,
                 ),
                 'htmlOptions' => array(
                     'id' => 'datepicker_for_created_at',
@@ -74,12 +78,18 @@ $this->widget('bootstrap.widgets.TbExtendedGridView',array(
         ),
         array(
             'class'=>'bootstrap.widgets.TbToggleColumn',
-            'toggleAction'=>'patient/toggle',
+            'toggleAction'=>'patient/report',
             'name' => 'report',
             'checkedButtonLabel'=>'Готово',
             'uncheckedButtonLabel'=>'Пока не готово',
             'filter'=>$model->getReportStatusOptions(),
+//            'visible'=>$visible,
         ),
+//        array(
+//            'name'=>'report',
+//            'value'=>'$data->getReportStatusText()',
+//            'visible'=>!$visible,
+//        ),
         array(
             'class'=>'bootstrap.widgets.TbToggleColumn',
             'toggleAction'=>'patient/toggle',
@@ -106,8 +116,8 @@ $this->widget('bootstrap.widgets.TbExtendedGridView',array(
 //                'width' => '150px',
             )
         ),
-		/*
 		'updated_at',
+		/*
 		'created_user',
 		'updated_user',
 		*/
@@ -124,7 +134,8 @@ $this->widget('bootstrap.widgets.TbExtendedGridView',array(
 //                    )
 //                )
 //            )),
-            'header'=>'<a href="'. Yii::app()->createUrl('patient/create').'" class="btn icon-plus">Создать</a>',
+//            'header'=>'<a href="'. Yii::app()->createUrl('patient/create').'><span class="icon-plus"></span></a>',
+            'header'=>'<a href="'. Yii::app()->createUrl('patient/create').'" class="icon-plus"></a>',
 			'class'=>'bootstrap.widgets.TbButtonColumn',
             'template'=>'{view}{delete}',
             'buttons'=>array(

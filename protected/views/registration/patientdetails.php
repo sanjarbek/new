@@ -29,7 +29,7 @@ $this->menu=array(
         'headerIcon' => 'icon-th-list',
         // when displaying a table, if we include bootstra-widget-table class
         // the table will be 0-padding to the box
-        'htmlOptions' => array('class'=>'bootstrap-widget-table span4')
+        'htmlOptions' => array('class'=>'bootstrap-widget-table span5')
     ));
     $this->widget('bootstrap.widgets.TbDetailView',array(
         'data'=>$patient,
@@ -76,7 +76,7 @@ $this->menu=array(
     )); 
     $this->endWidget();
     ?>
-    <div class="span8">
+    <div class="span7">
         <?php
         $this->beginWidget('bootstrap.widgets.TbBox', array(
             'title' => 'Заказы',

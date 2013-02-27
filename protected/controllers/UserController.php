@@ -22,32 +22,6 @@ class UserController extends Controller
 	}
 
 	/**
-	 * Specifies the access control rules.
-	 * This method is used by the 'accessControl' filter.
-	 * @return array access control rules
-	 */
-	public function accessRules()
-	{
-		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index', 'view', 'login', 'logout'),
-				'users'=>array('*'),
-			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
-				'users'=>array('@'),
-			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
-				'users'=>array('admin'),
-			),
-			array('deny',  // deny all users
-				'users'=>array('*'),
-			),
-		);
-	}
-
-	/**
 	 * Displays a particular model.
 	 * @param integer $id the ID of the model to be displayed
 	 */
@@ -227,4 +201,38 @@ class UserController extends Controller
 			'model'=>$model,
 		));
 	}
+    
+    public function actionChangePassword()
+    {
+        $model=$this->loadModel(Yii::app()->user->getId());
+
+		// Uncomment the following line if AJAX validation is needed
+		// $this->performAjaxValidation($model);
+
+		if(isset($_POST['User']))
+		{
+			$model->password=$_POST['User']['password'];
+			if($model->validate(array('password')) &&
+                    $model->saveAttributes(array('password')))
+            {
+				$this->redirect(array('view','id'=>$model->id));
+            }
+		}
+
+		$this->render('changepassword',array(
+			'model'=>$model,
+		));
+    }
+    
+    public function actionGetManagersList()
+    {
+        $managers = User::model()->findAll();
+        echo CHtml::tag('option',
+                array('value'=>'0'),CHtml::encode('Все'),true);
+        foreach ($managers as $manager)
+            echo CHtml::tag('option',
+                array('value'=>$manager->id),CHtml::encode($manager->fullname),true);
+        Yii::app()->end();
+    }
+        
 }
