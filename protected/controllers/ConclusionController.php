@@ -112,13 +112,37 @@ class ConclusionController extends Controller
                 $model->file = $name;
                 
                 if($model->save())
-                    $this->redirect(array('view','id'=>$model->id));
+                {
+                    if (!empty($_GET['asDialog']))
+                    {
+                        //Close the dialog, reset the iframe and update the grid
+//                        echo CHtml::script("window.parent.$('#new-doctor-dialog').dialog('close');window.parent.$('#new-doctor-frame').attr('src','');;");
+                        echo 'Загружено.';
+                        Yii::app()->end();
+                    }
+                    else
+                    {
+                        $this->redirect(array('view','id'=>$model->id));
+                    }
+                }
             }
 		}
 
-		$this->render('create',array(
-			'model'=>$model,
-		));
+		if (!empty($_GET['asDialog']))
+        {
+            $this->layout = '//layouts/iframe';
+            $this->render('_form', array(
+                'model'=>$model,
+                'patientId'=>$this->_patient->id,
+            ));
+        }
+        else
+        {
+            $this->render('create',array(
+                'model'=>$model,
+                'patientId'=>$this->_patient->id,
+            ));
+        }
 	}
 
 	/**

@@ -9,7 +9,22 @@ $this->menu=array(
 	array('label'=>'Создать','url'=>array('create')),
 	array('label'=>'Редактировать','url'=>array('update','id'=>$model->id)),
 	array('label'=>'Управлять','url'=>array('admin')),
+	'',
 	array('label'=>'Удалить','url'=>'#','linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Вы уверены что хотите удалить?')),
+    '',
+    array(
+        'label'=>'Загрузить заключение',
+        'url'=>'#myModal',
+        'linkOptions'=>array(
+            'onClick'=>'js: $("#upload_conclusion").attr("src", "' .
+                    Yii::app()->createUrl('conclusion/create', array(
+                        'pid'=>$model->id,
+                        'asDialog'=>1,
+                    )) . '");',
+            'data-toggle'=>'modal',
+            
+        ),
+    ),
 );
 ?>
 
@@ -83,3 +98,35 @@ $this->endWidget();
 ?>
     </div>
 </div>
+
+<?php
+$this->beginWidget('bootstrap.widgets.TbModal', array(
+        'id'=>'myModal',
+    ));
+?>
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+    <h4>Подробнее ...</h4>
+    </div>
+ 
+    <div class="modal-body">
+    <iframe id="upload_conclusion" width="100%" height="100%" frameborder="no"></iframe>
+    </div>
+ 
+
+    <div class="modal-footer">
+    <?php 
+        $this->widget('bootstrap.widgets.TbButton', array(
+            'label'=>'Закрыть',
+            'type'=>'primary',
+            'url'=>'#',
+            'htmlOptions'=>array(
+                'data-dismiss'=>'modal'
+            ),
+        ));
+    ?>
+    </div>
+<?php
+    $this->endWidget();
+?>
+
