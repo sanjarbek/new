@@ -341,7 +341,7 @@ class RegistrationController extends Controller
             $registration->price = $mrtscan->price;
             $registration->discont = 0.0;
             $registration->price_with_discont = $registration->price - $registration->discont;
-            $registration->status = Registration::STATUS_NOT_YET_STARTED;
+            $registration->status = Registration::STATUS_NEW;
             
             if ($registration->save())
             {

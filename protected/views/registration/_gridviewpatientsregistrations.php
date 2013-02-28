@@ -51,15 +51,6 @@ $this->widget('bootstrap.widgets.TbGridView',array(
             'name'=>'price_with_discont',
             'class'=>'bootstrap.widgets.TbTotalSumColumn',
         ),
-		/*
-		'status',
-		'report_status',
-		'report_text',
-		'created_at',
-		'updated_at',
-		'created_user',
-		'updated_user',
-		*/
 		array(
 			'class'=>'bootstrap.widgets.TbButtonColumn',
             'template'=>'{delete}',
