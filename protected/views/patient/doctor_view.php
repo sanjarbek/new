@@ -29,8 +29,6 @@ $this->menu=array(
 ?>
 
 <div class="row-fluid">
-<!--<h3>View Patient #<?php // echo $model->id; ?></h3>-->
-
 <?php 
 $this->beginWidget('bootstrap.widgets.TbBox', array(
     'title' => 'Подробно',
@@ -85,7 +83,7 @@ $this->endWidget();
     <div class="span6">
 <?php    
     $this->beginWidget('bootstrap.widgets.TbBox', array(
-    'title' => 'Услуги',
+    'title' => 'Области исследования',
     'headerIcon' => 'icon-th-list',
     // when displaying a table, if we include bootstra-widget-table class
     // the table will be 0-padding to the box
