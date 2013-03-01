@@ -27,8 +27,6 @@ abstract class MasterModel extends CActiveRecord{
             $this->updated_at = new CDbExpression('NOW()'); // set updated_at value
         if ($this->hasAttribute('updated_user'))
             $this->updated_user = Yii::app()->user->id;
-        if ($this->hasAttribute('owner_id'))
-            $this->owner_id = Yii::app()->user->id;
 
         return parent::beforeValidate();
     }
