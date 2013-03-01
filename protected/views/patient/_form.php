@@ -21,8 +21,9 @@
         'append'=>'<i class="icon-calendar"></i>',
         'options'=>array(
             'format'=>'yyyy-mm-dd',
-            'calendarWeeks'=>true,
+//            'calendarWeeks'=>true,
             'startView'=>'decade',
+            'autoclose'=>true,
         ),
     )); ?>
     <?php echo $form->select2Row($model, 'sex', array(

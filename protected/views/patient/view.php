@@ -65,8 +65,7 @@ $this->widget('bootstrap.widgets.TbDetailView',array(
 $this->endWidget();
 ?>
     <div class="span6">
-<?php    
-    $this->beginWidget('bootstrap.widgets.TbBox', array(
+<?php $this->beginWidget('bootstrap.widgets.TbBox', array(
     'title' => 'Услуги',
     'headerIcon' => 'icon-th-list',
     // when displaying a table, if we include bootstra-widget-table class

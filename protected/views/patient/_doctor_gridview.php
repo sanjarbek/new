@@ -69,8 +69,8 @@ $this->widget('bootstrap.widgets.TbExtendedGridView',array(
 		'updated_at',
         array(
             'name' => 'report',
-            'filter'=>$model->getReportStatusOptions(),
-            'value'=>'$data->getReportStatusText()',
+            'filter'=>$model->getConclusionOptions(),
+            'value'=>'$data->getConclusionText()',
             'htmlOptions' => array(
                 'width' => '100px',
             ),

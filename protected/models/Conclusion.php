@@ -134,13 +134,12 @@ class Conclusion extends MasterModel
         $query = 'select m.id, m.name 
             from mrtscans m, registrations r            
             where m.id=r.mrtscan_id and 
-                    r.patient_id=22 and 
+                    r.patient_id=:patientId and 
                     r.mrtscan_id not in (select c.mrtscan_id 
-                        from conclusions c where c.patient_id=22)';
+                        from conclusions c where c.patient_id=:patientId)';
         $command = Yii::app()->db->createCommand($query);
         $command->bindValue(':patientId', $patientId);
         
-        $patientMrtscans = array();
         $patientMrtscans = $command->queryAll();
         
         $listData = array();

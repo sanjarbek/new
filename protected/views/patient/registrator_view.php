@@ -9,35 +9,37 @@ $this->menu=array(
 	array('label'=>'Создать','url'=>array('create')),
 	array('label'=>'Редактировать','url'=>array('update','id'=>$model->id)),
 	array('label'=>'Управлять','url'=>array('admin')),
-	'',
+    '',
 	array('label'=>'Удалить','url'=>'#','linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Вы уверены что хотите удалить?')),
     '',
     array(
-        'label'=>'Загрузить заключение',
-        'url'=>'#myModal',
+        'label'=>'Добавить', 
+        'url'=>'#myModal', 
         'linkOptions'=>array(
-            'onClick'=>'js: $("#upload_conclusion").attr("src", "' .
-                    Yii::app()->createUrl('conclusion/create', array(
+            'onClick'=>'js: $("#doctor_details_frame").attr("src", "' .
+                    Yii::app()->createUrl('//registration/getmrtscanslist', array(
                         'pid'=>$model->id,
                         'asDialog'=>1,
+                        'gridId'=>'PatientRegistrationGrid',
                     )) . '");',
             'data-toggle'=>'modal',
-            
         ),
     ),
 );
 ?>
 
 <div class="row-fluid">
+<h4>Пациент #<?php echo $model->id; ?></h4>
+
 <?php 
 $this->beginWidget('bootstrap.widgets.TbBox', array(
     'title' => 'Подробно',
     'headerIcon' => 'icon-th-list',
     // when displaying a table, if we include bootstra-widget-table class
     // the table will be 0-padding to the box
-    'htmlOptions' => array('class'=>'bootstrap-widget-table span6')
+    'htmlOptions' => array('class'=>'bootstrap-widget-table')
 ));
-$this->widget('bootstrap.widgets.TbEditableDetailView',array(
+$this->widget('bootstrap.widgets.TbDetailView',array(
 	'data'=>$model,
     'htmlOptions'=>array(
 //        'class'=>'span4',
@@ -60,70 +62,63 @@ $this->widget('bootstrap.widgets.TbEditableDetailView',array(
             'value'=>CHtml::encode($model->doctor->fullname),
         ),
         array(
-            'name'=>'paid',
-            'value'=>$model->getPaidText(),
-        ),
-        array(
             'name'=>'report', 
-            'editable' => array(
-                'type' => 'select',
-                'source' => $model->getConclusionOptions(),
-            )
+            'value'=>$model->getConclusionText(),
         ),
 		'created_at',
 		array(
             'name'=>'created_user',
             'value'=>CHtml::encode($model->creator->fullname),
         ),
+		'updated_at',
+        array(
+            'name'=>'updated_user',
+            'value'=>CHtml::encode($model->updater->fullname),
+        ),
 	),
 )); 
 $this->endWidget();
 ?>
-    <div class="span6">
-<?php    
+</div>
+<div class="row-fluid">
+<?php
+    Yii::import('application.controllers.RegistrationController');
+    $regController = new RegistrationController(399);
+    
     $this->beginWidget('bootstrap.widgets.TbBox', array(
-    'title' => 'Области исследования',
+    'title' => 'Области исследований',
     'headerIcon' => 'icon-th-list',
     // when displaying a table, if we include bootstra-widget-table class
     // the table will be 0-padding to the box
     'htmlOptions' => array('class'=>'bootstrap-widget-table')
-));
-$this->renderPartial('/registration/_patient_gridview_doctor', array(
-    'model'=>$regDataProvider,
 )); 
-$this->endWidget();
 ?>
-    </div>
-</div>
-
 <?php
-$this->beginWidget('bootstrap.widgets.TbModal', array(
+    $regController->renderPartial('/registration/_gridviewpatientsregistrations', array(
+        'model'=>$registration,
+    ));
+?>
+<?php
+    $this->endWidget();
+?>
+<?php 
+    $this->beginWidget('bootstrap.widgets.TbModal', array(
         'id'=>'myModal',
+        'events'=>array(
+            'hide'=>'js: function(){$.fn.yiiGridView.update("PatientRegistrationGrid");}',
+        )
     ));
 ?>
     <div class="modal-header">
         <a class="close" data-dismiss="modal">×</a>
-    <h4>Подробнее ...</h4>
+        <h4>Подробнее ...</h4>
     </div>
  
     <div class="modal-body">
-    <iframe id="upload_conclusion" width="100%" height="100%" frameborder="no"></iframe>
+        <iframe id="doctor_details_frame" width="100%" height="100%" frameborder="no"></iframe>
     </div>
  
-
-    <div class="modal-footer">
-    <?php 
-        $this->widget('bootstrap.widgets.TbButton', array(
-            'label'=>'Закрыть',
-            'type'=>'primary',
-            'url'=>'#',
-            'htmlOptions'=>array(
-                'data-dismiss'=>'modal'
-            ),
-        ));
-    ?>
-    </div>
 <?php
     $this->endWidget();
 ?>
-
+</div>

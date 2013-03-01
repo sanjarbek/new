@@ -10,6 +10,7 @@ $this->widget('bootstrap.widgets.TbGridView',array(
     'type'=>'bordered condensed',
     'template'=>'{items}',
 	'dataProvider'=>$dataProvider,
+    'ajaxUpdate'=>array('PatientMrtscanGrid'),
 //    'patientId'=>$patientId,
     'enableSorting'=>false,
 	'columns'=>array(
@@ -21,16 +22,12 @@ $this->widget('bootstrap.widgets.TbGridView',array(
                     'icon'=>'icon-plus',
                     'label'=>'Add',
                     'url'=>'$this->grid->controller->createUrl("addService", array("id"=>$data->primaryKey,"asDialog"=>1,"gridId"=>$this->grid->id, "pid"=>'.$patientId.'))',
-//                    'click'=>'function(){$("#cru-frame").attr("src",$(this).attr("href")); $("#cru-dialog").dialog("open");  return false;}',
-                    'click'=>"function() {
-                        window.$.fn.yiiGridView.update('PatientMrtscanGrid'); 
-                        return false;
-                    }",
                     'options'=>array(
-                        'ajax'=>array(
-                            'url'=>"js:
-                                $(this).attr('href');
-                                ",
+                        'ajax' => array(
+                            'type' => 'get', 
+                            'url'=>'js:$(this).attr("href")', 
+                            'success' => 'js:function(data) { 
+                                $.fn.yiiGridView.update("PatientMrtscanGrid")}',
                         ),
                     ),
                 ),

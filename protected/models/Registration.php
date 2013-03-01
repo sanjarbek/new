@@ -24,9 +24,8 @@
  */
 class Registration extends MasterModel
 {
-    const STATUS_NOT_YET_STARTED = 0;
+    const STATUS_NEW = 0;
     const STATUS_FINISHED = 1;
-    const STATUS_CANCELED = 2;
     
 	/**
 	 * @return string the associated database table name
@@ -45,7 +44,7 @@ class Registration extends MasterModel
 		// will receive user inputs.
 		return array(
 			array('patient_id, mrtscan_id, price, discont, price_with_discont, status, created_at, updated_at, created_user, updated_user', 'required'),
-			array('patient_id, mrtscan_id, status, report_status, created_user, updated_user', 'numerical', 'integerOnly'=>true),
+			array('patient_id, mrtscan_id, status, created_user, updated_user', 'numerical', 'integerOnly'=>true),
 			array('price, discont, price_with_discont', 'length', 'max'=>10),
             array('patient_id', 
                 'exist', 
@@ -67,14 +66,13 @@ class Registration extends MasterModel
             array('discont', 'discontValidation'),
             array('price_with_discont', 'priceWithDiscontValidation'),
             array('status', 'in', 'range'=>array(
-                self::STATUS_NOT_YET_STARTED,
+                self::STATUS_NEW,
                 self::STATUS_FINISHED,
-                self::STATUS_CANCELED,
             )),
-			array('report_text', 'safe'),
+			array('conclusion, owner_id', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, patient_id, mrtscan_id, price, discont, price_with_discont, status, report_status, report_text, created_at, updated_at, created_user, updated_user', 'safe', 'on'=>'search'),
+			array('id, patient_id, mrtscan_id, price, discont, price_with_discont, status, created_at, updated_at, created_user, updated_user', 'safe', 'on'=>'search'),
 		);
 	}
     
@@ -138,17 +136,17 @@ class Registration extends MasterModel
 		return array(
 			'id' => 'ID',
 			'patient_id' => 'Пациент',
-			'mrtscan_id' => 'Услуга',
+			'mrtscan_id' => 'Область исследования',
 			'price' => 'Цена',
 			'discont' => 'Скидка',
 			'price_with_discont' => 'Конечная цена',
-			'status' => 'Статус',
-			'report_status' => 'Статус отчета',
-			'report_text' => 'Тескт отчета',
+			'status' => 'Статус заключения',
+			'conclusion' => 'Заключение',
+            'owner_id' => 'Исследовавший врач',
 			'created_at' => 'Дата создания',
 			'updated_at' => 'Дата редактирования',
-			'created_user' => 'Создавщий пользователь',
-			'updated_user' => 'Редактировавщий пользователь',
+			'created_user' => 'Создавший пользователь',
+			'updated_user' => 'Редактировавший пользователь',
 		);
 	}
 
@@ -177,8 +175,7 @@ class Registration extends MasterModel
 		$criteria->compare('t.discont',$this->discont,true);
 		$criteria->compare('t.price_with_discont',$this->price_with_discont,true);
 		$criteria->compare('t.status',$this->status);
-		$criteria->compare('t.report_status',$this->report_status);
-		$criteria->compare('t.report_text',$this->report_text,true);
+		$criteria->compare('t.owner_id',$this->owner_id,true);
 		$criteria->compare('t.created_at',$this->created_at,true);
 		$criteria->compare('t.updated_at',$this->updated_at,true);
 		$criteria->compare('t.created_user',$this->created_user);
@@ -236,9 +233,8 @@ class Registration extends MasterModel
     public function getStatusOptions()
     {
         return array(
-            self::STATUS_NOT_YET_STARTED => Yii::t('status', 'Еще не начата'),
-            self::STATUS_FINISHED => Yii::t('status', 'Закончено'),
-            self::STATUS_CANCELED => Yii::t('status', 'Отменено'),
+            self::STATUS_NEW => Yii::t('status', 'Не готово'),
+            self::STATUS_FINISHED => Yii::t('status', 'Готово'),
         );
     }
 
