@@ -19,10 +19,11 @@ class RegistrationController extends Controller
 	public function filters()
 	{
         return CMap::mergeArray(parent::filters(),array(
-            'patientContext + create 
+            'patientContext + 
+                create 
                 patient 
                 update 
-                getPatientRegistrations 
+                patientRegistrations 
                 getMrtscansList
                 addService', //check to ensure valid patient context
 //            'postOnly + delete', // we only allow deletion via POST request

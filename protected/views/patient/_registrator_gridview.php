@@ -38,8 +38,13 @@ $this->widget('bootstrap.widgets.TbExtendedGridView',array(
             'filter'=>$model->getSexOptions(),
         ),
         array(
+            'type'=>'raw',
             'name'=>'doctor_id',
-            'value'=>'$data->doctor->fullname',
+            'value'=>'CHtml::tag("span", array(
+                    "title"=>$data->doctor->phone,
+                ), 
+                $data->doctor->fullname
+             )',
             'filter'=>$model->getDoctorsList(),
             'htmlOptions'=>array(
                 'width'=>'100px',
@@ -93,11 +98,11 @@ $this->widget('bootstrap.widgets.TbExtendedGridView',array(
             'header'=>'<a href="'. Yii::app()->createUrl('patient/create').'" class="icon-plus"></a>',
 			'class'=>'bootstrap.widgets.TbButtonColumn',
             'template'=>'{view}{delete}',
-            'buttons'=>array(
-                'view'=>array(
-                    'url'=>'$this->grid->controller->createUrl("/registration/patient", array("pid"=>$data->primaryKey))',
-                ),
-            ),
+//            'buttons'=>array(
+//                'view'=>array(
+//                    'url'=>'$this->grid->controller->createUrl("/registration/patient", array("pid"=>$data->primaryKey))',
+//                ),
+//            ),
 		),
 	),
 ));

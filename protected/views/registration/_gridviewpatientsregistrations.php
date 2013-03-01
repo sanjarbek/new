@@ -9,6 +9,7 @@ $this->widget('bootstrap.widgets.TbGridView',array(
 	'dataProvider'=>$model->with('mrtscan')->search(),
 //	'filter'=>$model,
     'enableSorting'=>false,
+    'ajaxUrl'=> Yii::app()->createUrl('registration/patientRegistrations', array('pid'=>$model->patient_id)),
     'type'=>'bordered condensed',
     'template'=>'{items}{pager}{summary}',
 	'columns'=>array(
@@ -28,14 +29,10 @@ $this->widget('bootstrap.widgets.TbGridView',array(
             'name'=>'price',
             'class'=>'bootstrap.widgets.TbTotalSumColumn',
         ),
-//		array(
-//            'name'=>'discont',
-//            'class'=>'bootstrap.widgets.TbTotalSumColumn',
-//        ),
         array(
             'name'=>'discont',
             'class'=>'bootstrap.widgets.TbJEditableColumn',
-            'saveURL'=>Yii::app()->createUrl('registration/save'),
+            'saveURL'=>Yii::app()->createUrl('//registration/save'),
             'jEditableOptions' => array(
                 'tooltip'=>'',
                 'type' => 'text',
@@ -61,7 +58,8 @@ $this->widget('bootstrap.widgets.TbGridView',array(
 //                    'label'=>'',
 //                ),    
                 'delete'=>array(
-                    'label'=>'',
+//                    'label'=>'',
+                    'url'=>'$this->grid->controller->createUrl("/registration/delete", array("id"=>$data->primaryKey))',
                 )                    
             ),
 		),
