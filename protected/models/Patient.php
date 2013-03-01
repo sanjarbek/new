@@ -14,7 +14,7 @@
  * @property integer $report
  * @property datetime $reported_at
  * @property integer $desc_doctor_id
- * @property integer $payment Description
+ * @property integer $paid
  * @property string $created_at
  * @property string $updated_at
  * @property integer $created_user
@@ -33,11 +33,12 @@ class Patient extends MasterModel
     const SEX_MALE = 0;
     const SEX_FEMALE = 1;
     
-    const REPORT_NOT_FINISHED = 0;
-    const REPORT_FINISHED = 1;
+    const CONCLUSION_NOT_READY = 0;
+    const CONCLUSION_READY = 1;
     
-    const PAYMENT_IS_NOT_MADE = 0;
-    const PAYMENT_IS_MADE = 1;
+    const PAID_IS_NOT_MADE = 0;
+    const PAID_IS_MADE = 1;
+    const PAID_IS_DEBT = 2;
     
 	/**
 	 * @return string the associated database table name
@@ -56,7 +57,7 @@ class Patient extends MasterModel
 		// will receive user inputs.
 		return array(
 			array('fullname, phone, birthday, sex, status, doctor_id, created_at, updated_at, created_user, updated_user', 'required'),
-			array('sex, status, doctor_id, created_user, updated_user', 'numerical', 'integerOnly'=>true),
+			array('sex, paid, status, doctor_id, created_user, updated_user', 'numerical', 'integerOnly'=>true),
 			array('fullname', 'length', 'max'=>30),
 			array('phone', 'length', 'max'=>20),
             array('birthday', 'date', 'format'=>'yyyy-mm-dd'),
@@ -78,12 +79,13 @@ class Patient extends MasterModel
                 self::SEX_FEMALE,
             )),
             array('report', 'in', 'range'=>array(
-                self::REPORT_NOT_FINISHED,
-                self::REPORT_FINISHED,
+                self::CONCLUSION_NOT_READY,
+                self::CONCLUSION_READY,
             )),
-            array('payment', 'in', 'range'=>array(
-                self::PAYMENT_IS_NOT_MADE,
-                self::PAYMENT_IS_MADE,
+            array('paid', 'in', 'range'=>array(
+                self::PAID_IS_NOT_MADE,
+                self::PAID_IS_MADE,
+                self::PAID_IS_DEBT,
             )),
 //            array('desc_doctor_id',
 //                'exist',
@@ -95,7 +97,7 @@ class Patient extends MasterModel
 //            ),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, fullname, phone, birthday, sex, status, doctor_id, created_at, updated_at, created_user, updated_user', 'safe', 'on'=>'search'),
+			array('id, fullname, phone, birthday, sex, status, paid, doctor_id, created_at, updated_at, created_user, updated_user', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -118,7 +120,7 @@ class Patient extends MasterModel
     {
         return array(
             'paid'=>array(
-                'condition'=>'t.payment='.self::PAYMENT_IS_MADE,
+                'condition'=>'t.paid='.self::PAID_IS_MADE,
             )
         );
     }
@@ -139,8 +141,8 @@ class Patient extends MasterModel
             'report' => 'Заключение',
             'reported_at'=>'Дата заключения',
             'desc_doctor_id' => 'Описавщий доктор',
-            'payment' => 'Оплата',
-			'created_at' => 'Дата регистр.',
+            'paid' => 'Оплата',
+			'created_at' => 'Дата регистрации',
 			'updated_at' => 'Дата редактирования',
 			'created_user' => 'Регистрировал',
 			'updated_user' => 'Редактировал',
@@ -175,7 +177,7 @@ class Patient extends MasterModel
         $criteria->compare('t.report', $this->report);
         $criteria->compare('t.reported_at', $this->reported_at, true);
         $criteria->compare('t.desc_doctor_id', $this->desc_doctor_id);
-        $criteria->compare('t.payment', $this->payment);
+        $criteria->compare('t.paid', $this->paid);
 		$criteria->compare('t.created_at',$this->created_at,true);
 		$criteria->compare('t.updated_at',$this->updated_at,true);
 		$criteria->compare('t.created_user',$this->created_user);
@@ -206,9 +208,9 @@ class Patient extends MasterModel
     public function getStatusOptions()
     {
         return array(
-            self::STATUS_NOT_FINISHED => Yii::t('status', 'Не закончено'),
-            self::STATUS_FINISHED => Yii::t('status', 'Закончено'),
-            self::STATUS_CANCELED => Yii::t('status', 'Отменено'),
+            self::STATUS_NOT_FINISHED => Yii::t('status', 'Не закончен'),
+            self::STATUS_FINISHED => Yii::t('status', 'Закончен'),
+            self::STATUS_CANCELED => Yii::t('status', 'Отменен'),
         );
     }
 
@@ -220,36 +222,37 @@ class Patient extends MasterModel
             : (Yii::t('status', 'Unknown status ') . $this->status);
     }
     
-    public function getReportStatusOptions()
+    public function getConclusionOptions()
     {
         return array(
-            self::REPORT_NOT_FINISHED=>  Yii::t('status', 'Не готово'),
-            self::REPORT_FINISHED=> Yii::t('status', 'Готово'),
+            self::CONCLUSION_NOT_READY=>  Yii::t('status', 'Не готово'),
+            self::CONCLUSION_READY=> Yii::t('status', 'Готово'),
         );
     }
     
-    public function getReportStatusText()
+    public function getConclusionText()
     {
-        $report_options = $this->getReportStatusOptions();
+        $report_options = $this->getConclusionOptions();
         return isset($report_options[$this->report])
             ? $report_options[$this->report]
             : (Yii::t('status', 'Неизвестный статус ')) . $this->report;
     }    
     
-    public function getPaymentOptions()
+    public function getPaidOptions()
     {
         return array(
-            self::PAYMENT_IS_NOT_MADE => Yii::t('status', 'Не оплатил'),
-            self::PAYMENT_IS_MADE => Yii::t('status', 'Оплатил'),
+            self::PAID_IS_NOT_MADE => Yii::t('status', 'Не оплатил'),
+            self::PAID_IS_MADE => Yii::t('status', 'Оплатил'),
+            self::PAID_IS_DEBT => Yii::t('status', 'Долг'),
         );
     }
 
-    public function getPaymentText()
+    public function getPaidText()
     {
-        $payment_options = $this->getPaymentOptions();
-        return isset($payment_options[$this->payment])
-            ? $payment_options[$this->payment]
-            : (Yii::t('status', 'Неизвестный статус ')) . $this->payment;
+        $paid_options = $this->getPaidOptions();
+        return isset($paid_options[$this->paid])
+            ? $paid_options[$this->paid]
+            : (Yii::t('status', 'Неизвестный статус ')) . $this->paid;
     }
     
     public function getSexOptions()

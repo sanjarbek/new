@@ -30,33 +30,51 @@ $this->widget('bootstrap.widgets.TbExtendedGridView',array(
             )
         ),
         array(
-            'name'=>'fullname',
-            'class'=>'bootstrap.widgets.TbJEditableColumn',
-            'saveURL'=>Yii::app()->createUrl('patient/save'),
-            'jEditableOptions' => array(
-                'tooltip'=>'Click to edit...',
-                'type' => 'text',
-                // very important to get the attribute to update on the server!
-                'submitdata' => array(
-                    'attribute'=>'name'
-                ),
-                'cssclass' => 'form',
-                'width' => '150px',
-            )
+            'name'=>'fullname',            
         ),
-		'phone',
         array(            
             'name' => 'sex',
             'value'=> '$data->getSexText()',
             'filter'=>$model->getSexOptions(),
         ),
         array(
+            'type'=>'raw',
             'name'=>'doctor_id',
-            'value'=>'$data->doctor->fullname',
+            'value'=>'CHtml::tag("span", array(
+                    "title"=>$data->doctor->phone,
+                ), 
+                $data->doctor->fullname
+             )',
             'filter'=>$model->getDoctorsList(),
             'htmlOptions'=>array(
                 'width'=>'100px',
             )
+        ),
+        array(
+            'type'=>'raw',
+            'name' => 'report',
+            'value' => '($data->report==Patient::CONCLUSION_READY) ? 
+                "<span class=\"label label-success\">".$data->getConclusionText()."</span>" :
+                "<span class=\"label label-warning\">".$data->getConclusionText()."</span>" ',
+            'filter'=>$model->getConclusionOptions(),
+        ),
+        array(
+            'type'=>'raw',
+            'name' => 'paid',
+            'value' => '($data->paid==Patient::PAID_IS_MADE) ? 
+                "<span class=\"label label-success\">".$data->getPaidText()."</span>" : (($data->paid==Patient::PAID_IS_DEBT) ?
+                "<span class=\"label label-warning\">".$data->getPaidText()."</span>" : 
+                "<span class=\"label label-important\">".$data->getPaidText()."</span>")',
+            'filter'=>$model->getPaidOptions(),
+        ),
+        array(
+            'type'=>'raw',
+            'name'=>'status',
+            'value' => '($data->status==Patient::STATUS_FINISHED) ? 
+                "<span class=\"label label-success\">".$data->getStatusText()."</span>" : (($data->status==Patient::STATUS_CANCELED) ?
+                "<span class=\"label label-warning\">".$data->getStatusText()."</span>" : 
+                "<span class=\"label label-important\">".$data->getStatusText()."</span>")',
+            'filter'=>$model->getStatusOptions(),
         ),
 		array(
             'name'=>'created_at',
@@ -71,78 +89,20 @@ $this->widget('bootstrap.widgets.TbExtendedGridView',array(
                 ),
                 'htmlOptions' => array(
                     'id' => 'datepicker_for_created_at',
-                    'size' => '10',
+//                    'size' => '10',
                 ),
             ), 
             true),
         ),
-        array(
-            'class'=>'bootstrap.widgets.TbToggleColumn',
-            'toggleAction'=>'patient/report',
-            'name' => 'report',
-            'checkedButtonLabel'=>'Готово',
-            'uncheckedButtonLabel'=>'Пока не готово',
-            'filter'=>$model->getReportStatusOptions(),
-//            'visible'=>$visible,
-        ),
-//        array(
-//            'name'=>'report',
-//            'value'=>'$data->getReportStatusText()',
-//            'visible'=>!$visible,
-//        ),
-        array(
-            'class'=>'bootstrap.widgets.TbToggleColumn',
-            'toggleAction'=>'patient/toggle',
-            'name' => 'payment',
-            'checkedButtonLabel'=>'Готово',
-            'uncheckedButtonLabel'=>'Пока не готово',
-            'filter'=>$model->getPaymentOptions(),
-        ),
-        array(
-            'name'=>'status',
-            'value'=>'$data->getStatusText()',
-            'filter'=>$model->getStatusOptions(),
-            'class'=>'bootstrap.widgets.TbJEditableColumn',
-            'saveURL'=>Yii::app()->createUrl('patient/save'),
-            'jEditableOptions' => array(
-                'tooltip'=>'Click to edit...',
-                'type' => 'select',
-                'data'=>$model->getStatusOptions(),
-                // very important to get the attribute to update on the server!
-                'submitdata' => array(
-                    'attribute'=>'status'
-                ),
-                'cssclass' => 'form',
-//                'width' => '150px',
-            )
-        ),
-		'updated_at',
-		/*
-		'created_user',
-		'updated_user',
-		*/
 		array(
-//            'header'=>
-//            $this->widget('bootstrap.widgets.TbButtonGroup', array(
-//                'size'=>'mini',
-////                'icon'=>'icon-wrench',
-//                'buttons'=>array(
-//                    array(
-//                        'label'=>'Создать',
-//                        'icon'=>'icon-plus',
-//                        'url'=>array('create'),
-//                    )
-//                )
-//            )),
-//            'header'=>'<a href="'. Yii::app()->createUrl('patient/create').'><span class="icon-plus"></span></a>',
             'header'=>'<a href="'. Yii::app()->createUrl('patient/create').'" class="icon-plus"></a>',
 			'class'=>'bootstrap.widgets.TbButtonColumn',
             'template'=>'{view}{delete}',
-            'buttons'=>array(
-                'view'=>array(
-                    'url'=>'$this->grid->controller->createUrl("/registration/patient", array("pid"=>$data->primaryKey))',
-                ),
-            ),
+//            'buttons'=>array(
+//                'view'=>array(
+//                    'url'=>'$this->grid->controller->createUrl("/registration/patient", array("pid"=>$data->primaryKey))',
+//                ),
+//            ),
 		),
 	),
 ));

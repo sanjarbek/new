@@ -19,10 +19,11 @@ class RegistrationController extends Controller
 	public function filters()
 	{
         return CMap::mergeArray(parent::filters(),array(
-            'patientContext + create 
+            'patientContext + 
+                create 
                 patient 
                 update 
-                getPatientRegistrations 
+                patientRegistrations 
                 getMrtscansList
                 addService', //check to ensure valid patient context
 //            'postOnly + delete', // we only allow deletion via POST request
@@ -341,7 +342,7 @@ class RegistrationController extends Controller
             $registration->price = $mrtscan->price;
             $registration->discont = 0.0;
             $registration->price_with_discont = $registration->price - $registration->discont;
-            $registration->status = Registration::STATUS_NOT_YET_STARTED;
+            $registration->status = Registration::STATUS_NEW;
             
             if ($registration->save())
             {

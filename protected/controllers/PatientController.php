@@ -74,7 +74,10 @@ class PatientController extends Controller
 	{
         $model = $this->loadModel($id);
         
-        $registrationDataProvider = new CActiveDataProvider('Registration', array(
+        $registration = new Registration();
+        $registration->patient_id = $model->id;
+        
+        $regDataProvider = new CActiveDataProvider('Registration', array(
             'criteria'=>array(
                 'condition'=>'patient_id='.$model->id,
             )
@@ -84,14 +87,15 @@ class PatientController extends Controller
         {
             $this->render('doctor_view', array(
                 'model'=>$model,
-                'registrationDataProvider'=>$registrationDataProvider,
+                'regDataProvider'=>$regDataProvider,
             ));
         }
         else if (Yii::app()->user->checkAccess('Registrator'))
         {
-            $this->render('view',array(
+            $this->render('registrator_view',array(
                 'model'=>$model,
-                'registrationDataProvider'=>$registrationDataProvider,
+                'registration'=>$registration,
+//                'regDataProvider'=>$regDataProvider,
             ));
         }
 	}
