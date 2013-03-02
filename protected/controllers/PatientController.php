@@ -85,17 +85,16 @@ class PatientController extends Controller
         
         if (Yii::app()->user->checkAccess('Doctor'))
         {
-            $this->render('doctor_view', array(
+            $this->render('view_doctor', array(
                 'model'=>$model,
-                'regDataProvider'=>$regDataProvider,
+                'registration'=>$registration,
             ));
         }
         else if (Yii::app()->user->checkAccess('Registrator'))
         {
-            $this->render('registrator_view',array(
+            $this->render('view_registrator',array(
                 'model'=>$model,
                 'registration'=>$registration,
-//                'regDataProvider'=>$regDataProvider,
             ));
         }
 	}

@@ -29,11 +29,9 @@ $this->menu=array(
 ?>
 
 <div class="row-fluid">
-<h4>Пациент #<?php echo $model->id; ?></h4>
-
 <?php 
 $this->beginWidget('bootstrap.widgets.TbBox', array(
-    'title' => 'Подробно',
+    'title' => 'Подробно о пациенте №'.$model->id,
     'headerIcon' => 'icon-th-list',
     // when displaying a table, if we include bootstra-widget-table class
     // the table will be 0-padding to the box
@@ -82,9 +80,6 @@ $this->endWidget();
 </div>
 <div class="row-fluid">
 <?php
-    Yii::import('application.controllers.RegistrationController');
-    $regController = new RegistrationController(399);
-    
     $this->beginWidget('bootstrap.widgets.TbBox', array(
     'title' => 'Области исследований',
     'headerIcon' => 'icon-th-list',
@@ -94,7 +89,7 @@ $this->endWidget();
 )); 
 ?>
 <?php
-    $regController->renderPartial('/registration/_gridviewpatientsregistrations', array(
+    $this->renderPartial('/registration/_gridview_registrator', array(
         'model'=>$registration,
     ));
 ?>
@@ -105,7 +100,7 @@ $this->endWidget();
     $this->beginWidget('bootstrap.widgets.TbModal', array(
         'id'=>'myModal',
         'events'=>array(
-            'hide'=>'js: function(){$.fn.yiiGridView.update("PatientRegistrationGrid");}',
+            'hide'=>'js: function(){$.fn.yiiGridView.update("RegistrationGridRegistrator");}',
         )
     ));
 ?>

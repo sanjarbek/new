@@ -130,6 +130,7 @@ class Registration extends MasterModel
 			'patient' => array(self::BELONGS_TO, 'Patient', 'patient_id'),
             'creator' => array(self::BELONGS_TO, 'User', 'created_user'),
             'updater' => array(self::BELONGS_TO, 'User', 'updated_user'),
+            'conclus' => array(self::HAS_ONE, 'Conclusion', 'registration_id'),
 		);
 	}
 

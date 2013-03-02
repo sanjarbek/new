@@ -21,7 +21,7 @@ $this->menu=array(
         // the table will be 0-padding to the box
         'htmlOptions' => array('class'=>'bootstrap-widget-table span9')
     ));
-
+    
     $this->widget('bootstrap.widgets.TbDetailView',array(
         'data'=>$model,
         'htmlOptions'=>array(

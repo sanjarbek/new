@@ -257,7 +257,7 @@ class RegistrationController extends Controller
     /**
      * The specified patient registrations only
      */
-    public function _getGridViewPatientRegistrationGrid()
+    public function _getGridViewRegistrationGridRegistrator()
     {
         $model=new Registration('search');
 		$model->unsetAttributes();  // clear any default values
@@ -266,7 +266,7 @@ class RegistrationController extends Controller
 
         $model->patient_id = $this->_patient->id;
         
-        $this->renderPartial('_gridviewpatientsregistrations', array(
+        $this->renderPartial('_gridview_registrator', array(
             'model'=>$model,
             'patient'=>$this->_patient,
         ));
@@ -295,6 +295,18 @@ class RegistrationController extends Controller
     {
         $this->renderPartial('_gridviewpatientsregistrations', array(
             'patient_id'=>$this->_patient->id,
+        ));
+    }
+    
+    public function _getGridViewRegistrationGridDoctor()
+    {
+        $model=new Registration('search');
+		$model->unsetAttributes();  // clear any default values
+		
+        $model->patient_id = $this->_patient->id;
+        
+        $this->renderPartial('_gridview_doctor', array(
+            'model'=>$model,
         ));
     }
     
@@ -397,7 +409,7 @@ class RegistrationController extends Controller
                 if ($registration->validate(array('discont', 'price_with_discont')) && $registration->saveAttributes(array('discont', 'price_with_discont')))
                 {
                     echo $value;
-                    echo CHtml::script("window.$.fn.yiiGridView.update('PatientRegistrationGrid');");
+                    echo CHtml::script("window.$.fn.yiiGridView.update('RegistrationGridRegistrator');");
                 }
                 else
                 {

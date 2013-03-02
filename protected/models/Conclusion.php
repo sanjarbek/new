@@ -41,7 +41,7 @@ class Conclusion extends MasterModel
             array('conclusion', 'file', 'types' => 'docx,xlsx', 'maxSize' => 1024 * 512, 'tooLarge' => 'Размер файлы должен быть меньше 512 КБ !!!', 'on'=>'upload'),            
 			array('registration_id, file, description, created_at, updated_at, created_user, updated_user', 'required'),
 			array('registration_id, created_user, updated_user', 'numerical', 'integerOnly'=>true),
-            array('registration_id', 'unique', 'message'=>'Для данного пациента для данной области исследования уже загружено заключение. Чтобы заменить удалите загруженное заключение.'),
+//            array('registration_id', 'unique', 'message'=>'Для данного пациента для данной области исследования уже загружено заключение. Чтобы заменить удалите загруженное заключение.'),
 			array('file, description', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.

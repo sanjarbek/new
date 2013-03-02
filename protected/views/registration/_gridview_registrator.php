@@ -5,8 +5,8 @@
  * and open the template in the editor.
  */
 $this->widget('bootstrap.widgets.TbGridView',array(
-	'id'=>'PatientRegistrationGrid',
-	'dataProvider'=>$model->with('mrtscan')->search(),
+	'id'=>'RegistrationGridRegistrator',
+	'dataProvider'=>$model->with('mrtscan', 'conclus')->search(),
 //	'filter'=>$model,
     'enableSorting'=>false,
     'ajaxUrl'=> Yii::app()->createUrl('registration/patientRegistrations', array('pid'=>$model->patient_id)),
@@ -48,19 +48,20 @@ $this->widget('bootstrap.widgets.TbGridView',array(
             'name'=>'price_with_discont',
             'class'=>'bootstrap.widgets.TbTotalSumColumn',
         ),
+        array(
+            'type'=>'raw',
+            'header'=>'Файл заключения',
+            'value'=>'($data->conclus != NULL) ?
+                "<a href=\"".$data->conclus->downloadfilepath.DIRECTORY_SEPARATOR.$data->conclus->file."\">Скачать</a>" :
+                "Еще не загружен"',
+        ),
 		array(
 			'class'=>'bootstrap.widgets.TbButtonColumn',
             'template'=>'{delete}',
-            'buttons'=>array(                
-//                'update'=>array(
-//                    'url'=>'$this->grid->controller->createUrl("update", array("id"=>$data->primaryKey,"asDialog"=>1,"gridId"=>$this->grid->id, "pid"=>$data->patient_id))',
-//                    'click'=>'function(){$("#cru-frame").attr("src",$(this).attr("href")); $("#cru-dialog").dialog("open");  return false;}',
-//                    'label'=>'',
-//                ),    
+            'buttons'=>array(    
                 'delete'=>array(
-//                    'label'=>'',
                     'url'=>'$this->grid->controller->createUrl("/registration/delete", array("id"=>$data->primaryKey))',
-                )                    
+                ),                    
             ),
 		),
 	),
