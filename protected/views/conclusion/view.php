@@ -20,17 +20,21 @@ $this->menu=array(
 	'data'=>$model,
 	'attributes'=>array(
 		'id',
+//        array(
+//            'name'=>'patient_id',
+//            'value'=>$model->patient->fullname,
+//        ),
+//        array(
+//            'name'=>'mrtscan_id',
+//            'value'=>$model->mrtscan->name,
+//        ),
+//        array(
+//            'name'=>'owner_id',
+//            'value'=>$model->owner->fullname,            
+//        ),
         array(
-            'name'=>'patient_id',
-            'value'=>$model->patient->fullname,
-        ),
-        array(
-            'name'=>'mrtscan_id',
-            'value'=>$model->mrtscan->name,
-        ),
-        array(
-            'name'=>'owner_id',
-            'value'=>$model->owner->fullname,            
+            'name'=>'registration_id',
+            'value'=>$model->registration->mrtscan->name,
         ),
         array(
             'type'=>'raw',

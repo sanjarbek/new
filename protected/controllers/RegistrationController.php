@@ -413,4 +413,5 @@ class RegistrationController extends Controller
         Yii::app()->end();
         
     }
+
 }

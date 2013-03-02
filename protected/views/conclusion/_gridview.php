@@ -2,7 +2,7 @@
 $this->widget('bootstrap.widgets.TbGridView',array(
 	'id'=>'ConclusionGrid',
     'type'=>'striped condensed bordered',
-	'dataProvider'=>$model->with('patient', 'mrtscan', 'owner')->search(),
+	'dataProvider'=>$model->with('registration.mrtscan', 'registration.patient')->search(),
 	'filter'=>$model,
 	'columns'=>array(
 		array(
@@ -11,18 +11,15 @@ $this->widget('bootstrap.widgets.TbGridView',array(
                 'width'=>'40',
             )
         ),
+        'registration_id',
         array(
-            'name'=>'patient_id',
-            'value'=>'$data->patient->fullname',
+            'name'=>'patient',
+//            'header'=>'Пациент',
+            'value'=>'$data->registration->patient->fullname',
         ),
         array(
-            'name'=>'mrtscan_id',
-            'value'=>'$data->mrtscan->name',
-        ),
-        array(
-            'name'=>'owner_id',
-            'value'=>'$data->owner->fullname',
-            'filter'=>User::model()->getUsersList('Doctor'),
+            'name'=>'mrtscan',
+            'value'=>'$data->registration->mrtscan->name',
         ),
 		'description',
 		/*

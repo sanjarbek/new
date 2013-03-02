@@ -10,6 +10,9 @@ $this->menu=array(
 );
 ?>
 
-<h4>Новое заключение</h4>
+<h4>Загрузить заключение</h4>
 
-<?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+<?php echo $this->renderPartial('_form', array(
+    'model'=>$model,
+    'mrtscan_name'=>$mrtscan_name
+    )); ?>
