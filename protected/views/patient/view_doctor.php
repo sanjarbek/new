@@ -6,7 +6,6 @@ $this->breadcrumbs=array(
 
 $this->menu=array(
 	array('label'=>'Список','url'=>array('index')),
-	array('label'=>'Редактировать','url'=>array('update','id'=>$model->id)),
 );
 ?>
 
@@ -19,44 +18,23 @@ $this->beginWidget('bootstrap.widgets.TbBox', array(
     // the table will be 0-padding to the box
     'htmlOptions' => array('class'=>'bootstrap-widget-table')
 ));
-$this->widget('bootstrap.widgets.TbDetailView',array(
-	'data'=>$model,
-    'htmlOptions'=>array(
-//        'class'=>'span4',
-    ),
-	'attributes'=>array(
-		'id',
-		'fullname',
-		'phone',
-		'birthday',
-		array(
-            'name'=>'sex',
-            'value'=>$model->getSexText(),
-        ),
-        array(
-            'name'=>'status',
-            'value'=>$model->getStatusText(),
-        ),
-        array(
-            'name'=>'doctor_id',
-            'value'=>CHtml::encode($model->doctor->fullname),
-        ),
-        array(
-            'name'=>'report', 
-            'value'=>$model->getConclusionText(),
-        ),
-		'created_at',
-		array(
-            'name'=>'created_user',
-            'value'=>CHtml::encode($model->creator->fullname),
-        ),
-		'updated_at',
-        array(
-            'name'=>'updated_user',
-            'value'=>CHtml::encode($model->updater->fullname),
-        ),
-	),
-)); 
+
+if ($model->status == Patient::STATUS_NOT_FINISHED)
+{
+    $model->scenario = 'doctor-view';
+    $this->renderPartial('_editabledetailview_doctor', array(
+    'model'=>$model,
+));
+}
+else
+{
+    $this->renderPartial('_detailview_doctor', array(
+        'model'=>$model,
+    ));
+    
+}
+
+
 $this->endWidget();
 ?>
 </div>
@@ -76,6 +54,7 @@ $this->endWidget();
 <?php
     $regController->renderPartial('//registration/_gridview_doctor', array(
         'model'=>$registration,
+        'show_discont'=>($model->status==Patient::STATUS_NOT_FINISHED) ? true : false,
     ));
 ?>
 <?php

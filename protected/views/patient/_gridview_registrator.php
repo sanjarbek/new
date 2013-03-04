@@ -19,7 +19,7 @@ $this->widget('bootstrap.widgets.TbExtendedGridView',array(
     'afterAjaxUpdate'=>"js:function(){
         $('#datepicker_for_created_at').bdatepicker({'format':'yyyy-mm-dd', 'weekStart':'1', 'language':'ru', 'autoclose':'true'});
         }",
-    'pagerCssClass'=>'pagination pagination-mini pagination-centered',
+    'pagerCssClass'=>'pagination pagination-small pagination-centered',
     'responsiveTable'=>FALSE,
 	'filter'=>$model,
 	'columns'=>array(

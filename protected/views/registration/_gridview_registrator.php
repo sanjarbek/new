@@ -1,18 +1,24 @@
 <?php
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-$this->widget('bootstrap.widgets.TbGridView',array(
+if (isset($patient))
+{
+    $show_discont = ($patient->status==Patient::STATUS_NOT_FINISHED) ? true : false;
+}
+
+$this->widget('bootstrap.widgets.TbExtendedGridView',array(
 	'id'=>'RegistrationGridRegistrator',
 	'dataProvider'=>$model->with('mrtscan', 'conclus')->search(),
 //	'filter'=>$model,
     'enableSorting'=>false,
     'ajaxUrl'=> Yii::app()->createUrl('registration/patientRegistrations', array('pid'=>$model->patient_id)),
-    'type'=>'bordered condensed',
-    'template'=>'{items}{pager}{summary}',
+    'type'=>'bordered condensed hover',
+    'template'=>'{items}',
 	'columns'=>array(
+        array(
+            'name'=>'№',
+            'type'=>'raw',
+            'value'=>'$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1',
+        ),
 		array(
             'name'=>'id',
             'htmlOptions'=>array(
@@ -30,19 +36,24 @@ $this->widget('bootstrap.widgets.TbGridView',array(
             'class'=>'bootstrap.widgets.TbTotalSumColumn',
         ),
         array(
+            'class'=>'bootstrap.widgets.TbEditableColumn',
             'name'=>'discont',
-            'class'=>'bootstrap.widgets.TbJEditableColumn',
-            'saveURL'=>Yii::app()->createUrl('//registration/save'),
-            'jEditableOptions' => array(
-                'tooltip'=>'',
-                'type' => 'text',
-                // very important to get the attribute to update on the server!
-                'submitdata' => array(
-                    'attribute'=>'discont'
+            'visible'=>$show_discont,
+            'editable' => array(
+                'title'=>'Введите сумму скидки',
+                'url' => $this->createUrl('/registration/save'),
+				'placement' => 'top',
+                'options'=>array(
+                    'success' => 'js: function() {
+                        $.fn.yiiGridView.update("RegistrationGridRegistrator");
+                    }',
                 ),
-                'cssclass' => 'form',
-                'width' => '150px',
+//				'inputclass' => 'span4',
             )
+        ),
+        array(
+            'name'=>'discont',
+            'visible'=>!$show_discont,
         ),
 		array(
             'name'=>'price_with_discont',
@@ -58,6 +69,7 @@ $this->widget('bootstrap.widgets.TbGridView',array(
 		array(
 			'class'=>'bootstrap.widgets.TbButtonColumn',
             'template'=>'{delete}',
+            'visible'=>$show_discont,
             'buttons'=>array(    
                 'delete'=>array(
                     'url'=>'$this->grid->controller->createUrl("/registration/delete", array("id"=>$data->primaryKey))',

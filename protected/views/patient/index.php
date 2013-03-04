@@ -16,13 +16,13 @@ $this->menu=array(
     
     if (Yii::app()->user->checkAccess('Registrator'))
     {
-        $this->renderPartial('_registrator_gridview', array(
+        $this->renderPartial('_gridview_registrator', array(
             'model'=>$model,
         ));
     }
     else if (Yii::app()->user->checkAccess('Doctor'))
     {
-        $this->renderPartial('_doctor_gridview', array(
+        $this->renderPartial('_gridview_doctor', array(
             'model'=>$model,
         ));
     }

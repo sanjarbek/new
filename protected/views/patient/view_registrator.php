@@ -24,6 +24,7 @@ $this->menu=array(
                     )) . '");',
             'data-toggle'=>'modal',
         ),
+        'visible' => ($model->status == Patient::STATUS_NOT_FINISHED) ? true : false,
     ),
 );
 ?>
@@ -37,65 +38,45 @@ $this->beginWidget('bootstrap.widgets.TbBox', array(
     // the table will be 0-padding to the box
     'htmlOptions' => array('class'=>'bootstrap-widget-table')
 ));
-$this->widget('bootstrap.widgets.TbDetailView',array(
-	'data'=>$model,
-    'htmlOptions'=>array(
-//        'class'=>'span4',
-    ),
-	'attributes'=>array(
-		'id',
-		'fullname',
-		'phone',
-		'birthday',
-		array(
-            'name'=>'sex',
-            'value'=>$model->getSexText(),
-        ),
-        array(
-            'name'=>'status',
-            'value'=>$model->getStatusText(),
-        ),
-        array(
-            'name'=>'doctor_id',
-            'value'=>CHtml::encode($model->doctor->fullname),
-        ),
-        array(
-            'name'=>'report', 
-            'value'=>$model->getConclusionText(),
-        ),
-		'created_at',
-		array(
-            'name'=>'created_user',
-            'value'=>CHtml::encode($model->creator->fullname),
-        ),
-		'updated_at',
-        array(
-            'name'=>'updated_user',
-            'value'=>CHtml::encode($model->updater->fullname),
-        ),
-	),
-)); 
+
+if ($model->status == Patient::STATUS_NOT_FINISHED)
+{
+    $model->scenario = 'registrator-view';
+    $this->renderPartial('_editabledetailview_registrator', array(
+        'model'=>$model,
+    ));
+}
+else
+{
+    $this->renderPartial('_detailview_registrator', array(
+        'model'=>$model,
+    ));
+    
+}
+
 $this->endWidget();
 ?>
 </div>
 <div class="row-fluid">
 <?php
     $this->beginWidget('bootstrap.widgets.TbBox', array(
-    'title' => 'Области исследований',
-    'headerIcon' => 'icon-th-list',
-    // when displaying a table, if we include bootstra-widget-table class
-    // the table will be 0-padding to the box
-    'htmlOptions' => array('class'=>'bootstrap-widget-table')
-)); 
+        'title' => 'Области исследований',
+        'headerIcon' => 'icon-th-list',
+        // when displaying a table, if we include bootstra-widget-table class
+        // the table will be 0-padding to the box
+        'htmlOptions' => array('class'=>'bootstrap-widget-table')
+    )); 
 ?>
 <?php
     $this->renderPartial('/registration/_gridview_registrator', array(
         'model'=>$registration,
+        'show_discont'=>($model->status==Patient::STATUS_NOT_FINISHED) ? true : false,
     ));
 ?>
 <?php
     $this->endWidget();
 ?>
+</div>
 <?php 
     $this->beginWidget('bootstrap.widgets.TbModal', array(
         'id'=>'myModal',
@@ -116,4 +97,4 @@ $this->endWidget();
 <?php
     $this->endWidget();
 ?>
-</div>
+

@@ -1,6 +1,5 @@
 <?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
 	'id'=>'patient-form',
-    'action'=>array('patient/create'),
     'type'=>'horizontal',
 	'enableAjaxValidation'=>false,
     'htmlOptions'=>array(

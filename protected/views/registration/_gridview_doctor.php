@@ -1,9 +1,9 @@
 <?php
+if (isset($patient))
+{
+    $show_discont = ($patient->status==Patient::STATUS_NOT_FINISHED) ? true : false;
+}
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 $this->widget('bootstrap.widgets.TbGridView',array(
 	'id'=>'RegistrationGridDoctor',
 	'dataProvider'=>$model->with('mrtscan', 'conclus')->search(),
@@ -45,6 +45,7 @@ $this->widget('bootstrap.widgets.TbGridView',array(
         array(
 			'class'=>'bootstrap.widgets.TbButtonColumn',
             'template'=>'{delete}',
+            'visible'=>$show_discont,
             'buttons'=>array(
                 'delete'=>array(
                     'visible'=>'$data->conclus!=null',
