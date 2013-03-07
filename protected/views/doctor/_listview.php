@@ -14,7 +14,7 @@ $this->widget('bootstrap.widgets.TbGridView',array(
         array(
             'type'=>'raw',
             'name'=>'hospital_id',
-            'value'=>'CHtml::link(CHtml::encode($data->hospital->name), 
+            'value'=>'CHtml::link(CHtml::encode($data->hospital->shortname), 
                     array("hospital/view", "id"=>$data->hospital_id))',
         ),
 		'fullname',

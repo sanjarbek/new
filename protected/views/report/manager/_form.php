@@ -23,7 +23,7 @@ $form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
     $hospitals = array();
     if (isset($model->manager)) 
         $hospitals = CHtml::listData(Hospital::model()->findAll(
-                'manager_id=:managerId', array(':managerId'=>$model->manager)), 'id', 'name');
+                'manager_id=:managerId', array(':managerId'=>$model->manager)), 'id', 'shortname');
     
     $hospitals = array('0'=>'Все') + $hospitals; 
     

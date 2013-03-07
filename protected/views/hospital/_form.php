@@ -6,8 +6,16 @@
 
 
 	<?php echo $form->errorSummary($model); ?>
+    
+    <?php echo $form->select2Row($model, 'parent_id', array(
+        'asDropDownList'=>true,
+        'data'=>$model->getParentHospitalsList(),
+        
+    )); ?>
 
-	<?php echo $form->textFieldRow($model,'name',array('class'=>'span5','maxlength'=>45)); ?>
+	<?php echo $form->textFieldRow($model,'shortname',array('class'=>'span5','maxlength'=>45)); ?>
+
+	<?php echo $form->textAreaRow($model,'fullname',array('class'=>'span5','rows'=>5, 'maxlength'=>255)); ?>
 
 	<?php echo $form->textFieldRow($model,'phone',array('class'=>'span3','maxlength'=>20)); ?>
 

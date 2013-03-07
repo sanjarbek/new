@@ -54,7 +54,7 @@ class ReportController extends Controller
                 {
                     if ($model->month!=0)
                     {
-                        $sql = 'SELECT h.name as hospital, 
+                        $sql = 'SELECT h.shortname as hospital, 
                         d.id as doctorId, 
                         d.fullname as doctor, 
                         day(p.created_at) as day, 
@@ -62,7 +62,7 @@ class ReportController extends Controller
                         FROM hospitals h  JOIN doctors d on (h.id=d.hospital_id) 
                         LEFT JOIN (select * from patients where month(patients.created_at)=:month and year(patients.created_at)=:year) p ON d.id=p.doctor_id
 WHERE h.manager_id=:manager and h.id=:hospital and d.id=:doctor
-GROUP BY h.name, d.id, d.fullname, day(p.created_at)';
+GROUP BY h.shortname, d.id, d.fullname, day(p.created_at)';
                         $days_count_month = cal_days_in_month(CAL_GREGORIAN, $model->month, $model->year);
                         
                         $command = Yii::app()->db->createCommand($sql);
@@ -82,7 +82,7 @@ GROUP BY h.name, d.id, d.fullname, day(p.created_at)';
                     }
                     else // Выбрана опция Все для месяца
                     {
-                        $sql = 'SELECT h.name as hospital, 
+                        $sql = 'SELECT h.shortname as hospital, 
                         d.id as doctorId, 
                         d.fullname as doctor, 
                         month(p.created_at) as month, 
@@ -90,7 +90,7 @@ GROUP BY h.name, d.id, d.fullname, day(p.created_at)';
                         FROM hospitals h  JOIN doctors d on (h.id=d.hospital_id) 
                         LEFT JOIN (select * from patients where year(patients.created_at)=:year) p ON d.id=p.doctor_id
 WHERE h.manager_id=:manager and h.id=:hospital and d.id=:doctor
-GROUP BY h.name, d.id, d.fullname, month(p.created_at)';
+GROUP BY h.shortname, d.id, d.fullname, month(p.created_at)';
                         $command = Yii::app()->db->createCommand($sql);;
                         $command->bindValue(':year', $model->year);
                         $command->bindValue(':manager', $model->manager);
@@ -106,7 +106,7 @@ GROUP BY h.name, d.id, d.fullname, month(p.created_at)';
                 }
                 else // Если выбрана опция Все для годов
                 {
-                    $sql = 'SELECT h.name as hospital, 
+                    $sql = 'SELECT h.shortname as hospital, 
                     d.id as doctorId, 
                     d.fullname as doctor, 
                     month(p.created_at) as month, 
@@ -114,7 +114,7 @@ GROUP BY h.name, d.id, d.fullname, month(p.created_at)';
                     FROM hospitals h  JOIN doctors d on (h.id=d.hospital_id) 
                     LEFT JOIN (select * from patients) p ON d.id=p.doctor_id
 WHERE h.manager_id=:manager and h.id=:hospital and d.id=:doctor
-GROUP BY h.name, d.id, d.fullname, month(p.created_at)';
+GROUP BY h.shortname, d.id, d.fullname, month(p.created_at)';
                     $command = Yii::app()->db->createCommand($sql);
                     $command->bindValue(':manager', $model->manager);
                     $command->bindValue(':hospital', $model->hospital);
@@ -135,7 +135,7 @@ GROUP BY h.name, d.id, d.fullname, month(p.created_at)';
                 {
                     if ($model->month!=0)
                     {
-                        $sql = 'SELECT h.name as hospital, 
+                        $sql = 'SELECT h.shortname as hospital, 
                             d.id as doctorId, 
                             d.fullname as doctor, 
                             day(p.created_at) as day, 
@@ -143,7 +143,7 @@ GROUP BY h.name, d.id, d.fullname, month(p.created_at)';
                             FROM hospitals h  JOIN doctors d on (h.id=d.hospital_id) 
                             LEFT JOIN (select * from patients where month(patients.created_at)=:month and year(patients.created_at)=:year) p ON d.id=p.doctor_id
     WHERE h.manager_id=:manager and h.id=:hospital
-    GROUP BY h.name, d.id, d.fullname, day(p.created_at)';
+    GROUP BY h.shortname, d.id, d.fullname, day(p.created_at)';
                         $days_count_month = cal_days_in_month(CAL_GREGORIAN, $model->month, $model->year);
                         $command = Yii::app()->db->createCommand($sql);
                         $command->bindValue(':month', $model->month);
@@ -161,7 +161,7 @@ GROUP BY h.name, d.id, d.fullname, month(p.created_at)';
                     }
                     else
                     {
-                        $sql = 'SELECT h.name as hospital, 
+                        $sql = 'SELECT h.shortname as hospital, 
                             d.id as doctorId, 
                             d.fullname as doctor, 
                             month(p.created_at) as month, 
@@ -169,7 +169,7 @@ GROUP BY h.name, d.id, d.fullname, month(p.created_at)';
                             FROM hospitals h  JOIN doctors d on (h.id=d.hospital_id) 
                             LEFT JOIN (select * from patients where year(patients.created_at)=:year) p ON d.id=p.doctor_id
     WHERE h.manager_id=:manager and h.id=:hospital
-    GROUP BY h.name, d.id, d.fullname, month(p.created_at)';
+    GROUP BY h.shortname, d.id, d.fullname, month(p.created_at)';
                         
                         $command = Yii::app()->db->createCommand($sql);
                         
@@ -187,7 +187,7 @@ GROUP BY h.name, d.id, d.fullname, month(p.created_at)';
                 }
                 else
                 {
-                    $sql = 'SELECT h.name as hospital, 
+                    $sql = 'SELECT h.shortname as hospital, 
                         d.id as doctorId, 
                         d.fullname as doctor, 
                         month(p.created_at) as month, 
@@ -195,7 +195,7 @@ GROUP BY h.name, d.id, d.fullname, month(p.created_at)';
                         FROM hospitals h  JOIN doctors d on (h.id=d.hospital_id) 
                         LEFT JOIN (select * from patients ) p ON d.id=p.doctor_id
 WHERE h.manager_id=:manager and h.id=:hospital
-GROUP BY h.name, d.id, d.fullname, month(p.created_at)';
+GROUP BY h.shortname, d.id, d.fullname, month(p.created_at)';
                     
                     $command = Yii::app()->db->createCommand($sql);
                     $command->bindValue(':manager', $model->manager);
@@ -219,7 +219,7 @@ GROUP BY h.name, d.id, d.fullname, month(p.created_at)';
                 if ((int)$model->month!=0)
                 {
                     $sql = 'SELECT h.id as hospitalId,
-                        h.name as hospital, 
+                        h.shortname as hospital, 
                         day(p.created_at) as day, 
                         count(p.doctor_id) as count 
                         FROM hospitals h LEFT JOIN doctors d 
@@ -228,7 +228,7 @@ GROUP BY h.name, d.id, d.fullname, month(p.created_at)';
                             WHERE year(patients.created_at)=:year and month(patients.created_at)=:month)  p 
                             ON d.id=p.doctor_id
                         WHERE h.manager_id=:manager
-                        GROUP BY h.id, h.name,  day(p.created_at)
+                        GROUP BY h.id, h.shortname,  day(p.created_at)
                             ';  
                     $days_count_month = cal_days_in_month(CAL_GREGORIAN, $model->month, $model->year);
                     
@@ -249,7 +249,7 @@ GROUP BY h.name, d.id, d.fullname, month(p.created_at)';
                 {
                     $sql = 'SELECT 
                         h.id as hospitalId,
-                        h.name as hospital, 
+                        h.shortname as hospital, 
                         MONTHNAME(p.created_at) as month, 
                         count(p.doctor_id) as count 
                         FROM hospitals h LEFT JOIN doctors d 
@@ -258,7 +258,7 @@ GROUP BY h.name, d.id, d.fullname, month(p.created_at)';
                             WHERE year(patients.created_at)=:year)  p 
                             ON d.id=p.doctor_id
                         WHERE h.manager_id=:manager
-                        GROUP BY h.id, h.name,  MONTHNAME(p.created_at)
+                        GROUP BY h.id, h.shortname,  MONTHNAME(p.created_at)
                             ';  
                     $command = Yii::app()->db->createCommand($sql);
                     $command->bindValue(':manager', $model->manager);
@@ -277,7 +277,7 @@ GROUP BY h.name, d.id, d.fullname, month(p.created_at)';
             {
                 $sql = 'SELECT 
                     h.id as hospitalId,
-                    h.name as hospital, 
+                    h.shortname as hospital, 
                     MONTHNAME(p.created_at) as month, 
                     count(p.doctor_id) as count 
                     FROM hospitals h LEFT JOIN doctors d 
@@ -285,7 +285,7 @@ GROUP BY h.name, d.id, d.fullname, month(p.created_at)';
                         LEFT JOIN patients p 
                         ON d.id=p.doctor_id
                     WHERE h.manager_id=:manager
-                    GROUP BY h.id, h.name,  MONTHNAME(p.created_at)
+                    GROUP BY h.id, h.shortname,  MONTHNAME(p.created_at)
                         ';
                 $command = Yii::app()->db->createCommand($sql);
                 $command->bindValue(':manager', $model->manager);

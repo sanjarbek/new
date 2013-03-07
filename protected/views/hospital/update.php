@@ -1,7 +1,7 @@
 <?php
 $this->breadcrumbs=array(
 	'Больницы'=>array('index'),
-	$model->name=>array('view','id'=>$model->id),
+	$model->shortname=>array('view','id'=>$model->id),
 	'Редактировать',
 );
 
