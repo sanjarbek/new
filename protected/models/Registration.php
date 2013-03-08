@@ -10,9 +10,9 @@
  * @property string $price
  * @property string $discont
  * @property string $price_with_discont
- * @property integer $status
- * @property integer $report_status
- * @property string $report_text
+ * @property integer $status Conclusion status
+ * @property string $conclusion
+ * @property string $owner_id Doctor who prepared conclusion file
  * @property string $created_at
  * @property string $updated_at
  * @property integer $created_user
@@ -26,6 +26,8 @@ class Registration extends MasterModel
 {
     const STATUS_NEW = 0;
     const STATUS_FINISHED = 1;
+    
+    public $file;
     
 	/**
 	 * @return string the associated database table name
@@ -69,7 +71,10 @@ class Registration extends MasterModel
                 self::STATUS_NEW,
                 self::STATUS_FINISHED,
             )),
-			array('conclusion, owner_id', 'safe'),
+            
+			array('conclusion', 'length', 'max'=>254),
+            array('owner_id', 'numerical', 'integerOnly'=>true),
+
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, patient_id, mrtscan_id, price, discont, price_with_discont, status, created_at, updated_at, created_user, updated_user', 'safe', 'on'=>'search'),
@@ -125,6 +130,7 @@ class Registration extends MasterModel
 			'patient' => array(self::BELONGS_TO, 'Patient', 'patient_id'),
             'creator' => array(self::BELONGS_TO, 'User', 'created_user'),
             'updater' => array(self::BELONGS_TO, 'User', 'updated_user'),
+            'conclus' => array(self::HAS_ONE, 'Conclusion', 'registration_id'),
 		);
 	}
 
@@ -244,5 +250,17 @@ class Registration extends MasterModel
         return isset($status_options[$this->status])
             ? $status_options[$this->status]
             : (Yii::t('status', 'Неизвестный статус ') . $this->status);
+    }
+    
+    public function getUploadFilePath($patientId)
+    {
+        return Yii::app()->basePath . DIRECTORY_SEPARATOR .'..'.
+                    Yii::getPathOfAlias('uploads.conclusions').
+                    DIRECTORY_SEPARATOR.$patientId;
+    }
+    
+    public function getDownloadFilePath()
+    {
+        return Yii::getPathOfAlias('uploads.conclusions').DIRECTORY_SEPARATOR.$this->patient_id;
     }
 }

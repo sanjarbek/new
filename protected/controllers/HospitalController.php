@@ -130,7 +130,7 @@ class HospitalController extends Controller
 		$dataProvider=new CActiveDataProvider('Hospital', array(
             'criteria'=>array(
                 'condition'=>'t.status='.Hospital::STATUS_ENABLED,
-                'order'=>'name',
+                'order'=>'shortname',
                 'with'=>array('manager'),
             )
         ));
@@ -234,7 +234,7 @@ class HospitalController extends Controller
         
         echo CHtml::tag('option', array('value'=>0),CHtml::encode('Все'), true);
         foreach ($hospitals as $hospital)
-            echo CHtml::tag('option', array('value'=>$hospital->id),CHtml::encode($hospital->name),true);
+            echo CHtml::tag('option', array('value'=>$hospital->id),CHtml::encode($hospital->shortname),true);
 
         Yii::app()->end();
         

@@ -12,7 +12,7 @@
             'type'=>'raw',
             'value'=>'$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1',
         ),
-        'name',
+        'shortname',
         'phone',
         array(
             'type'=>'raw',

@@ -16,7 +16,12 @@ $this->widget('bootstrap.widgets.TbGridView',array(
                 'width'=>'40px',
             ),
         ),
-		'name',
+        array(
+            'name'=>'parent_id',
+            'value'=>'$data->parent_hospital->shortname',
+            'filter'=>$model->getParentHospitalsList(),
+        ),
+		'shortname',
 		'phone',
         array(
             'type'=>'raw',

@@ -257,7 +257,7 @@ class RegistrationController extends Controller
     /**
      * The specified patient registrations only
      */
-    public function _getGridViewPatientRegistrationGrid()
+    public function _getGridViewRegistrationGridRegistrator()
     {
         $model=new Registration('search');
 		$model->unsetAttributes();  // clear any default values
@@ -266,7 +266,7 @@ class RegistrationController extends Controller
 
         $model->patient_id = $this->_patient->id;
         
-        $this->renderPartial('_gridviewpatientsregistrations', array(
+        $this->renderPartial('_gridview_registrator', array(
             'model'=>$model,
             'patient'=>$this->_patient,
         ));
@@ -295,6 +295,19 @@ class RegistrationController extends Controller
     {
         $this->renderPartial('_gridviewpatientsregistrations', array(
             'patient_id'=>$this->_patient->id,
+        ));
+    }
+    
+    public function _getGridViewRegistrationGridDoctor()
+    {
+        $model=new Registration('search');
+		$model->unsetAttributes();  // clear any default values
+		
+        $model->patient_id = $this->_patient->id;
+        
+        $this->renderPartial('_gridview_doctor', array(
+            'model'=>$model,
+            'patient'=>  $this->_patient,
         ));
     }
     
@@ -375,9 +388,51 @@ class RegistrationController extends Controller
     {
         $r = Yii::app()->getRequest();
         
-        $attribute = $r->getParam('attribute');
+        $attribute = $r->getParam('name');
         $value = $r->getParam('value');
-        $registrationId  = $r->getParam('id');
+        $registrationId  = $r->getParam('pk');
+       
+        $registration = Registration::model()->findByPk($registrationId);
+        if(is_null($registration))
+            Yii::app()->end();
+        
+        $old_value = $registration->{$attribute};
+        $price_with_discont_old_value = $registration->price_with_discont;
+        // we can check whether is comming from a specific grid id too
+        // avoided for the sake of the example
+//        if($r->getParam('editable'))
+//        {
+            $registration->{$attribute} = $value;
+            
+            if ($attribute === 'discont')
+            {
+                $registration->price_with_discont = $registration->price-$registration->discont;
+                if ($registration->validate(array('discont', 'price_with_discont')) && $registration->saveAttributes(array('discont', 'price_with_discont')))
+                {
+//                    echo $value;
+//                    echo CHtml::script("window.$.fn.yiiGridView.update('RegistrationGridRegistrator');");
+                }
+                else
+                {
+                    $error = $registration->getError($attribute);
+
+                    echo $old_value;                
+                    echo CHtml::script("alert('{$error}');");
+                }
+            }
+                
+//        }
+        
+        Yii::app()->end();
+        
+    }
+    public function actionSaveOld()
+    {
+        $r = Yii::app()->getRequest();
+        
+        $attribute = $r->getParam('name');
+        $value = $r->getParam('value');
+        $registrationId  = $r->getParam('pk');
        
         $registration = Registration::model()->findByPk($registrationId);
         if(is_null($registration))
@@ -397,7 +452,7 @@ class RegistrationController extends Controller
                 if ($registration->validate(array('discont', 'price_with_discont')) && $registration->saveAttributes(array('discont', 'price_with_discont')))
                 {
                     echo $value;
-                    echo CHtml::script("window.$.fn.yiiGridView.update('PatientRegistrationGrid');");
+                    echo CHtml::script("window.$.fn.yiiGridView.update('RegistrationGridRegistrator');");
                 }
                 else
                 {
@@ -413,4 +468,5 @@ class RegistrationController extends Controller
         Yii::app()->end();
         
     }
+
 }

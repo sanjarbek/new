@@ -11,7 +11,7 @@ class ConclusionController extends Controller
     /**
      * @var private property containing the associated Patient model instance.
      */
-    private $_patient = null;
+    private $_registration = null;
     
 	/**
 	 * @return array action filters
@@ -19,7 +19,7 @@ class ConclusionController extends Controller
 	public function filters()
 	{
 		return CMap::mergeArray(parent::filters(), array(
-            'patientContext + create',
+            'registrationContext + create',
             array( 
                 'application.filters.GridViewHandler',
             ),
@@ -31,18 +31,18 @@ class ConclusionController extends Controller
      * It is called before the actionCreate() action method is run in order to ensure a proper patient context
      */
 
-    public function filterPatientContext($filterChain)
+    public function filterRegistrationContext($filterChain)
     {
         //set the project identifier based on either the GET or POST input
         //request variables, since we allow both types for our actions
 
-        $patientId = null;
-        if(isset($_GET['pid']))
-            $patientId = $_GET['pid'];
-        else if (isset($_POST['pid']))
-            $patientId = $_POST['pid'];
+        $registrationId = null;
+        if(isset($_GET['rid']))
+            $registrationId = $_GET['rid'];
+        else if (isset($_POST['rid']))
+            $registrationId = $_POST['rid'];
 
-        $this->loadPatient($patientId);
+        $this->loadRegistration($registrationId);
 
         // complete the running of other filters and execute the requested action
         $filterChain->run();
@@ -53,18 +53,18 @@ class ConclusionController extends Controller
     * @patient_id the primary identifier of the associated Patient
     * @return object the Project data model based on the primary key
     */
-    protected function loadPatient($patient_id)
+    protected function loadRegistration($registrationId)
     {
         //if the project property is null, create it based on input id
-        if($this->_patient===null)
+        if($this->_registration === null)
         {
-            $this->_patient=Patient::model()->findbyPk($patient_id);
-            if($this->_patient===null)
+            $this->_registration = Registration::model()->findbyPk($registrationId);
+            if($this->_registration === null)
             {
-                throw new CHttpException(404,'Пациент не указан.');
+                throw new CHttpException(404,'Область исследования не указан.');
             }
         }
-        return $this->_patient;
+        return $this->_registration;
     }
 
 	/**
@@ -92,13 +92,13 @@ class ConclusionController extends Controller
 		if(isset($_POST['Conclusion']))
 		{
 			$model->attributes=$_POST['Conclusion'];
-            $model->patient_id = $this->_patient->id;
+            $model->registration_id = $this->_registration->id;
             
             $model->conclusion = CUploadedFile::getInstance($model, 'conclusion');
             if ($model->conclusion !== null  && 
                     $model->validate(array('conclusion')))
             {
-                $file_path = $model->getUploadFilePath($model->patient_id);
+                $file_path = $model->getUploadFilePath($model->registration->patient_id);
                 
                 // проверка на существования директории пациента
                 if (!file_exists($file_path))
@@ -133,14 +133,14 @@ class ConclusionController extends Controller
             $this->layout = '//layouts/iframe';
             $this->render('_form', array(
                 'model'=>$model,
-                'patientId'=>$this->_patient->id,
+                'mrtscan_name'=>$this->_registration->mrtscan->name,
             ));
         }
         else
         {
             $this->render('create',array(
                 'model'=>$model,
-                'patientId'=>$this->_patient->id,
+                'mrtscan_name'=>$this->_registration->mrtscan->name,
             ));
         }
 	}
@@ -150,24 +150,24 @@ class ConclusionController extends Controller
 	 * If update is successful, the browser will be redirected to the 'view' page.
 	 * @param integer $id the ID of the model to be updated
 	 */
-	public function actionUpdate($id)
-	{
-		$model=$this->loadModel($id);
-
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
-
-		if(isset($_POST['Conclusion']))
-		{
-			$model->attributes=$_POST['Conclusion'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
-		}
-
-		$this->render('update',array(
-			'model'=>$model,
-		));
-	}
+//	public function actionUpdate($id)
+//	{
+//		$model=$this->loadModel($id);
+//
+//		// Uncomment the following line if AJAX validation is needed
+//		// $this->performAjaxValidation($model);
+//
+//		if(isset($_POST['Conclusion']))
+//		{
+//			$model->attributes=$_POST['Conclusion'];
+//			if($model->save())
+//				$this->redirect(array('view','id'=>$model->id));
+//		}
+//
+//		$this->render('update',array(
+//			'model'=>$model,
+//		));
+//	}
 
 	/**
 	 * Deletes a particular model.
@@ -181,14 +181,14 @@ class ConclusionController extends Controller
 			// we only allow deletion via POST request
 			$model = $this->loadModel($id);
             
-            $params = array("owner"=>$model->owner_id);
-            
-            if (!Yii::app()->user->checkAccess('deleteOwnConclusion',$params))
-            {
-                throw  new CHttpException(403, 'У вас недостаточно прав для выполнения указанного действия.');
-            }
+//            $params = array("owner"=>$model->owner_id);
+//            
+//            if (!Yii::app()->user->checkAccess('deleteOwnConclusion',$params))
+//            {
+//                throw  new CHttpException(403, 'У вас недостаточно прав для выполнения указанного действия.');
+//            }
    
-            $file_path = $model->getUploadFilePath($model->patient_id).DIRECTORY_SEPARATOR.$model->file;
+            $file_path = $model->getUploadFilePath($model->registration->patient_id).DIRECTORY_SEPARATOR.$model->file;
 
             if(file_exists($file_path))
                 unlink($file_path);

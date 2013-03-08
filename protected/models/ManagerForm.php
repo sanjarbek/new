@@ -6,7 +6,7 @@
  */
 
 /**
- * Description of ReportForm
+ * Description of ManagerForm
  *
  * @author Sanzharbek Amatov <asanjarbek@gmail.com>
  */

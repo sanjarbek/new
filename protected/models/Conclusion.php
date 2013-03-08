@@ -5,9 +5,7 @@
  *
  * The followings are the available columns in table 'conclusions':
  * @property integer $id
- * @property integer $patient_id
- * @property integer $mrtscan_id
- * @property integer $owner_id
+ * @property integer $registration_id
  * @property string $file
  * @property string $description
  * @property string $created_at
@@ -16,13 +14,13 @@
  * @property integer $updated_user
  *
  * The followings are the available model relations:
- * @property Users $owner
- * @property Patients $patient
- * @property Mrtscans $mrtscan
+ * @property Registration $registration
  */
 class Conclusion extends MasterModel
 {
     public $conclusion;
+    public $patient;
+    public $mrtscan;
 	/**
 	 * @return string the associated database table name
 	 */
@@ -40,13 +38,14 @@ class Conclusion extends MasterModel
 		// will receive user inputs.
 		return array(
             array('conclusion', 'length', 'max' => 255, 'tooLong' => '{attribute} слишком длинный (max {max} chars).', 'on' => 'upload'),
-            array('conclusion', 'file', 'types' => 'docx,xlsx', 'maxSize' => 1024 * 512, 'tooLarge' => 'Размер файлы должен быть меньше 512 КБ !!!', 'on'=>'upload'),
-			array('patient_id, mrtscan_id, owner_id, file, description, created_at, updated_at, created_user, updated_user', 'required'),
-			array('patient_id, mrtscan_id, owner_id, created_user, updated_user', 'numerical', 'integerOnly'=>true),
+            array('conclusion', 'file', 'types' => 'docx,xlsx', 'maxSize' => 1024 * 512, 'tooLarge' => 'Размер файлы должен быть меньше 512 КБ !!!', 'on'=>'upload'),            
+			array('registration_id, file, description, created_at, updated_at, created_user, updated_user', 'required'),
+			array('registration_id, created_user, updated_user', 'numerical', 'integerOnly'=>true),
+//            array('registration_id', 'unique', 'message'=>'Для данного пациента для данной области исследования уже загружено заключение. Чтобы заменить удалите загруженное заключение.'),
 			array('file, description', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, patient_id, mrtscan_id, owner_id, file, description, created_at, updated_at, created_user, updated_user', 'safe', 'on'=>'search'),
+			array('id, registration_id, file, description, created_at, updated_at, created_user, updated_user', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -58,9 +57,7 @@ class Conclusion extends MasterModel
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'owner' => array(self::BELONGS_TO, 'User', 'owner_id'),
-			'patient' => array(self::BELONGS_TO, 'Patient', 'patient_id'),
-			'mrtscan' => array(self::BELONGS_TO, 'Mrtscan', 'mrtscan_id'),
+			'registration' => array(self::BELONGS_TO, 'Registration', 'registration_id'),
 		);
 	}
 
@@ -71,9 +68,7 @@ class Conclusion extends MasterModel
 	{
 		return array(
 			'id' => 'ID',
-			'patient_id' => 'Пациент',
-			'mrtscan_id' => 'Область исследования',
-			'owner_id' => 'Исследовавший врач',
+			'registration_id' => 'Номер регистрации',
 			'file' => 'Файл',
 			'description' => 'Описание',
 			'created_at' => 'Дата создания',
@@ -81,6 +76,8 @@ class Conclusion extends MasterModel
 			'created_user' => 'Создал',
 			'updated_user' => 'Редактировал',
             'conclusion' => 'Заключение',
+            'patient' => 'Пациент',
+            'mrtscan' => 'Область исследования',
 		);
 	}
 
@@ -103,15 +100,18 @@ class Conclusion extends MasterModel
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('t.id',$this->id);
-		$criteria->compare('t.patient_id',$this->patient_id);
-		$criteria->compare('t.mrtscan_id',$this->mrtscan_id);
-		$criteria->compare('t.owner_id',$this->owner_id);
+		$criteria->compare('t.registration_id',$this->registration_id);
 		$criteria->compare('t.file',$this->file,true);
 		$criteria->compare('t.description',$this->description,true);
 		$criteria->compare('t.created_at',$this->created_at,true);
 		$criteria->compare('t.updated_at',$this->updated_at,true);
 		$criteria->compare('t.created_user',$this->created_user);
 		$criteria->compare('t.updated_user',$this->updated_user);
+        
+        $criteria->compare('t.registration.patient_id', $this->patient);
+        $criteria->compare('t.registration.mrtscan_id', $this->mrtscan);
+        
+        $criteria->with = array('registration.mrtscan', 'registration.patient');
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -158,6 +158,6 @@ class Conclusion extends MasterModel
     
     public function getDownloadFilePath()
     {
-        return Yii::getPathOfAlias('uploads.conclusions').DIRECTORY_SEPARATOR.$this->patient_id;
+        return Yii::getPathOfAlias('uploads.conclusions').DIRECTORY_SEPARATOR.$this->registration->patient_id;
     }
 }

@@ -127,7 +127,7 @@ class DoctorController extends Controller
 		$dataProvider=new CActiveDataProvider('Doctor', array(
             'criteria'=>array(
                 'condition'=>'t.status='.Doctor::STATUS_ENABLED,
-                'order'=>'hospital_id, type, fullname',
+                'order'=>'hospital_id, type, t.fullname',
                 'with'=>array('hospital'),
             ),
         ));

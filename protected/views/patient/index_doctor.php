@@ -14,7 +14,7 @@ $this->menu=array(
 <?php
     $this->layout = '//layouts/column1';
     
-    $this->renderPartial('_doctor_gridview', array(
+    $this->renderPartial('_gridview_doctor', array(
         'model'=>$model,
     ));
     

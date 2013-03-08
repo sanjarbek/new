@@ -5,7 +5,9 @@
  *
  * The followings are the available columns in table 'hospitals':
  * @property integer $id
- * @property string $name
+ * @property integer $parent
+ * @property string $shortname
+ * @property string $fullname
  * @property string $phone
  * @property integer $manager_id
  * @property integer $status
@@ -20,8 +22,8 @@
  */
 class Hospital extends MasterModel
 {
-    const STATUS_ENABLED = 0;
-    const STATUS_DISABLED = 1;
+    const STATUS_ENABLED = 1;
+    const STATUS_DISABLED = 0;
     
 	/**
 	 * @return string the associated database table name
@@ -39,8 +41,8 @@ class Hospital extends MasterModel
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, phone, manager_id, status, created_at, updated_at, created_user, updated_user', 'required'),
-			array('manager_id, status, created_user, updated_user', 'numerical', 'integerOnly'=>true),
+			array('parent_id, shortname, fullname, phone, manager_id, status, created_at, updated_at, created_user, updated_user', 'required'),
+			array('parent_id, manager_id, status, created_user, updated_user', 'numerical', 'integerOnly'=>true),
             array('status', 'in', 'range'=>array(
                 self::STATUS_DISABLED,
                 self::STATUS_ENABLED,
@@ -53,10 +55,11 @@ class Hospital extends MasterModel
                 'message' => 'The specified manager does not exist.',
                 'skipOnError'=>false,
             ),
-			array('name, phone', 'length', 'max'=>45),
+			array('shortname, phone', 'length', 'max'=>45),
+            array('fullname', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, name, phone, manager_id, status, created_at, updated_at, created_user, updated_user', 'safe', 'on'=>'search'),
+			array('id, shortname, fullname, phone, manager_id, status, created_at, updated_at, created_user, updated_user', 'safe', 'on'=>'search'),
 		);
 	}
     
@@ -64,7 +67,13 @@ class Hospital extends MasterModel
         return array(
             'active'=>array(
                 'condition'=>'status='.self::STATUS_ENABLED,
-            )
+            ),
+            'parents'=>array(
+                'condition'=>'parent_id=1',
+            ),
+            'doctor'=>array(
+                'condition'=>'manager_id='.Yii::app()->user->id,
+            ),
         );
     }
     
@@ -80,6 +89,8 @@ class Hospital extends MasterModel
 			'manager' => array(self::BELONGS_TO, 'User', 'manager_id'),
             'creator' => array(self::BELONGS_TO, 'User', 'created_user'),
             'updater' => array(self::BELONGS_TO, 'User', 'updated_user'),
+            'parent_hospital' => array(self::BELONGS_TO, 'Hospital', 'parent_id'),
+            'child_hospitals' => array(self::HAS_MANY, 'Hospital', 'parent_id'),
 		);
 	}
 
@@ -90,7 +101,9 @@ class Hospital extends MasterModel
 	{
 		return array(
 			'id' => 'ID',
-			'name' => 'Название',
+            'parent_id' => 'Больница',
+			'shortname' => 'Название',
+            'fullname' => 'Полное название',
 			'phone' => 'Телефон',
 			'manager_id' => 'Менеджер',
 			'status' => 'Статус',
@@ -120,7 +133,9 @@ class Hospital extends MasterModel
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('t.id',$this->id);
-		$criteria->compare('t.name',$this->name,true);
+        $criteria->compare('t.parent_id', $this->parent_id);
+		$criteria->compare('t.shortname',$this->shortname, true);
+        $criteria->compare('t.fullname', $this->fullname, true);
 		$criteria->compare('t.phone',$this->phone,true);
 		$criteria->compare('t.manager_id',$this->manager_id);
 		$criteria->compare('t.status',$this->status);
@@ -163,6 +178,16 @@ class Hospital extends MasterModel
     
     public function getManagersList()
     {
-        return CHtml::listData(User::model()->managers()->active()->findAll(), 'id', 'fullname');
+        return User::model()->getUsersList('manager');
+    }
+    
+    public function getParentHospitalsList()
+    {
+        return CHtml::listData(Hospital::model()->active()->parents()->findAll(), 'id', 'shortname');
+    }
+    
+    public function getParentHospitalsArray()
+    {
+        return array();
     }
 }

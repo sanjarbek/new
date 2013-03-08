@@ -1,7 +1,7 @@
 <?php
 $this->breadcrumbs=array(
 	'Больницы'=>array('index'),
-	$model->name,
+	$model->shortname,
 );
 
 $this->menu=array(
@@ -20,7 +20,12 @@ $this->menu=array(
 	'data'=>$model,
 	'attributes'=>array(
 		'id',
-		'name',
+        array(
+            'name'=>'parent_id',
+            'value'=>$model->parent_hospital->shortname,
+        ),
+		'shortname',
+        'fullname',
 		'phone',
         array(
             'name'=>'manager_id',

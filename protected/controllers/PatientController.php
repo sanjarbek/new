@@ -77,25 +77,18 @@ class PatientController extends Controller
         $registration = new Registration();
         $registration->patient_id = $model->id;
         
-        $regDataProvider = new CActiveDataProvider('Registration', array(
-            'criteria'=>array(
-                'condition'=>'patient_id='.$model->id,
-            )
-        ));
-        
         if (Yii::app()->user->checkAccess('Doctor'))
         {
-            $this->render('doctor_view', array(
+            $this->render('view_doctor', array(
                 'model'=>$model,
-                'regDataProvider'=>$regDataProvider,
+                'registration'=>$registration,
             ));
         }
         else if (Yii::app()->user->checkAccess('Registrator'))
         {
-            $this->render('registrator_view',array(
+            $this->render('view_registrator',array(
                 'model'=>$model,
                 'registration'=>$registration,
-//                'regDataProvider'=>$regDataProvider,
             ));
         }
 	}
@@ -115,7 +108,7 @@ class PatientController extends Controller
 		{
 			$model->attributes=$_POST['Patient'];
 			if($model->save())
-				$this->redirect(array('/registration/patient','pid'=>$model->id));
+				$this->redirect(array('/patient/view', 'id'=>$model->id));
 		}
 
 		$this->render('create',array(
@@ -140,19 +133,19 @@ class PatientController extends Controller
 			$model->attributes=$_POST['Patient'];
 			if($model->save())
             {
-                if (!empty($_GET['asDialog']))
-                {
-                    //Close the dialog, reset the iframe and update the grid
-                    echo CHtml::script("window.parent.$('#cru-dialog').dialog('close');window.parent.$('#cru-frame').attr('src','');window.parent.$.fn.yiiGridView.update('{$_GET['gridId']}');");
-                    Yii::app()->end();
-                }
-                else
+//                if (!empty($_GET['asDialog']))
+//                {
+//                    //Close the dialog, reset the iframe and update the grid
+//                    echo CHtml::script("window.parent.$('#cru-dialog').dialog('close');window.parent.$('#cru-frame').attr('src','');window.parent.$.fn.yiiGridView.update('{$_GET['gridId']}');");
+//                    Yii::app()->end();
+//                }
+//                else
                     $this->redirect(array('view','id'=>$model->id));
             }
 		}
         
-        if (!empty($_GET['asDialog']))
-            $this->layout = '//layouts/iframe';
+//        if (!empty($_GET['asDialog']))
+//            $this->layout = '//layouts/iframe';
 
 		$this->render('update',array(
 			'model'=>$model,
@@ -269,7 +262,7 @@ class PatientController extends Controller
 		if(isset($_GET['Patient']))
 			$model->attributes=$_GET['Patient'];
         
-		$this->renderPartial('_registrator_gridview',array(
+		$this->renderPartial('_gridview_registrator',array(
 			'model'=>$model,
             'created_at'=>$model->created_at,
 		));
@@ -285,7 +278,7 @@ class PatientController extends Controller
 		if(isset($_GET['Patient']))
 			$model->attributes=$_GET['Patient'];
         
-		$this->renderPartial('_doctor_gridview',array(
+		$this->renderPartial('_gridview_doctor',array(
 			'model'=>$model,
 		));
 	}
@@ -347,5 +340,34 @@ class PatientController extends Controller
         ));
 
         Yii::app()->end();
+    }
+    
+    public function actionEditable()
+    {
+        $r = Yii::app()->getRequest();
+
+        // needed to check model attribute name. !!!
+        $id=$r->getParam('pk');
+        $name = $r->getParam('name');
+        $value = $r->getParam('value');
+
+        $model=Patient::model()->findByPk($id);
+
+        if($model!==NULL)
+        {
+            $model->$name = $value;
+            
+            if ($name=='report')
+            {
+                $model->desc_doctor_id = Yii::app()->user->id;
+                $model->reported_at = new CDbExpression('NOW()'); 
+            }
+            if(!$model->save())
+            {
+                echo $model->getError($name);
+            }
+        }
+        Yii::app()->end();
+
     }
 }

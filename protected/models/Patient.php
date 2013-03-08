@@ -87,6 +87,10 @@ class Patient extends MasterModel
                 self::PAID_IS_MADE,
                 self::PAID_IS_DEBT,
             )),
+            
+            // Scenario for registrator updating status attribute of patient
+            array('fullname, phone, birthday, sex, doctor_id, report, created_at, updated_at, created_user, updated_user', 'unsafe', 'on'=>'registrator-view'),
+            array('fullname, phone, birthday, sex, status, paid, doctor_id, created_at, updated_at, created_user, updated_user', 'unsafe', 'on'=>'doctor-view'),
 //            array('desc_doctor_id',
 //                'exist',
 //                'allowEmpty' => false,
@@ -113,6 +117,7 @@ class Patient extends MasterModel
 			'registrations' => array(self::HAS_MANY, 'Registration', 'patient_id', 'alias'=>'reg'),
             'creator'=>array(self::BELONGS_TO, 'User', 'created_user'),
             'updater'=>array(self::BELONGS_TO, 'User', 'updated_user'),
+            'conclusion_by'=>array(self::BELONGS_TO, 'User', 'desc_doctor_id'),
 		);
 	}
     
@@ -120,7 +125,7 @@ class Patient extends MasterModel
     {
         return array(
             'paid'=>array(
-                'condition'=>'t.paid='.self::PAID_IS_MADE,
+                'condition'=>'t.paid!='.self::PAID_IS_NOT_MADE,
             )
         );
     }
@@ -273,6 +278,6 @@ class Patient extends MasterModel
     
     public function getDoctorsList()
     {
-        return CHtml::listData(Doctor::model()->active()->with('hospital')->findAll(), 'id', 'fullname', 'hospital.name');
+        return CHtml::listData(Doctor::model()->active()->with('hospital')->findAll(), 'id', 'fullname', 'hospital.shortname');
     }
 }

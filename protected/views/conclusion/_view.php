@@ -4,16 +4,12 @@
 	<?php echo CHtml::link(CHtml::encode($data->id),array('view','id'=>$data->id)); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('patient_id')); ?>:</b>
-	<?php echo CHtml::encode($data->patient_id); ?>
+    <b><?php echo 'Пациент'; ?>:</b>
+	<?php echo CHtml::encode($data->registration->patient->fullname); ?>
 	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('mrtscan_id')); ?>:</b>
-	<?php echo CHtml::encode($data->mrtscan_id); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('owner_id')); ?>:</b>
-	<?php echo CHtml::encode($data->owner_id); ?>
+    
+	<b><?php echo CHtml::encode($data->getAttributeLabel('registration_id')); ?>:</b>
+	<?php echo CHtml::encode($data->registration->mrtscan->name); ?>
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('file')); ?>:</b>

@@ -25,7 +25,7 @@ $this->menu=array(
 		'type',
 		array(
             'name'=>'hospital_id',
-            'value'=>$model->hospital->name,
+            'value'=>$model->hospital->shortname,
         ),
 		array(
             'name'=>'status',
