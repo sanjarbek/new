@@ -1,6 +1,6 @@
 <?php
 $this->breadcrumbs=array(
-	'Отчеты'=>array('registrator'),
+	'Отчеты'=>array('/report'),
 	'Отчет регистратора',
 );
 ?>
