@@ -1,7 +1,7 @@
 <?php
 $form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
 	'id'=>'ManagerForm',
-    'action'=>array('report/manager'),
+    'action'=>array('/report/manager'),
 //    'type'=>'horizontal',
 	'enableAjaxValidation'=>false,
 )); ?>
