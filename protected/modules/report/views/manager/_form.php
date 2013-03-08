@@ -1,7 +1,7 @@
 <?php
 $form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
 	'id'=>'ManagerForm',
-    'action'=>array('report/manager'),
+    'action'=>array('/report/manager'),
 //    'type'=>'horizontal',
 	'enableAjaxValidation'=>false,
 )); ?>
@@ -12,7 +12,7 @@ $form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
         array(
             'ajax' => array(
                 'type'=>'POST', //request type
-                'url'=>CController::createUrl('hospital/getmanagerhospitalslist'), 
+                'url'=>$this->createUrl('/hospital/getmanagerhospitalslist'), 
                 'update'=>'#'.CHtml::activeId($model,'hospital'), 
                 'data'=>array('manager'=>'js:this.value'),
             ),
@@ -31,7 +31,7 @@ $form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
          array(
             'ajax' => array(
                 'type'=>'POST', //request type
-                'url'=>CController::createUrl('doctor/gethospitaldoctorslist'), 
+                'url'=>$this->createUrl('/doctor/gethospitaldoctorslist'), 
                 'update'=>'#'.CHtml::activeId($model,'doctor'), 
                 'data'=>array('hospital'=>'js:this.value'),
             ),

@@ -53,6 +53,7 @@ return array(
             'enableBizRuleData'=>false,
 //            'errorAction'=>'site/error',
         ),
+        'report' => array(),
 
 	),
 
