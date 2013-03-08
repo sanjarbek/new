@@ -9,7 +9,7 @@ $this->breadcrumbs=array(
     <div class="span3">
         <div class="well-small">
         <?php 
-            echo $this->renderPartial('registrator/_search_form', array(
+            echo $this->renderPartial('_search_form', array(
                 'model'=>$model,
             )); 
         ?>
@@ -19,7 +19,7 @@ $this->breadcrumbs=array(
         <?php
             if (isset($command))
             {
-                echo $this->renderPartial('registrator/registrator_report', array(
+                echo $this->renderPartial('registrator_report', array(
                     'command'=>$command,
                 ));
             }
