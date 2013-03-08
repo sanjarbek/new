@@ -10,185 +10,77 @@
  *
  * @author Sanzharbek Amatov <asanjarbek@gmail.com>
  */
-class ManagerForm extends CFormModel
+class RegistratorForm extends CFormModel
 {
-    public $manager;
-    public $hospital;
-    public $doctor;
-    public $year;
-    public $month;
+    public $registrator;
+    public $range_date;
+    public $start_date;
+    public $end_date;
+    
+    public function rules()
+    {
+        return array(
+            array('range_date, start_date, end_date', 'required'),
+            array('start_date, end_date', 'date', 'format'=>'yyyy.mm.dd'),
+            array('range_date', 'match', 'pattern'=>'/^\d{4}.\d{2}.\d{2}\s-\s\d{4}.\d{2}.\d{2}$/'),
+        );
+    }
     
     public function attributeLabels()
     {
         return array(
-            'manager'=>Yii::t('column', 'Менеджер'),
-            'hospital'=>Yii::t('column', 'Больница'),
-            'doctor'=>Yii::t('column', 'Доктор'),
-            'year'=>Yii::t('column', 'Год'),
-            'month'=>Yii::t('column', 'Месяц'),
+            'range_date'=>Yii::t('column', 'Интервал даты'),
+            'start_date'=>Yii::t('column', 'Начало даты'),
+            'end_date'=>Yii::t('column', 'Конец даты'),
+            'registrator'=>  Yii::t('column', 'Регистратор'),
         );
     }
     
-    public function getYearsList()
-    {
-        $content = array();
-        $content[0] = 'Все';
-        for ($year = 2012; $year<2015; $year++)
-            $content[$year] = $year;
-        
-        return $content;
-    }
-    
-    public function getMonthsList()
-    {
-        $content = array();
-        $content[0] = 'Все';
-        $content[1] = 'Январь';
-        $content[2] = 'Февраль';
-        $content[3] = 'Март';
-        $content[4] = 'Апрель';
-        $content[5] = 'Май';
-        $content[6] = 'Июнь';
-        $content[7] = 'Июль';
-        $content[8] = 'Август';
-        $content[9] = 'Сентябрь';
-        $content[10] = 'Октябрь';
-        $content[11] = 'Ноябрь';
-        $content[12] = 'Декабрь';
-        
-        return $content;
-    }
-    
-    public function getDoctorsPerMonth($command)
+    public function getReport($command)
     {
         $rawData = $command->queryAll();
         
         $data = array();
         
-        $months = array_fill(1, 12, 0);
-
         foreach($rawData as $rawRow)
         {
-            if (!array_key_exists($rawRow['doctorId'], $data))
+            if (!array_key_exists($rawRow['id'], $data))
             {
-                $data[$rawRow['doctorId']] = $months + array(
-                    'hospital'=>'',
-                    'doctor'=>'',
-                    'sum'=>0,
+                $data[$rawRow['id']] = array(
+                    'id'=>'',
+                    'patient_name'=>'',
+                    'patient_phone'=>'',
+                    'hospital_name'=>'',
+                    'doctor_name'=>'',
+                    'doctor_phone'=>'',
+                    'date'=>'',
+                    'registration_count'=>'',
+                    'total_price'=>'',
+                    'total_discont'=>'',
+                    'final_price'=>'',
                 );
             }
-            $data[$rawRow['doctorId']]['hospital'] = $rawRow['hospital'];
-            $data[$rawRow['doctorId']]['doctor'] = $rawRow['doctor'];
-            $data[$rawRow['doctorId']][$rawRow['month']] = $rawRow['count'];
-            $data[$rawRow['doctorId']]['sum'] += (int)$rawRow['count'];
+            $data[$rawRow['id']]['patient_name'] = $rawRow['patient_name'];
+            $data[$rawRow['id']]['patient_phone'] = $rawRow['patient_phone'];
+            $data[$rawRow['id']]['hospital_name'] = $rawRow['hospital_name'];
+            $data[$rawRow['id']]['doctor_name'] = $rawRow['doctor_name'];
+            $data[$rawRow['id']]['doctor_phone'] = $rawRow['doctor_phone'];
+            $data[$rawRow['id']]['date'] = $rawRow['date'];
+            $data[$rawRow['id']]['registration_count'] = $rawRow['registration_count'];
+            $data[$rawRow['id']]['total_price'] = $rawRow['total_price'];
+            $data[$rawRow['id']]['total_discont'] = $rawRow['total_discont'];
+            $data[$rawRow['id']]['final_price'] = $rawRow['final_price'];
+            
         }
         
         return new CArrayDataProvider($data, array(
             'pagination'=>array(
-                'pageSize'=>20,
+                'pageSize'=>100,
             ),
-            'keyField'=>'doctor',
-        ));
-    }
-    public function getDoctorsPerMonthDay($days_count, $command)
-    {
-        $rawData = $command->queryAll();
-        
-        $data = array();
-        $days_months = array_fill(1, $days_count, 0);
-        
-        foreach($rawData as $rawRow)
-        {
-            if (!array_key_exists($rawRow['doctorId'], $data))
-            {
-                $data[$rawRow['doctorId']] = $days_months + array(
-                    'hospital'=>'',
-                    'doctor'=>'',
-                    'sum'=>0,
-                );
-            }
-            $data[$rawRow['doctorId']]['hospital'] = $rawRow['hospital'];
-            $data[$rawRow['doctorId']]['doctor'] = $rawRow['doctor'];
-            $data[$rawRow['doctorId']][$rawRow['day']] = $rawRow['count'];
-            $data[$rawRow['doctorId']]['sum'] += (int)$rawRow['count'];
-        }
-        
-        return new CArrayDataProvider($data, array(
-            'pagination'=>array(
-                'pageSize'=>20,
-            ),
-            'keyField'=>'doctor',
+            'keyField'=>'id',
         ));
     }
     
-    public function getHospitalsPerMonth($command)
-    {
-        $rawData = $command->queryAll();
-        
-        $data = array();
-
-        foreach($rawData as $rawRow)
-        {
-            if (!array_key_exists($rawRow['hospitalId'], $data))
-            {
-                $data[$rawRow['hospitalId']] = array(
-                    'hospital'=>'',
-                    'January'=>0,
-                    'February'=>0,
-                    'March'=>0,
-                    'April'=>0,
-                    'May'=>0,
-                    'June'=>0,
-                    'July'=>0,
-                    'August'=>0,
-                    'September'=>0,
-                    'October'=>0,
-                    'November'=>0,
-                    'December'=>0,
-                    'sum'=>0,
-                );
-            }
-            $data[$rawRow['hospitalId']]['hospital'] = $rawRow['hospital'];
-            $data[$rawRow['hospitalId']][$rawRow['month']] = $rawRow['count'];
-            $data[$rawRow['hospitalId']]['sum'] += (int)$rawRow['count'];
-        }
-        
-        return new CArrayDataProvider($data, array(
-            'pagination'=>array(
-                'pageSize'=>20,
-            ),
-            'keyField'=>'hospital',
-        ));
-    }
-    public function getHospitalsPerMonthDay($days_count, $command)
-    {
-        $rawData = $command->queryAll();
-        
-        $data = array();
-        
-        $days_months = array_fill(1, $days_count, 0);
-        
-        foreach($rawData as $rawRow)
-        {
-            if (!array_key_exists($rawRow['hospitalId'], $data))
-            {
-                $data[$rawRow['hospitalId']] = $days_months + array(
-                    'hospital'=>'',
-                    'sum'=>0,
-                );
-            }
-            $data[$rawRow['hospitalId']]['hospital'] = $rawRow['hospital'];
-            $data[$rawRow['hospitalId']][$rawRow['day']] = $rawRow['count'];
-            $data[$rawRow['hospitalId']]['sum'] += (int)$rawRow['count'];
-        }
-        
-        return new CArrayDataProvider($data, array(
-            'pagination'=>array(
-                'pageSize'=>20,
-            ),
-            'keyField'=>'hospital',
-        ));
-    }
 
 }
 
