@@ -108,9 +108,9 @@ return array(
 					'class'=>'CFileLogRoute',
 					'levels'=>'info, error, warning',
 				),
-				array(
-					'class'=>'CWebLogRoute',
-				),
+//				array(
+//					'class'=>'CWebLogRoute',
+//				),
 				
 			),
 		),

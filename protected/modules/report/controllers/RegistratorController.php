@@ -10,6 +10,7 @@ class RegistratorController extends Controller
         {
             $model->range_date = isset($_POST['RegistratorForm']['range_date']) ? $_POST['RegistratorForm']['range_date'] : 0;
             $model->registrator = isset($_POST['RegistratorForm']['registrator']) ? $_POST['RegistratorForm']['registrator'] : 0;
+            $model->export_type = isset($_POST['RegistratorForm']['export_type']) ? $_POST['RegistratorForm']['export_type'] : 1;
             
             
             if($model->validate(array('range_date')))
@@ -119,6 +120,11 @@ class RegistratorController extends Controller
                     }
                 }
                 
+                if ($model->export_type == RegistratorForm::EXPORT_EXCEL)
+                {
+                    $this->exportToExcel($command);
+                }
+                
                 $this->render('index', array(
                     'model'=>$model,
                     'command'=>$command,
@@ -128,10 +134,68 @@ class RegistratorController extends Controller
             }
         }
         
+        
+        
         $this->render('index', array(
             'model'=>$model,
         ));
 	}
+    
+    public function exportToExcel($command)
+    {
+        $array_data_provider = RegistratorForm::getReport($command);
+        
+        $this->widget('ext.EExcelView',array(
+            'dataProvider'=>$array_data_provider,
+            'grid_mode'=>'export',
+            'exportType'=> 'Excel2007',
+//            'exportType'=> 'CSV',
+            'columns'=>array(
+                array(
+                    'name'=>'patient_name',
+                    'header'=>'ФИО',
+                ),
+                array(
+                    'name'=>'patient_phone',
+                    'header'=>'Тел. пациента',
+                ),
+                array(
+                    'name'=>'hospital_name',
+                    'header'=>'Название больницы',
+                ),
+                array(
+                    'name'=>'doctor_name',
+                    'header'=>'ФИО доктора',
+                ),
+                array(
+                    'name'=>'doctor_phone',
+                    'header'=>'Тел. доктора',
+                ),
+                array(
+                    'name'=>'date',
+                    'header'=>'Дата регистрации',
+                ),
+                array(
+                    'name'=>'registration_count',
+                    'header'=>'Количество',
+                ),
+                array(
+                    'name'=>'total_price',
+                    'header'=>'Сумма',
+                ),
+                array(
+                    'name'=>'total_discont',
+                    'header'=>'Скидка',
+                ),
+                array(
+                    'name'=>'final_price',
+                    'header'=>'Конечная сумма',
+                ),
+            ),
+        ));
+        
+        Yii::app()->end();
+    }
 
 	// Uncomment the following methods and override them if needed
 	/*
