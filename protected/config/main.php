@@ -74,6 +74,10 @@ return array(
             'class' => 'ext.bootstrap.components.Bootstrap',
             'responsiveCss' => TRUE,
         ),
+        'session' => array(
+            'timeout' => 300,
+        ),
+
 		// uncomment the following to enable URLs in path-format
 		/*
 		'urlManager'=>array(
@@ -108,9 +112,9 @@ return array(
 					'class'=>'CFileLogRoute',
 					'levels'=>'info, error, warning',
 				),
-				array(
-					'class'=>'CWebLogRoute',
-				),
+//				array(
+//					'class'=>'CWebLogRoute',
+//				),
 				
 			),
 		),

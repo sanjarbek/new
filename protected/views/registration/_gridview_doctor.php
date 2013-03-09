@@ -30,7 +30,7 @@ $this->widget('bootstrap.widgets.TbGridView',array(
         array(
             'type'=>'raw',
             'header'=>'Шаблон',
-            'value'=>'"<span class=\"icon-download\"></span>"',
+            'value'=>'"<a href=\"".Yii::app()->createUrl("/registration/gettemplate", array("rid"=>$data->id))."\" class=\"icon-download\"></a>"',
         ),
         array(
             'type'=>'raw',

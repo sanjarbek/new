@@ -12,17 +12,25 @@
  */
 class RegistratorForm extends CFormModel
 {
+    const EXPORT_HTML = 1;
+    const EXPORT_EXCEL = 2;
+
     public $registrator;
     public $range_date;
     public $start_date;
     public $end_date;
+    public $export_type;
     
     public function rules()
     {
         return array(
-            array('range_date, start_date, end_date', 'required'),
+            array('registrator, range_date, start_date, end_date', 'required'),
             array('start_date, end_date', 'date', 'format'=>'yyyy.mm.dd'),
             array('range_date', 'match', 'pattern'=>'/^\d{4}.\d{2}.\d{2}\s-\s\d{4}.\d{2}.\d{2}$/'),
+            array('export_type', 'in', 'range'=>array(
+                self::EXPORT_HTML,
+                self::EXPORT_EXCEL,
+            )),
         );
     }
     
@@ -33,6 +41,7 @@ class RegistratorForm extends CFormModel
             'start_date'=>Yii::t('column', 'Начало даты'),
             'end_date'=>Yii::t('column', 'Конец даты'),
             'registrator'=>  Yii::t('column', 'Регистратор'),
+            'export_type' => Yii::t('column', 'Тип показа'),
         );
     }
     
@@ -60,6 +69,8 @@ class RegistratorForm extends CFormModel
                     'final_price'=>'',
                 );
             }
+            
+            $data[$rawRow['id']]['id'] = $rawRow['id'];
             $data[$rawRow['id']]['patient_name'] = $rawRow['patient_name'];
             $data[$rawRow['id']]['patient_phone'] = $rawRow['patient_phone'];
             $data[$rawRow['id']]['hospital_name'] = $rawRow['hospital_name'];
@@ -73,14 +84,23 @@ class RegistratorForm extends CFormModel
             
         }
         
+        $data = array_merge(array(), $data);
+        
         return new CArrayDataProvider($data, array(
             'pagination'=>array(
-                'pageSize'=>100,
+                'pageSize'=>1000000,
             ),
             'keyField'=>'id',
         ));
     }
     
+    public function getExportOptions()
+    {
+        return array(
+            self::EXPORT_HTML => 'HTML',
+            self::EXPORT_EXCEL => 'Excel',
+        );
+    }
 
 }
 

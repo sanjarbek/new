@@ -1,6 +1,7 @@
 <?php
 
 $this->breadcrumbs=array(
+    'Отчеты'=>array('/report'),
 	'Отчет менеджера',
 );
 ?>

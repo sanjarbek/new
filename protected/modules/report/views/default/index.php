@@ -2,16 +2,11 @@
 /* @var $this DefaultController */
 
 $this->breadcrumbs=array(
-	$this->module->id,
+	'Отчеты',
 );
 ?>
-<h1><?php echo $this->uniqueId . '/' . $this->action->id; ?></h1>
-
-<p>
-This is the view content for action "<?php echo $this->action->id; ?>".
-The action belongs to the controller "<?php echo get_class($this); ?>"
-in the "<?php echo $this->module->id; ?>" module.
-</p>
-<p>
-You may customize this page by editing <tt><?php echo __FILE__; ?></tt>
-</p>
+<h4>Отчеты</h4>
+<ul>
+    <li><?php echo CHtml::link('Отчеты менеджера', array('/report/manager')); ?></li>
+    <li><?php echo CHtml::link('Отчеты регистратора', array('/report/registrator')); ?></li>
+</ul>
