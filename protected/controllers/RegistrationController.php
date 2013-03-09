@@ -468,5 +468,95 @@ class RegistrationController extends Controller
         Yii::app()->end();
         
     }
+    
+    public function actionGetTemplate($rid)
+    {
+        $model = $this->loadModel($rid);
+        
+        // Turn off our amazing library autoload
+        spl_autoload_unregister(array('YiiBase','autoload'));
+
+        // get a reference to the path of PHPExcel classes
+        $phpExcelPath = Yii::getPathOfAlias('ext.phpexcel.Classes');
+
+
+        // making use of our reference, include the main class
+        // when we do this, phpExcel has its own autoload registration
+        // procedure (PHPExcel_Autoloader::Register();)
+        include($phpExcelPath . DIRECTORY_SEPARATOR . 'PHPExcel.php');
+
+        spl_autoload_register(array('YiiBase', 'autoload'));
+
+        $fileType = 'Excel2007';
+        $readFileName = 'conclusion_template.xlsx';
+        $writeFileName = $model->patient->fullname . '_' . $model->mrtscan->name . '_('. Date('d.m.Y') .').xlsx';
+
+
+        // Read the file
+        $objReader = PHPExcel_IOFactory::createReader($fileType);
+//        $objPHPExcel = $objReader->load(Yii::app()->basePath.'/data/excel_templates/test_xlsx1.xlsx');
+//        $objPHPExcel = $objReader->load(Yii::app()->basePath.'/data/excel_templates/conclusion_template.xlsx');
+        $objPHPExcel = $objReader->load(Yii::app()->basePath.'/data/templates/'. $readFileName);
+
+
+        $creator = Yii::app()->user->getState('fullname');
+        
+        $today = time();
+        $patient_birthday = strtotime($model->patient->birthday);
+        $seconds_diff = $today - $patient_birthday;
+        $age = (int)($seconds_diff/3600/24/360);
+        
+        $mrtscan_name = strtolower((string)$model->mrtscan->name); 
+        
+//        $objPHPExcel = new PHPExcel();
+
+        // Set properties
+        $objPHPExcel->getProperties()->setCreator($creator)
+            ->setLastModifiedBy($creator)
+            ->setTitle("Semamed MRT conclusion report")
+            ->setSubject("Report")
+            ->setDescription("Conclusion file, generated on Semamed Mtd.")
+            ->setKeywords("Semamed MRT")
+            ->setCategory("Report");
+        
+        // Add some data
+        $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue('A4', 'ПРОТОКОЛ МАГНИТНО-РЕЗОНАНСНОЙ ТОМОГРАФИИ ' . $mrtscan_name)
+            ->setCellValue('D5', Date('d.m.Y'))
+            ->setCellValue('I5', Date('d.m.Y'))
+            ->setCellValue('D6', $model->patient->fullname)
+            ->setCellValue('D7', Date('d.m.Y', $patient_birthday))
+            ->setCellValue('D9', $creator)
+            ->setCellValue('G7', $age . ' лет')
+            ->setCellValue('J7', Yii::t('value', $model->patient->getSexText()))
+            ->setCellValue('B16', 'Врач ' . $creator)
+            ->setCellValue('D8', $model->patient->doctor->fullname);
+
+//         Miscellaneous glyphs, UTF-8
+//        $objPHPExcel->setActiveSheetIndex(0)
+//            ->setCellValue('A20', 'Miscellaneous glyphs')
+//            ->setCellValue('A25', 'Өнүктүрөйлү деп жатабыз @ Hello World');
+
+        // Rename sheet
+//        $objPHPExcel->getActiveSheet()->setTitle('Simple');
+
+        // Set active sheet index to the first sheet,
+        // so Excel opens this as the first sheet
+        $objPHPExcel->setActiveSheetIndex(0);
+
+        ob_end_clean();
+        ob_start();
+
+        // Redirect output to a client’s web browser (Excel2007)
+        header("Content-type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+//        header("Content-type: application/vnd.ms-excel");
+        header('Content-Disposition: attachment;filename="'. $writeFileName .'"');
+        header('Cache-Control: max-age=0');
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+//        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter->save('php://output');
+        Yii::app()->end();
+    }
 
 }

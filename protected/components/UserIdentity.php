@@ -29,6 +29,9 @@ class UserIdentity extends CUserIdentity
         {
             $this->_id = $user->id;
             $this->username = $user->username;
+            
+            Yii::app()->user->setState('fullname', $user->fullname);
+            
             $user->saveAttributes(array(
                 'lastvisit_at'=>date("Y-m-d H:i:s", time()),
             ));

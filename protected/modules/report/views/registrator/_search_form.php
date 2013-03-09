@@ -15,7 +15,6 @@ $form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
     <?php 
         echo $form->select2Row($model, 'registrator', array(
             'asDropDownList'=>true,
-//            'prompt'=>'Все',
             'data'=>array('0'=>'Все') + User::model()->getUsersList('registrator'),
             'class'=>'span10',
         ));
@@ -46,7 +45,14 @@ $form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
             ),
         ),
     )); ?>
-
+    <hr />
+    <?php
+        echo $form->select2Row($model, 'export_type', array(
+            'asDropDownList'=>true,
+            'data'=>$model->getExportOptions(),
+            'class'=>'span10',
+        ));
+    ?>
 	<div class="form-actions">
         <?php $this->widget('bootstrap.widgets.TbButton', array(
         'buttonType'=>'submit',
